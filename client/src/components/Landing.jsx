@@ -1,6 +1,6 @@
-import React, { useState } from "react";
+import React, { useState , useRef } from "react";
 import apple from './images/apple.png';
-import arrow from './images/arrow.png';
+import arrow33 from './images/arrow.png';
 import phone from './images/iphone.png';
 import dropdown from './images/DropDown.png';
 import dots from './images/dots.png';
@@ -50,18 +50,18 @@ function Landing() {
 
 
 const [activeCategory, setActiveCategory] = useState(null);
-const arrow=document.getElementById("arrow1");
-const arrow2=document.getElementById("arrow2");
+const arrow=useRef(null);
+const arrow2=useRef(null);
     const toggleCategory = (category) => {
         if (category === 'women') {
-            arrow2.style.transform ='rotate(0deg)';
-            arrow.style.transition='0.2s all ease';
-            arrow.style.transform = activeCategory === 'women' ? 'rotate(0deg)' : 'rotate(90deg)';
+            arrow2.current.style.transform ='rotate(0deg)';
+            arrow.current.style.transition='0.2s all ease';
+            arrow.current.style.transform = activeCategory === 'women' ? 'rotate(0deg)' : 'rotate(90deg)';
         }
         else if (category === 'men') {    
-            arrow.style.transform ='rotate(0deg)';
-            arrow2.style.transition='0.2s all ease';
-            arrow2.style.transform = activeCategory === 'men' ? 'rotate(0deg)' : 'rotate(90deg)';
+            arrow.current.style.transform ='rotate(0deg)';
+            arrow2.current.style.transition='0.2s all ease';
+            arrow2.current.style.transform = activeCategory === 'men' ? 'rotate(0deg)' : 'rotate(90deg)';
         }
         setActiveCategory(activeCategory === category ? null : category);
     };
@@ -71,7 +71,7 @@ const arrow2=document.getElementById("arrow2");
 <section id="landing">
 <aside>
         <ul>
-            <li onClick={() => toggleCategory('women')} >Woman's Fashion <img src={dropdown} alt="arrow" id="arrow1" /></li>
+            <li onClick={() => toggleCategory('women')} >Woman's Fashion <img src={dropdown} alt="arrow" id="arrow1" ref={arrow}/></li>
             {
                 activeCategory ==='women' && (
                     <div className="dropdown">
@@ -85,7 +85,7 @@ const arrow2=document.getElementById("arrow2");
                     </div>
                 )
             }
-            <li onClick={() => toggleCategory('men')}>Man's Fashion <img src={dropdown} alt="arrow" id="arrow2" /></li>
+            <li onClick={() => toggleCategory('men')}>Man's Fashion <img src={dropdown} alt="arrow" id="arrow2" ref={arrow2}/></li>
             {activeCategory === 'men' && (
                 <div className="dropdown">
                     <ul>
@@ -121,7 +121,7 @@ const arrow2=document.getElementById("arrow2");
                     <button>
                         Shop Now
                     </button>
-                    <img src={arrow} alt="arrow" className="arrow"/>
+                    <img src={arrow33} alt="arrow" className="arrow"/>
                 </div>
             </div>
             <div className="pics">
