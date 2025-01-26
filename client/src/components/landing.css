@@ -411,7 +411,7 @@ font-weight: 600;
     gap: 10px;
 
     /* Set fixed height and scrolling behavior */
-    height: 410px; /* Adjust as needed */
+    height: 430px; /* Adjust as needed */
     overflow-y: auto; /* Scroll vertically */
     scrollbar-width: thin; /* For Firefox */
     scrollbar-color: #cccccc #f8f8f8; /* Scrollbar styling for Firefox */
