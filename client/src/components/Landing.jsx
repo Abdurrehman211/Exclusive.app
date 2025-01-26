@@ -258,11 +258,11 @@ const arrow2=useRef(null);
             <img src={whheadphones} alt="white phone" id="phone-1"/>
             <p>Headphone</p>
            </div>
-           <div className="card1">
+           {/* <div className="card1">
             <img src={watch} alt="phone" id="phone1" />
             <img src={watch1} alt="white phone" id="phone-1"/>
             <p>SmartWatch</p>
-           </div> 
+           </div>  */}
           {/* <div className="card1">
             <img src={gamepad} alt="phone" id="phone1" />
             <img src={nintendo} alt="white phone" id="phone-1"/>
