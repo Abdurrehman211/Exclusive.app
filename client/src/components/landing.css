@@ -459,6 +459,8 @@ transition: 0.2s ease;
 .main-sales1{
     padding: 10px ;
     margin-left: 100px;
+
+    width: 100%;
 }
 .card1{
     width: 250px;

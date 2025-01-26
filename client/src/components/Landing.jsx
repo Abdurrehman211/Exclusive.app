@@ -258,12 +258,12 @@ const arrow2=useRef(null);
             <img src={whheadphones} alt="white phone" id="phone-1"/>
             <p>Headphone</p>
            </div>
-           {/* <div className="card1">
+           <div className="card1">
             <img src={watch} alt="phone" id="phone1" />
             <img src={watch1} alt="white phone" id="phone-1"/>
             <p>SmartWatch</p>
-           </div> */}
-           {/* <div className="card1">
+           </div> 
+          {/* <div className="card1">
             <img src={gamepad} alt="phone" id="phone1" />
             <img src={nintendo} alt="white phone" id="phone-1"/>
             <p>Gaming</p>
@@ -332,7 +332,7 @@ const arrow2=useRef(null);
                 </div>
              </div>
             </div>
-            {/* <div className="card">
+            <div className="card">
                 <img src={smheart} alt="wishlist" id="Smallheart"/>
                 <img src={Quickview} alt="Quick view" id="QuickView"/>
              <div className="main-layer">
@@ -352,7 +352,7 @@ const arrow2=useRef(null);
                 <p>(88)</p>
                 </div>
              </div>
-            </div> */}
+            </div>
             <div className="card">
                 <img src={smheart} alt="wishlist" id="Smallheart"/>
                 <img src={Quickview} alt="Quick view" id="QuickView"/>
@@ -494,7 +494,7 @@ const arrow2=useRef(null);
              </div>
             </div>
 
-            {/* <div className="card">
+            <div className="card">
                 <img src={smheart} alt="wishlist" id="Smallheart"/>
                 <img src={Quickview} alt="Quick view" id="QuickView"/>
              <div className="main-layer">
@@ -514,7 +514,7 @@ const arrow2=useRef(null);
                 <p>(88)</p>
                 </div>
              </div>
-            </div> */}
+            </div>
            
         </div>
         <div className="products">
@@ -584,7 +584,27 @@ const arrow2=useRef(null);
              </div>
             </div>
 
-           
+            <div className="card">
+                <img src={smheart} alt="wishlist" id="Smallheart"/>
+                <img src={Quickview} alt="Quick view" id="QuickView"/>
+             <div className="main-layer">
+
+                <p> -40% </p>
+                <img src={chair} alt="controller" id="controller"/>
+                <button className="Button">ADD to cart</button>
+             </div>
+             <div className="card-body">
+                <h3>HAVIT HV-G92 Gamepad</h3>
+                <div className="price">
+                    <p>$120</p>
+                    <del>$150</del>
+                </div>
+                <div className="review">
+                <img src={stars} alt="stars"/>
+                <p>(88)</p>
+                </div>
+             </div>
+            </div>
            
         </div>
         <button id="button">View All</button>
