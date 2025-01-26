@@ -93,10 +93,11 @@ aside ul li:hover {
     align-items: center;
     width: 80%;
     background-color: black;
+    border-radius: 5px;
+    margin-top: 30px;
 }
 .main{
-    display: flex
-    ;
+    display: flex ;
         justify-content: center;
         align-items: center;
         width: 75%;
@@ -112,16 +113,17 @@ aside ul li:hover {
     width:40%;
     color: #cecdcd;
     padding-left: 60px;
+    border-radius: 5px;
  }
  .company{
     display: flex;
     justify-content: flex-start;
-    align-items: left;
+    align-items: center;
     gap: 10px;
     margin-bottom: 20px;
  }
  .main-text{
-    font-size: 44px;
+    font-size: 40px;
     font-weight: bold;
     color: #ffffff;
     width: 100%; 
@@ -143,19 +145,19 @@ aside ul li:hover {
     border-bottom: 2px solid white;
     /* border: none; */
     cursor: pointer;
-    margin-top: 20px;
-    font-size: 25px;
+    margin-top: 10px;
+    font-size: 20px;
 }
 .arrow{
-    width: 40px;
-    height: 40px;
+    width: 30px;
+    height: 30px;
     position: absolute;
-    margin-top: 25px;
-    margin-left: 20px;
+    margin-top: 17px;
+    margin-left: 15px;
 }
 .company p{
-    margin-left: 30px;
-    font-size: 20px;
+    margin-left: 15px;
+    font-size: 15px;
 }
 .apple{
     width: 50px;
