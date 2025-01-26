@@ -450,11 +450,12 @@ transition: 0.2s ease;
     display: flex;
     flex-direction: row;
     justify-content: space-between;
+    align-items: center;
     background-color: #ffffff;
     padding: 20px;
     height: 80vh;
     font-family: 'Inter';
-    margin-top: 100px;
+    margin-top: 200px;
 }
 .main-sales1{
     padding: 10px ;
@@ -509,7 +510,7 @@ margin: 10px 0px;
 #space{
     width: 80%;
     border: 0.5px solid rgba(0, 0, 0, 0.267);
-    margin-top: 50px;
+    margin-top: 30px;
     justify-content: center;
     display: flex
 ;
@@ -527,23 +528,25 @@ margin: 10px 0px;
 }
 .container1{
     display: flex;
-    padding: 20px;
-    width: 95%;
-    justify-content: center;
+        padding: 20px;
+        width: 100%;
+        justify-content: center;
 }
 .optional-sale{
     display: flex;
-    justify-content: center;
-    align-items: center;
-    border: 2px solid;
-    width: 95%;
-    background-color: black;
-    height: 710px;
+        justify-content: center;
+        align-items: center;
+        border: 2px solid;
+        width: 95%;
+        background-color: black;
+        height: 460px;
+        border-radius: 5px;
 }
 .sale-text{
-    width: 50%;
+    width: 55%;
     text-align: left;
     padding-left: 50px;
+    margin: 25px 0px;
 }
 .sale-text #sale-p{
    font-size: 25px; 
@@ -553,7 +556,7 @@ margin: 5px;
 margin-bottom: 30px;
 }
 .sale-text h1{
-    font-size: 65px;
+    font-size: 40px;
     color: #ffffff;
     letter-spacing: 2.3px;
     font-weight: 600;
@@ -562,7 +565,7 @@ margin-bottom: 30px;
 .sales-timer{
     display: flex;
         color: #ffffff;
-        width: 70%;
+        width: 75%;
         justify-content: space-around;
         margin-top: 29px;
 }
