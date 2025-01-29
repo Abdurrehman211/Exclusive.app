@@ -1,8 +1,16 @@
 import React from "react";
-import {toast} from "react-toastify";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import axios from "axios";
+import './dashboard.css';
+import { FaShoppingCart, FaUsers, FaChartLine, FaBoxOpen,FaCog, FaSignOutAlt   } from 'react-icons/fa';
+import { useNavigate } from "react-router";
+import { toast } from "react-toastify";
 function Userpanel() {
+const navigate = useNavigate();
+const [userData,setUser]=useState({
+    name: "",
+    email: "",
+});
 
     useEffect(() => {FetchuserDetail()}, []);
 const FetchuserDetail =async () => {
@@ -13,8 +21,21 @@ try {
             'Authorization': `Bearer ${token}`
         }
     });
+  
     console.log(response.data);
-    toast.success(response.data.message ||"Login Success!")
+    if (response.data.success){
+        setUser({
+            name: response.data.user.name || "Username",
+            email: response.data.user.email || "example@gmail.com",
+        })
+    }
+    let userDetails = {
+        loggedIn: true,
+        name: response.data.user.name,
+        email: response.data.user.email
+    }
+    sessionStorage.setItem("userDetails", JSON.stringify(userDetails));
+    // toast.success(response.data.message ||"Login Success!")
     if(response.data.success){
         console.log(response.data);
     }
@@ -26,9 +47,68 @@ try {
     console.error(error);
 }
 }
+
+const Logout =()=>{
+sessionStorage.clear();
+navigate("/");
+toast.info('Please Login Again');
+}
+
     return(
 <>
-<h1>Welcome to user panel</h1>
+<div className="dashboard">
+      <aside className="sidebar">
+        <h2>User Dashboard</h2>
+        <ul>
+          <li><FaChartLine /> Overview</li>
+          <li><FaShoppingCart /> Orders</li>
+          <li><FaUsers /> Customers</li>
+          <li><FaBoxOpen /> Products</li>
+          <li><FaCog/> Settings</li>
+          <li onClick={Logout}><FaSignOutAlt /> Logout</li>
+        </ul>
+      </aside>
+      <main className="content">
+        <h1>Welcome to the Dashboard</h1>
+        <div className="profile-section">
+            <div className="profile-info">
+              <img 
+                src={"https://via.placeholder.com/150"} 
+                alt="Profile" 
+                className="profile-image"
+              />
+              <div className="profile-details">
+                <h2 className="profile-name">{userData.name}</h2>
+                <p className="profile-email">{userData.email}</p>
+              </div>
+            </div>
+          </div>
+        <div className="stats">
+          <div className="stat-card">
+            <FaShoppingCart />
+            <h3>1,250</h3>
+            <p>Total Orders</p>
+          </div>
+          <div className="stat-card">
+            <FaUsers />
+            <h3>3,500</h3>
+            <p>Customers</p>
+          </div>
+          <div className="stat-card">
+            <FaChartLine />
+            <h3>$120,000</h3>
+            <p>Revenue</p>
+          </div>
+          <div className="stat-card">
+            <FaBoxOpen />
+            <h3>650</h3>
+            <p>Products Available</p>
+          </div>
+        </div>
+      </main>
+     
+    </div>
+   
 </>
 
     )
