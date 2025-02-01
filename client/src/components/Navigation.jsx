@@ -5,9 +5,11 @@ import cart from './images/cart.png';
 import wish from './images/heart.png';
 import profile from './images/Profile.png';
 import { Link, useLocation } from 'react-router-dom';
+import Business from './images/Busines.gif';
 
 function Navigation() {
     const [userdata, setUser] = useState("");
+    const [admindata, setAdmin] = useState("");
     const location = useLocation();
 
     // Fetch user data when location changes
@@ -19,13 +21,21 @@ function Navigation() {
         let data = sessionStorage.getItem("userDetails");
         if (data){
             let parseData = JSON.parse(data);
-            if (parseData &&  parseData.loggedIn) {
-                setUser(parseData);
-            }
-            else{
+            if (parseData.loggedIn){
+                if (parseData.role==="admin"){
+                    setAdmin(parseData);
+                    setUser("");
+                }
+                else{
+                    setUser(parseData);
+                    setAdmin("");
+                }
+            }else{
                 setUser("");
+                setAdmin("");
             }
         }else{
+            setAdmin("");
             setUser("");
         }      
     };
@@ -35,7 +45,7 @@ function Navigation() {
     }, [userdata]); // This will log whenever userdata changes
 
     return (
-        <nav>
+        <nav className='nav'>
             <div className="logo">
                 <h2>Exclusive</h2>
             </div>
@@ -55,14 +65,25 @@ function Navigation() {
                     <>
                         <a href="/Cart"><img src={cart} alt='cart' id='cart' /></a>
                         <a href='/Wishlist'><img src={wish} alt="Wish" id='wish' /></a>
-                        <Link to={`/Userpanel`} style={{ textDecoration: 'none', display: 'flex', alignItems: 'center' }}><img src={profile} alt="Profile" id='profile' width={'30px'} height={'30px'} style={{ cursor: 'pointer' }} />{userdata.name}</Link>
+                        <Link to={`/Userpanel`} className='admin'>
+                            <img src={profile} alt="Profile" id='profile' width={'30px'} height={'30px'} style={{ cursor: 'pointer' }} />
+                            {userdata.name}
+                        </Link>
+                    </>
+                ) : admindata ? (
+                    <>
+                        <a href='/admin' className='admin1'><img src={Business} alt="Profile" id='profile' width={'30px'} height={'30px'} style={{ cursor: 'pointer' }} />
+                            <button>
+                                Admin Panel
+                            </button>
+                        </a>
                     </>
                 ) : (
                     <>
                         <a href="/Cart"><img src={cart} alt='cart' id='cart' /></a>
                         <a href='/Wishlist'><img src={wish} alt="Wish" id='wish' /></a>
                         <Link to={`/login`}><img src={profile} alt="Profile" id='profile' width={'30px'} height={'30px'} style={{ cursor: 'pointer' }} /></Link>
-                    </>
+                    </> 
                 )}
             </div>
         </nav>

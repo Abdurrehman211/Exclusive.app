@@ -5,54 +5,58 @@ import './dashboard.css';
 import { FaShoppingCart, FaUsers, FaChartLine, FaBoxOpen,FaCog, FaSignOutAlt   } from 'react-icons/fa';
 import { useNavigate } from "react-router";
 import { toast } from "react-toastify";
+import profile from './images/Profile.png';
 function Userpanel() {
 const navigate = useNavigate();
-const [userData,setUser]=useState({
-    name: "",
-    email: "",
+const [user, setUser] = useState({
+  email: "",
+  name: "",
 });
 
-    useEffect(() => {FetchuserDetail()}, []);
-const FetchuserDetail =async () => {
-try {
-    const token = sessionStorage.getItem("Auth-Token");
-    const response = await axios.get('http://localhost:3001/getuser',{
-        headers: {
-            'Authorization': `Bearer ${token}`
-        }
-    });
-  
-    console.log(response.data);
-    if (response.data.success){
-        setUser({
-            name: response.data.user.name || "Username",
-            email: response.data.user.email || "example@gmail.com",
-        })
-    }
-    let userDetails = {
-        loggedIn: true,
-        name: response.data.user.name,
-        email: response.data.user.email
-    }
-    sessionStorage.setItem("userDetails", JSON.stringify(userDetails));
-    // toast.success(response.data.message ||"Login Success!")
-    if(response.data.success){
-        console.log(response.data);
-    }
-    else{
-        console.log(response.data.message || 'Error Occured');
-    }
-} catch (error) {
-    console.log("An error Occured",error);
-    console.error(error);
-}
-}
+useEffect(() => { 
+  FetchuserDetail(); 
+}, );
 
-const Logout =()=>{
-sessionStorage.clear();
-navigate("/");
-toast.info('Please Login Again');
-}
+const FetchuserDetail = async () => {
+  try {
+      const token = sessionStorage.getItem("Auth-Token");
+      const role = sessionStorage.getItem("User-Role"); // Get user role
+      if (!token) {
+          navigate("/login");
+          return;
+      }
+
+      const response = await axios.get('http://localhost:3001/getuser', {
+          headers: { 'Authorization': `Bearer ${token}` }
+      });
+
+      console.log(response.data);
+      if (response.data.success) {
+          setUser({
+              name: response.data.user.name || "Username",
+              email: response.data.user.email || "example@gmail.com",
+          });
+
+          let userDetails = {
+              loggedIn: true,
+              name: response.data.user.name,
+              email: response.data.user.email,
+              role: response.data.user.role
+          };
+          sessionStorage.setItem("userDetails", JSON.stringify(userDetails));
+
+          // Redirect if admin
+          if (role === "admin") {
+              navigate("/AdminPanel");
+          }
+      } else {
+          console.log(response.data.message || 'Error Occurred');
+      }
+  } catch (error) {
+      console.log("An error Occurred", error);
+      console.error(error);
+  }
+};
 
     return(
 <>
@@ -65,7 +69,7 @@ toast.info('Please Login Again');
           <li><FaUsers /> Customers</li>
           <li><FaBoxOpen /> Products</li>
           <li><FaCog/> Settings</li>
-          <li onClick={Logout}><FaSignOutAlt /> Logout</li>
+          <li onClick={() => navigate("/Logout")}><FaSignOutAlt /> Logout</li>
         </ul>
       </aside>
       <main className="content">
@@ -73,13 +77,13 @@ toast.info('Please Login Again');
         <div className="profile-section">
             <div className="profile-info">
               <img 
-                src={"https://via.placeholder.com/150"} 
+                src={profile} 
                 alt="Profile" 
                 className="profile-image"
               />
               <div className="profile-details">
-                <h2 className="profile-name">{userData.name}</h2>
-                <p className="profile-email">{userData.email}</p>
+                <h2 className="profile-name">{user.name}</h2>
+                <p className="profile-email">{user.email}</p>
               </div>
             </div>
           </div>

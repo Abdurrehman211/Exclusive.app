@@ -34,7 +34,7 @@ const Login = () => {
                 theme: "light",
             });
 
-            navigate("/Userpanel");
+            FetchuserDetail();
         } catch (error) {
             console.error(error.response?.data || "Error occurred");
 
@@ -52,6 +52,42 @@ const Login = () => {
         }
     };
 
+const FetchuserDetail =async () => {
+try {
+    const token = sessionStorage.getItem("Auth-Token");
+    const response = await axios.get('http://localhost:3001/getuser',{
+        headers: {
+            'Authorization': `Bearer ${token}`
+        }
+    });
+
+    console.log(response.data);
+    let userDetails = {
+        loggedIn: true,
+        name: response.data.user.name,
+        email: response.data.user.email,
+        role: response.data.user.role
+    }
+    sessionStorage.setItem("userDetails", JSON.stringify(userDetails));
+    
+    // toast.success(response.data.message ||"Login Success!")
+    if(response.data.success){
+        console.log(response.data);
+        if (response.data.user.role === "admin") {
+            navigate("/admin");
+        }
+        else if (response.data.user.role === "user") {
+            navigate("/userpanel");
+        }
+    }
+    else{
+        console.log(response.data.message || 'Error Occured');
+    }
+} catch (error) {
+    console.log("An error Occured",error);
+    console.error(error);
+}
+}
     const login = (e) => {
         e.preventDefault();
         if (email1.trim() === "" || password2.trim() === "") {

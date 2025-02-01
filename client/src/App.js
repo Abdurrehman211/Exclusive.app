@@ -9,7 +9,8 @@ import Login from   './components/Login'  ;
 import { ToastContainer,useLocation } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import Userpanel from './components/Userpanel';
-
+import Admin from './components/Admin';
+import Logout from './components/Logout';
 
 function App() {
 
@@ -26,7 +27,9 @@ function App() {
       <Route path='/sign-up' element={<Signup />}/>
       <Route path='/login' element={<Login />}/>
       <Route path='/Userpanel' element={<Userpanel />} />
-    </Routes>
+      <Route path='/admin' element={<Admin />}  />  
+      <Route path='/Logout' element={<Logout />} />   
+      </Routes>
     <ToastContainer
     position='top-right'
     autoClose={1000}
