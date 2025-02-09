@@ -11,6 +11,7 @@ import "react-toastify/dist/ReactToastify.css";
 import Userpanel from './components/Userpanel';
 import Admin from './components/Admin';
 import Logout from './components/Logout';
+import TawkToChat from './components/TawkToChat';
 
 function App() {
 
@@ -22,7 +23,6 @@ function App() {
     </header>
     <Routes>
       <Route path='/' element={<Landing />} />
-      
       <Route path='/Counter' element={<Counter />} />
       <Route path='/sign-up' element={<Signup />}/>
       <Route path='/login' element={<Login />}/>
@@ -35,6 +35,9 @@ function App() {
     autoClose={1000}
     theme='colored'
     />
+    <footer>
+      <TawkToChat />
+    </footer>
 
    </Router>
    
