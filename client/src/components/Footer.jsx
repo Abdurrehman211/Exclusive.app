@@ -3,6 +3,8 @@ import './footer.css';
 function Footer() {
     return (
         <>
+
+        {/* hello */}
         <footer class="footer">
         <div class="container">
             <div class="row">
