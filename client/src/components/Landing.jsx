@@ -40,15 +40,6 @@ import Footer from "./Footer";
 
 function Landing() {
 
-// const [counter,setCounter]=useState(0);
-//   const increment =()=>{
-//     setCounter(counter+1);
-//   }
-//   const decrement =()=>{ 
-//     setCounter(counter-1);
-//   }
-
-
 const [activeCategory, setActiveCategory] = useState(null);
 const arrow=useRef(null);
 const arrow2=useRef(null);
