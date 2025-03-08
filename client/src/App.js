@@ -12,6 +12,7 @@ import Userpanel from './components/Userpanel';
 import Admin from './components/Admin';
 import Logout from './components/Logout';
 import TawkToChat from './components/TawkToChat';
+import Contact from './components/Contact';
 
 function App() {
 
@@ -20,6 +21,7 @@ function App() {
    <Router>
     <header>
       <Navigation />
+      <Contact/>
     </header>
     <Routes>
       <Route path='/' element={<Landing />} />

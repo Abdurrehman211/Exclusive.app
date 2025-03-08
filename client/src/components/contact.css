@@ -1,0 +1,54 @@
+
+#p2
+{
+    padding-left: 88px;
+    padding-top: 34px;
+    font-size: larger;
+    font-weight: 600;
+}
+#p1
+{
+    padding-left: 49px;
+    padding-top: 30px;
+
+}
+#p3
+{
+    padding-top: 20px;
+    padding-left: 48px;
+}
+#p4
+{
+   
+    font-size: larger;
+    font-weight: 600;
+    margin-left: 86px;
+}
+#p5
+{
+    
+    padding-left: 48px;
+    margin-top: 26px;
+}
+#p6
+{
+    padding-left: 48px;
+    margin-top: 21px;
+}
+#p7
+{padding-left: 49px;
+    padding-top: 18px;
+}
+hr{
+    width: 80%;
+    border: 1px solid black;
+    margin: 47px;
+}
+
+.class1
+{
+    background-color: #f8f8f8;
+    width: 401px;
+    margin: 240px 155px;
+    height: 484px;
+}
