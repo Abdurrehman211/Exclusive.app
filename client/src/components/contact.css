@@ -44,6 +44,17 @@ hr{
     border: 1px solid black;
     margin: 47px;
 }
+input
+{margin-left: 54px;
+    height: 35px;
+}
+textarea{
+    margin-left: 39px;
+}
+#b1
+{
+    float: right;
+}
 
 .class1
 {
@@ -51,4 +62,11 @@ hr{
     width: 401px;
     margin: 240px 155px;
     height: 484px;
+}
+.class2
+{background-color: red;
+    width: 733px;
+    height: 484px;
+    margin: -721px 588px;
+
 }
