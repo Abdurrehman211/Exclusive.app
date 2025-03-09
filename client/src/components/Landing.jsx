@@ -36,9 +36,10 @@ import service from './images/delivery.png';
 import headphines from './images/headphines.png';
 import security from './images/security.png';
 import Footer from "./Footer";
-
+import {useAccessibility} from './context/Accessibility';
 
 function Landing() {
+    const {highContrast,largeFont,toggleContrast,toggleFont}=useAccessibility();
 
 const [activeCategory, setActiveCategory] = useState(null);
 const arrow=useRef(null);
@@ -61,6 +62,10 @@ const arrow2=useRef(null);
 <>
 
 <section id="landing">
+    <div className={'pagecont ${highContrast ? "high-contrast":"" } ${ largeFont ? "large-font":""}'}>
+    <button id="acces" onClick={toggleContrast}>Toggle High Contrast</button>
+    <button id="access" onClick={toggleFont}>Toggle Large Text</button>
+    </div>
 <aside>
         <ul>
             <li onClick={() => toggleCategory('women')} >Woman's Fashion <img src={dropdown} alt="arrow" id="arrow1" ref={arrow}/></li>

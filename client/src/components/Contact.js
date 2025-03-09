@@ -11,7 +11,7 @@ function Contact ()
         const [phone, setphone] = useState("");
 
         //handle form submission
-        const handle=(e)=>{
+        const handlesubmet=(e)=>{
           e.preventDefault();
           alert ("message send");
             setname("");
@@ -34,7 +34,7 @@ function Contact ()
                 <p id="p7">Email: support@exclusive.com</p>
             </div>
             <div className="class2">
-                <form onSubmit={handle}>
+                <form onSubmit={(e)=>handlesubmet(e)}>
                 
                 <input
                 type="text"
@@ -63,8 +63,9 @@ function Contact ()
                 placeholder="Your message"
                 onChange={(e) => setmessage(e.target.value)}
                />
+               <button id="b1" type="submit" >Send Message</button>
 </form>
-<button id="b1" type="submit">Send Message</button>
+
             </div>
         </div>
     )

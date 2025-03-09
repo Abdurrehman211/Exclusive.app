@@ -13,11 +13,13 @@ import Admin from './components/Admin';
 import Logout from './components/Logout';
 import TawkToChat from './components/TawkToChat';
 import Contact from './components/Contact';
+import Accessibilityprovider from './components/context/Accessibility';
 
 function App() {
 
 
   return (
+    <Accessibilityprovider>
    <Router>
     <header>
       <Navigation />
@@ -31,6 +33,7 @@ function App() {
       <Route path='/Userpanel' element={<Userpanel />} />
       <Route path='/admin' element={<Admin />}  />  
       <Route path='/Logout' element={<Logout />} />   
+      <Route path='/Contact' element={<Contact/>}/>
       </Routes>
     <ToastContainer
     position='top-right'
@@ -42,6 +45,7 @@ function App() {
     </footer>
 
    </Router>
+   </Accessibilityprovider>
    
   );
 }

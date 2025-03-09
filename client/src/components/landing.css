@@ -834,3 +834,18 @@ display: block;
     margin: 0;
     font-size: 15px;
 }
+.high-contrast {
+    background-color: black;
+    color: yellow;
+    
+  }
+  
+  /* Large Text Mode */
+  .large-font {
+    font-size: 1.5rem;
+    
+  }
+  #acces{
+    background-color: #fa3131;
+    float: right;
+  }
