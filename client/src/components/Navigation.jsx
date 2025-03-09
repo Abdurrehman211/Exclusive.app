@@ -52,7 +52,7 @@ function Navigation() {
             <div className="links">
                 <ul>
                     <li><a href='/'>Home</a></li>
-                    <li><a href='/contact-us'>Contact</a></li>
+                    <li><a href='/contact'>Contact</a></li>
                     <li><a href='/about'>About</a></li>
                     <li><a href='/sign-up'>Sign up</a></li>
                 </ul>

@@ -23,7 +23,7 @@ function App() {
    <Router>
     <header>
       <Navigation />
-      <Contact/>
+      
     </header>
     <Routes>
       <Route path='/' element={<Landing />} />
