@@ -14,7 +14,7 @@ const AccessibilityContext = createContext();
     };
     return(
         <AccessibilityContext.Provider value={{highContrast,largeFont,toggleContrast,toggleFont}}>
-            <div className={'container ${highContrast?"high-contrast":""} ${largeFont ?"large-font":""}'}>
+            <div className={`container ${highContrast?"high-contrast":""} ${largeFont ?"large-font":""}`}>
             {children}
             </div>
             

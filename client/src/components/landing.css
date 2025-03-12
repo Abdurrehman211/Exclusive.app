@@ -834,6 +834,16 @@ display: block;
     margin: 0;
     font-size: 15px;
 }
+#bootn
+{
+    width: 95px;
+    background-color: black;
+    color: white;
+}
+.pagecont
+{
+    background-color: #a30000;
+}
 .high-contrast {
     background-color: black;
     color: yellow;
@@ -845,7 +855,10 @@ display: block;
     font-size: 1.5rem;
     
   }
-  #acces{
-    background-color: #fa3131;
-    float: right;
+  .access{
+    position: fixed;
+    z-index: 1;
+    background-color: red;
+    margin: 409px 1088px;
   }
+  
