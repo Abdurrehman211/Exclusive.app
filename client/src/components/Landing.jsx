@@ -108,7 +108,7 @@ const arrow2=useRef(null);
         </ul>
     </aside> 
     <div className="access" onClick={togglebutton} >
-         {show ? "hide": "show"} options
+        Accessability {show ? "hide": "show"} options
         { show &&(
 
         
