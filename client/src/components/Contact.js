@@ -1,5 +1,7 @@
 import React, { useState } from "react"
-import "./contact.css";
+import './contact.css';
+import Footer from "./Footer";
+
 
 function Contact ()
 {
@@ -22,7 +24,10 @@ function Contact ()
     
     return (
         
-        <div>
+        < >
+        <div  className="wraper">
+           <div className="container">
+            
             <div className="class1">
                 <p id="p2"> Call To Us</p>
                 <p id="p1">We are available 24/7,7 Days a week </p>
@@ -66,9 +71,28 @@ function Contact ()
                <button id="b1" type="submit" >Send Message</button>
 </form>
 
+
             </div>
-        </div>
+            </div>
+            </div>
+            
+            
+            
+            <footer> 
+    
+        <Footer/>
+        
+</footer>
+        </>
+        
     )
+        
+        
+
+
+    
+
+
 
 }
 export default  Contact;
