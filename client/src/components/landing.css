@@ -13,6 +13,11 @@ body {
     padding: 0;
     background-color: #ffffff;
 }
+.container{
+    margin-top: 100px;
+    margin-left: 20px;
+    margin-right: 2px;
+}
 
 aside {
     display: flex;

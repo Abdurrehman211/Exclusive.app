@@ -20,13 +20,13 @@ function App() {
 
 
   return (
-    <Accessibilityprovider>
+  
    <Router>
-    <header>
+ 
       <Navigation />
       
       
-    </header>
+  
     <Routes>
       <Route path='/' element={<Landing />} />
       <Route path='/Counter' element={<Counter />} />
@@ -48,7 +48,6 @@ function App() {
     </footer>
 
    </Router>
-   </Accessibilityprovider>
    
   );
 }

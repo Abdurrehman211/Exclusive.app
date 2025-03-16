@@ -8,7 +8,7 @@ function Footer() {
         <footer class="footer">
         <div class="container">
             <div class="row">
-                <div class="footer-col">
+                <div class="col-lg-3 col-md-6 col-sm-12 footer-col">
                     <h4>company</h4>
                     <ul>
                         <li><a href="#">about us</a></li>
@@ -17,7 +17,7 @@ function Footer() {
                         <li><a href="#">affiliate program</a></li>
                     </ul>
                 </div>
-                <div class="footer-col">
+                <div class="col-lg-3 col-md-6 col-sm-12 footer-col">
                     <h4>get help</h4>
                     <ul>
                         <li><a href="#">FAQ</a></li>
@@ -27,7 +27,7 @@ function Footer() {
                         <li><a href="#">payment options</a></li>
                     </ul>
                 </div>
-                <div class="footer-col">
+                <div class="col-lg-3 col-md-6 col-sm-12 footer-col">
                     <h4>online shop</h4>
                     <ul>
                         <li><a href="#">watch</a></li>
@@ -36,7 +36,7 @@ function Footer() {
                         <li><a href="#">dress</a></li>
                     </ul>
                 </div>
-                <div class="footer-col">
+                <div class="col-lg-3 col-md-6 col-sm-12 footer-col">
                     <h4>follow us</h4>
                     <div class="social-links">
                         <a href="#"><i class="fab fa-facebook-f">F</i></a>

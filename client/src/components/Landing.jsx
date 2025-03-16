@@ -36,17 +36,14 @@ import service from './images/delivery.png';
 import headphines from './images/headphines.png';
 import security from './images/security.png';
 import Footer from "./Footer";
-import {useAccessibility} from './context/Accessibility';
+
 
 function Landing() {
-    const {highContrast,largeFont,toggleContrast,toggleFont}=useAccessibility();
+
 
 const [activeCategory, setActiveCategory] = useState(null);
-const [show , setshow] = useState(false);
-const togglebutton=()=>
-{
-    setshow (!show);
-}
+
+
 
 
 const arrow=useRef(null);
@@ -107,17 +104,7 @@ const arrow2=useRef(null);
             <li>Health & Beauty</li>
         </ul>
     </aside> 
-    <div className="access" onClick={togglebutton} >
-        Accessability {show ? "hide": "show"} options
-        { show &&(
-
-        
-    <div className={'pagecont ${highContrast ? "high-contrast":"" } ${ largeFont ? "large-font":""}'}>
-    <button id="bootn" onClick={toggleContrast}>Toggle High Contrast</button>
-    <button id="bootn" onClick={toggleFont}>Toggle Large Text</button>
-    </div>
-        )}
-    </div>
+   
     <div className="main">
         <img src={dropdown} alt="dropdown" className="dropdown1" />
         <div className="ads">
