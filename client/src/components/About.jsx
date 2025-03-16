@@ -14,6 +14,25 @@ function About ()
         dlnsc
 
     </div>
+    <div className='about2'>
+        <div id="box1"> 
+            <h id="hb"> 10.5k</h>
+            <p id='pb'>Saller active our site</p>
+        </div>
+        <div id='box2'>
+            <h id="hb"> 33k</h> 
+            <p id='pb' > monthly product sale</p>
+            </div>
+        <div id='box3'>
+            <h id="hb"> 45.5k</h>
+            <p id='pb'> Customer active in our site</p> 
+            </div>
+        <div id='box4'>
+            <h id="hb"> 25k</h> 
+            <p id='pb'> annual grooss sale in store</p>
+            </div>
+
+    </div>
     </>
     )
 }
