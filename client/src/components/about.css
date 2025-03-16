@@ -1,5 +1,32 @@
 
-class1
+
+#ab1
 {
-    background-color: antiquewhite;
+    font-size: xx-large;
+    font-weight: 500px;
+}
+#ab2
+{
+    padding-top: 38px;
+    margin-left: 6px;
+}
+#ab3
+{
+    padding-top: 21px;
+    margin-left: 3px;
+}
+.about
+{
+    
+    margin: 342px -1px;
+    width: 400px;
+    box-sizing: border-box;
+}
+.about1
+{
+    background-color: rgb(97, 97, 60);
+    width: 500px;
+    height: 452px;
+    float: right;
+    margin-top: -766px;
 }
