@@ -15,6 +15,46 @@
     padding-top: 21px;
     margin-left: 3px;
 }
+#box1
+{
+    background-color: aliceblue;
+    text-align: center;
+    height: 183px;
+    width: 209px;
+    box-sizing: border-box;
+}
+#box2
+{
+    background-color: rgb(14, 20, 26);
+    text-align: center;
+    height: 183px;
+    width: 209px;
+    box-sizing: border-box;
+}
+#box3
+{
+    background-color: rgb(54, 134, 204);
+    text-align: center;
+    height: 183px;
+    width: 209px;
+    box-sizing: border-box;
+}
+#box4
+{
+    background-color: rgb(158, 160, 162);
+    text-align: center;
+    height: 183px;
+    box-sizing: border-box;
+    width: 209px;
+}
+#hb
+{
+    font-weight: bold;
+}
+#pb
+{
+    font-size: small;
+}
 .about
 {
     
@@ -29,4 +69,12 @@
     height: 452px;
     float: right;
     margin-top: -766px;
+}
+.about2
+{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 21px;
+    margin-top: -210px;
 }
