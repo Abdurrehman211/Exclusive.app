@@ -31,7 +31,7 @@ function Contact ()
         <section id="Contact-hero">
             <div className="container">
                 <div className="row mb-5">
-                    <div className="col-lg-6 col-md-12 col-sm-12">
+                    <div className="col-lg-6 col-md-12 col-sm-12 ">
                         <div className="Contact-desc">
                 <h2> Call Us</h2>
                 <p >We are available 24/7,7 Days a week </p>

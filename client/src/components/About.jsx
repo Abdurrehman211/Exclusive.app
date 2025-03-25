@@ -4,33 +4,20 @@ function About ()
 {
     return (
     <>
-    <div className="about">
-        <h id="ab1" > Our Story</h>
-        <p id='ab2'> Launche in 2015 ,Exculisve in fjsho;andaand <br/> kdsagjhibnglsngfd jngogo gng r/nfng rengrgn <br/>iofh hudnff hfueifhh nfmiofofsdjfdsfnsDFDSDFUU HDUFDFHUDFHSF FHDUSFHSFHUDF FHSDUFFHS FFHSDUFHFSHFUSelf bfekfb fkebfeb</p>
-        <p id='ab3'> flnon fjdnfo ekjfnneo kefb <br/> efnlfndlfflnf <br/> fnknldnfldf jdala </p>
+    <div className='container'>
+<div className="col-lg-6 col-md-12 col-sm-12"> 
+    <div className='our-story'> 
+       <h1> Our Story</h1>
+        <p>Lorem ipsum dolor, sit amet consectetur adipisicing elit.<br/> Laborum deleniti accusamus obcaecati dolor dicta ab quas cumque<br/>  reiciendis voluptatem, natus magnam soluta nobis harum eaque reprehenderit aliquid m<br/> aiores voluptas vitae?</p>
+    <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Similique impedit corporis, quaerat dicta quisquam fugit ratione facere placeat deleniti optio atque eos. Similique obcaecati velit ex eum sed iusto nihil?</p>
+    </div>
+</div>
+<div className="col-lg-6 col-md-12 col-sm-12">
+    <div className='picture'>
+        sdjdnsjdsndjsdbkjb
 
     </div>
-    <div className='about1'>
-        dlnsc
-
-    </div>
-    <div className='about2'>
-        <div id="box1"> 
-            <h id="hb"> 10.5k</h>
-            <p id='pb'>Saller active our site</p>
-        </div>
-        <div id='box2'>
-            <h id="hb"> 33k</h> 
-            <p id='pb' > monthly product sale</p>
-            </div>
-        <div id='box3'>
-            <h id="hb"> 45.5k</h>
-            <p id='pb'> Customer active in our site</p> 
-            </div>
-        <div id='box4'>
-            <h id="hb"> 25k</h> 
-            <p id='pb'> annual grooss sale in store</p>
-            </div>
+</div>
 
     </div>
     </>
