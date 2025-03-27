@@ -22,19 +22,19 @@ function About ()
 </div>
 <div className='cardes col-lg-12 col-md-12 col-sm-12 mt-5'>
     <div className='card1'> 
-        <h2> 10.5k</h2>
+        <h3> 10.5k</h3>
         <p> Saller active our site</p>
     </div>
     <div className='card2'> 
-        <h2> 33k</h2>
+        <h3> 33k</h3>
         <p> Monthly product sale</p>
     </div>
     <div className='card3 '> 
-        <h2> 44.5k</h2>
+        <h3> 44.5k</h3>
         <p> Custome active on our site</p>
     </div>
     <div className='card4'> 
-        <h2> 10k</h2>
+        <h3> 10k</h3>
         <p> Average gross sale in our sute</p>
     </div>
     </div>
