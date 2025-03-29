@@ -1,6 +1,10 @@
 import React from 'react';
 import './about.css';
 import controller from './images/controlller.png';
+import Images from './images/images.jpeg';
+import img from './images/image1.jpeg';
+import img1 from './images/images2.jpeg';
+0
 function About ()
 {
     return (
@@ -55,32 +59,32 @@ function About ()
     
     </div>
     </div>
-    <div className='row  mt-5 '>
-        <div className='col-lg-4 col-md-12 col-sm-12 '>
-            <div className='img1'>
-                <img src={controller} alt="controller" />
+    <div className='row  mt-5  ms-5'>
+        <div className='col-lg-4 col-md-12 col-sm-12  ps-5'>
+            <div className='img1 '>
+                <img src={Images} alt="images" />
             </div>
-            <div className='img-body'> 
-                <h6> M huzaifa khan</h6>
-                <p> ba,ajanldcnacdk</p>
-            </div>
-        </div>
-        <div className='col-lg-4 col-md-12 col-sm-12'>
-            <div className='img1'>
-                <img src={controller} alt="controller" />
-            </div>
-            <div className='img-body'> 
-                <h6> M huzaifa khan</h6>
-                <p> ba,ajanldcnacdk</p>
+            <div className='img-body pt-3 '> 
+                <h4> Tom Cruise</h4>
+                <p> Founder and chairmain</p>
             </div>
         </div>
-        <div className='col-lg-4 col-md-12 col-sm-12'>
+        <div className='col-lg-4 col-md-12 col-sm-12 ps-5'>
             <div className='img1'>
-                <img src={controller} alt="controller" />
+                <img src={img} alt="controller"  style={{ height: '200px'}}/>
             </div>
-            <div className='img-body'> 
-                <h6> M huzaifa khan</h6>
-                <p> ba,ajanldcnacdk</p>
+            <div className='img-body  pt-3'> 
+                <h4 className='ps-4' > Will Smith</h4>
+                <p className='ps-4 '> Managing Director</p>
+            </div>
+        </div>
+        <div className='col-lg-4 col-md-12 col-sm-12 ps-5'>
+            <div className='img1'>
+                <img src={img1} alt="controller" />
+            </div>
+            <div className='img-body pt-3'> 
+                <h4 className='ps-5'> Emma Watson</h4>
+                <p className='ps-5'> Product Director</p>
             </div>
         </div>
     </div>
