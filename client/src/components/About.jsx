@@ -1,10 +1,10 @@
 import React from 'react';
 import './about.css';
-import controller from './images/controlller.png';
+
 import Images from './images/images.jpeg';
 import img from './images/image1.jpeg';
 import img1 from './images/images2.jpeg';
-0
+
 function About ()
 {
     return (
@@ -51,7 +51,7 @@ function About ()
         </div>
         
     </div>
-    <div className="  col-lg-3 col-md-12 col-sm-12"> 
+    <div className="  col-lg-3 col-md-12 col-sm-12 "> 
  <div className='card1'>
         <h3> 10k</h3>
         <p> Average gross sale in our sute</p>
@@ -68,10 +68,14 @@ function About ()
                 <h4> Tom Cruise</h4>
                 <p> Founder and chairmain</p>
             </div>
+            <div>
+                <li></li>
+              
+            </div>
         </div>
         <div className='col-lg-4 col-md-12 col-sm-12 ps-5'>
             <div className='img1'>
-                <img src={img} alt="controller"  style={{ height: '200px'}}/>
+                <img src={img} alt="image"  style={{ height: '200px', backgroundColor:"red"}}/>
             </div>
             <div className='img-body  pt-3'> 
                 <h4 className='ps-4' > Will Smith</h4>
@@ -80,7 +84,7 @@ function About ()
         </div>
         <div className='col-lg-4 col-md-12 col-sm-12 ps-5'>
             <div className='img1'>
-                <img src={img1} alt="controller" />
+                <img src={img1} alt="image" />
             </div>
             <div className='img-body pt-3'> 
                 <h4 className='ps-5'> Emma Watson</h4>
