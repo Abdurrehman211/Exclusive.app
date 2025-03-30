@@ -114,13 +114,18 @@ function About ()
         </div>
     </div>
 
-    <div className='row  row-3'>
+    <div className='row  row-3 pb-5'>
         <div className='col-lg-3 col-md-12 col-sm-12'>
             <div className='img2' >
                 <img src={head} alt=" image" />
 
 
             </div>
+            <div>      
+                
+                <h6>  Free And Fast Delivery</h6>
+                <p> Free Delivery on order over $100</p>
+                </div>
             
 
         </div>
@@ -131,6 +136,13 @@ function About ()
             <div className='img2' >
                 <img src={deliver} alt=" image" />
 
+            </div>
+
+
+            <div className='icon-body'>
+                
+            <h6>  Free And Fast Delivery</h6>
+            <p> Free Delivery on order over $100</p>
             </div>
 
         </div>
@@ -145,6 +157,14 @@ function About ()
                 
 
             </div>
+            <div>  
+                
+            <h6>  Free And Fast Delivery</h6>
+            <p> Free Delivery on order over $100</p>
+                
+                
+                
+                    </div>
             
            
 
@@ -154,43 +174,7 @@ function About ()
 
     </div>
 
-    <div className='row  row-4   mb-5'>
-        <div  className='col-lg-3 col-md-12 col-sm-12'>
-            <div>
-
-            <h6>  Free And Fast Delivery</h6>
-            <p> Free Delivery on order over $100</p>
-            </div>
-            
-            
-              </div>
-
-
-
-              <div  className='col-lg-3 col-md-12 col-sm-12'>
-            <div>
-
-            <h6>  Free And Fast Delivery</h6>
-            <p> Free Delivery on order over $100</p>
-            </div>
-            
-            
-              </div>
-
-              <div  className='col-lg-3 col-md-12 col-sm-12'>
-            <div>
-
-            <h6>  Free And Fast Delivery</h6>
-            <p> Free Delivery on order over $100</p>
-            </div>
-            
-            
-              </div>
-        
-        
-        
-        
-          </div>
+    
 
     
    
