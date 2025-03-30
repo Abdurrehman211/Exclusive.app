@@ -8,6 +8,7 @@ import img1 from './images/images2.jpeg';
 import head from './images/headphines.png';
 import deliver from './images/delivery.png';
 import secure from './images/security.png';
+import Footer from './Footer';
 
 function About ()
 {
@@ -63,8 +64,8 @@ function About ()
     
     </div>
     </div>
-    <div className='row  mt-5  ms-5'>
-        <div className='col-lg-4 col-md-12 col-sm-12  ps-5'>
+    <div className='row  row-2  mt-5  ms-5 '>
+        <div className='col-lg-4 col-md-12 col-sm-12  ps-5 '>
             <div className='img1 '>
                 <img src={Images} alt="images" />
             </div>
@@ -118,7 +119,9 @@ function About ()
             <div className='img2' >
                 <img src={head} alt=" image" />
 
+
             </div>
+            
 
         </div>
 
@@ -131,6 +134,7 @@ function About ()
             </div>
 
         </div>
+       
 
 
 
@@ -138,13 +142,57 @@ function About ()
         <div className='col-lg-3 col-md-12 col-sm-12'>
             <div className='img2' >
                 <img src={secure} alt=" image" />
+                
 
             </div>
+            
+           
 
         </div>
+        
 
 
     </div>
+
+    <div className='row  row-4   mb-5'>
+        <div  className='col-lg-3 col-md-12 col-sm-12'>
+            <div>
+
+            <h6>  Free And Fast Delivery</h6>
+            <p> Free Delivery on order over $100</p>
+            </div>
+            
+            
+              </div>
+
+
+
+              <div  className='col-lg-3 col-md-12 col-sm-12'>
+            <div>
+
+            <h6>  Free And Fast Delivery</h6>
+            <p> Free Delivery on order over $100</p>
+            </div>
+            
+            
+              </div>
+
+              <div  className='col-lg-3 col-md-12 col-sm-12'>
+            <div>
+
+            <h6>  Free And Fast Delivery</h6>
+            <p> Free Delivery on order over $100</p>
+            </div>
+            
+            
+              </div>
+        
+        
+        
+        
+          </div>
+
+    
    
     
 
@@ -153,6 +201,16 @@ function About ()
 
 
     </div>
+<footer>
+<Footer/>
+    
+
+    </footer>
+
+
+
+
+
     </>
     )
 }
