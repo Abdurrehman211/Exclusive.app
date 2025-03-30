@@ -1,9 +1,13 @@
 import React from 'react';
 import './about.css';
+import { FaLinkedin, FaTwitter, FaFacebook } from "react-icons/fa";
 
 import Images from './images/images.jpeg';
 import img from './images/image1.jpeg';
 import img1 from './images/images2.jpeg';
+import head from './images/headphines.png';
+import deliver from './images/delivery.png';
+import secure from './images/security.png';
 
 function About ()
 {
@@ -69,7 +73,11 @@ function About ()
                 <p> Founder and chairmain</p>
             </div>
             <div>
-                <li></li>
+            
+            <a href='#'> <FaLinkedin size={20} color='black' />  </a>
+         <a href='#'>   <FaTwitter size={20} color='black' /> </a> 
+          <a href='#'>  <FaFacebook size={20} color='black'  /> </a> 
+
               
             </div>
         </div>
@@ -81,6 +89,12 @@ function About ()
                 <h4 className='ps-4' > Will Smith</h4>
                 <p className='ps-4 '> Managing Director</p>
             </div>
+            <div className='ps-4'>
+             
+            <a href='#'> <FaLinkedin size={20} color='black' />  </a>
+         <a href='#'>   <FaTwitter size={20} color='black' /> </a> 
+          <a href='#'>  <FaFacebook size={20} color='black'  /> </a> 
+            </div>
         </div>
         <div className='col-lg-4 col-md-12 col-sm-12 ps-5'>
             <div className='img1'>
@@ -90,7 +104,46 @@ function About ()
                 <h4 className='ps-5'> Emma Watson</h4>
                 <p className='ps-5'> Product Director</p>
             </div>
+            <div className='ps-5'>
+           
+            <a href='#'> <FaLinkedin size={20} color='black' />  </a>
+         <a href='#'>   <FaTwitter size={20} color='black' /> </a> 
+          <a href='#'>  <FaFacebook size={20}  color='black' /> </a> 
+            </div>
         </div>
+    </div>
+
+    <div className='row  row-3'>
+        <div className='col-lg-3 col-md-12 col-sm-12'>
+            <div className='img2' >
+                <img src={head} alt=" image" />
+
+            </div>
+
+        </div>
+
+
+
+        <div className='col-lg-3 col-md-12 col-sm-12'>
+            <div className='img2' >
+                <img src={deliver} alt=" image" />
+
+            </div>
+
+        </div>
+
+
+
+
+        <div className='col-lg-3 col-md-12 col-sm-12'>
+            <div className='img2' >
+                <img src={secure} alt=" image" />
+
+            </div>
+
+        </div>
+
+
     </div>
    
     
