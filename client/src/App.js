@@ -15,6 +15,7 @@ import TawkToChat from './components/TawkToChat';
 import Contact from './components/Contact';
 import About from './components/About';
 import Accessibilityprovider from './components/context/Accessibility';
+import Account from './components/Account';
 
 function App() {
 
@@ -24,6 +25,7 @@ function App() {
    <Router>
  
       <Navigation />
+      <Account/>
       
       
   
@@ -37,6 +39,7 @@ function App() {
       <Route path='/Logout' element={<Logout />} />   
       <Route path='/Contact' element={<Contact/>}/>
       <Route path='/About' element={<About/>}/>
+      <Route path='/Account' element={<Account/>}/>
       </Routes>
     <ToastContainer
     position='top-right'
