@@ -64,7 +64,7 @@ function About ()
     
     </div>
     </div>
-    <div className='row  row-2  mt-5  ms-5 '>
+    <div className='row  row-2  mt-5 '>
         <div className='col-lg-4 col-md-12 col-sm-12  ps-5 '>
             <div className='img1 '>
                 <img src={Images} alt="images" />
@@ -114,7 +114,7 @@ function About ()
         </div>
     </div>
 
-    <div className='row  row-3 pb-5'>
+    <div className='row  row-3 mb-5'>
         <div className='col-lg-3 col-md-12 col-sm-12'>
             <div className='img2' >
                 <img src={head} alt=" image" />
