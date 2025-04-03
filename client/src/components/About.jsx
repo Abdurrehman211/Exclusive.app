@@ -116,7 +116,7 @@ function About ()
 
     <div className='row  row-3 mb-5'>
         <div className='col-lg-3 col-md-12 col-sm-12'>
-            <div className='img2' >
+            <div className='img2 ps-5' >
                 <img src={head} alt=" image" />
 
 
@@ -133,7 +133,7 @@ function About ()
 
 
         <div className='col-lg-3 col-md-12 col-sm-12'>
-            <div className='img2' >
+            <div className='img2 ps-5' >
                 <img src={deliver} alt=" image" />
 
             </div>
@@ -152,7 +152,7 @@ function About ()
 
 
         <div className='col-lg-3 col-md-12 col-sm-12'>
-            <div className='img2' >
+            <div className='img2 ps-5' >
                 <img src={secure} alt=" image" />
                 
 
