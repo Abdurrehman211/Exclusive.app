@@ -25,7 +25,7 @@ function App() {
    <Router>
  
       <Navigation />
-      <Account/>
+      
       
       
   

@@ -68,7 +68,7 @@ const arrow2=useRef(null);
 <>
 
 <section id="landing">
-    <Accessibilityprovider />
+ 
 <aside>
         <ul>
             <li onClick={() => toggleCategory('women')} >Woman's Fashion <img src={dropdown} alt="arrow" id="arrow1" ref={arrow}/></li>

@@ -55,6 +55,7 @@ function Navigation() {
                     <li><a href='/contact'>Contact</a></li>
                     <li><a href='/about'>About</a></li>
                     <li><a href='/sign-up'>Sign up</a></li>
+                    <li><a href='/account'> Account</a></li>
                 </ul>
             </div>
             <div className="customs">
