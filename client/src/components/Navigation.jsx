@@ -7,6 +7,7 @@ import profile from './images/Profile.png';
 import { Link, useLocation } from 'react-router-dom';
 import Business from './images/Busines.gif';
 
+
 function Navigation() {
     const [userdata, setUser] = useState("");
     const [admindata, setAdmin] = useState("");
@@ -55,7 +56,8 @@ function Navigation() {
                     <li><a href='/contact'>Contact</a></li>
                     <li><a href='/about'>About</a></li>
                     <li><a href='/sign-up'>Sign up</a></li>
-                    <li><a href='/account'> Account</a></li>
+                    
+                    <li><a href='/checkout'> Checkout</a></li>
                 </ul>
             </div>
             <div className="customs">
@@ -81,7 +83,7 @@ function Navigation() {
                     </>
                 ) : (
                     <>
-                        <a href="/Cart"><img src={cart} alt='cart' id='cart' /></a>
+                        <a href="/Account"><img src={cart} alt='cart' id='cart' /></a>
                         <a href='/Wishlist'><img src={wish} alt="Wish" id='wish' /></a>
                         <Link to={`/login`}><img src={profile} alt="Profile" id='profile' width={'30px'} height={'30px'} style={{ cursor: 'pointer' }} /></Link>
                     </> 

@@ -1,0 +1,37 @@
+.input-check
+{
+    width: 40px;
+    background-color: red;
+    transform: scale(1.5);
+}
+.inputtext
+{
+    width: 300px;
+   
+}
+.list
+{
+    display: flex;
+}
+.list-1
+{
+    display: flex;;
+}
+.lcd
+{
+    padding-left: 10%;
+}
+.price
+{
+    padding-left: 20%;
+}
+.mt-5
+{
+display: flex;
+
+}
+ 
+.pricetotal
+{
+    padding-left: 44%;
+}

@@ -16,15 +16,20 @@ import Contact from './components/Contact';
 import About from './components/About';
 import Accessibilityprovider from './components/context/Accessibility';
 import Account from './components/Account';
+import Checkout from './components/Checkout';
 
 function App() {
 
 
   return (
+    
+    
   
    <Router>
  
       <Navigation />
+      
+      
       
       
       
@@ -40,6 +45,8 @@ function App() {
       <Route path='/Contact' element={<Contact/>}/>
       <Route path='/About' element={<About/>}/>
       <Route path='/Account' element={<Account/>}/>
+    
+      <Route path='/Checkout' element={<Checkout/>}/>
       </Routes>
     <ToastContainer
     position='top-right'
@@ -51,6 +58,7 @@ function App() {
     </footer>
 
    </Router>
+   
    
   );
 }
