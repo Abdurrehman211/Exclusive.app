@@ -94,6 +94,7 @@ function Checkout() {
                 <input   type="radio" value={payment} onChange={(e)=>setpayment(e.target.value)}  style={{transform:'scale(1.5)' }} />
                 Bank
                 </label>
+                <br/>
 
                 <label  >
                 <input type="radio" value={payment} onChange={(e)=>setpayment(e.target.value)}  style={{transform:'scale(1.5)' }} />
@@ -101,10 +102,10 @@ function Checkout() {
                 </label>
 
              </div>
-             <div >
-            <button className="btn btn-dark"  style={{}}>Coupal</button>
-            <button className="btn btn-danger" style={{marginRight:'60px'}}>Coupal</button>
-            <button className="btn btn-danger "  style={{marginRight:'40px', marginTop:"-37px"}}>Apply</button>
+             <div className=" mt-5" >
+            <button className="coupon"  >Coupal Code</button>
+            <button className=" coupon" > Apple Coupal</button>
+            <button className="coupon ">Place Order</button>
             </div>
 
 

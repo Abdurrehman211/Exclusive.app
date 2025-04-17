@@ -1,0 +1,136 @@
+.headingg
+{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    height: 66px;
+    box-sizing: border-box;
+    
+    background-color: #dee2e642;
+}
+.proced
+{
+    float: right;
+}
+.mt-2
+{
+    padding-right: 100px;
+}
+.button-shop
+{
+    
+    border:'2px solid black';
+
+    border-radius: 6px;
+    width: 180px;
+    height: 40px;
+    color: white;
+      box-sizing: border-box; 
+      background-color: rgba(61, 64, 222, 0.733);
+      transition: 0.3s all ease;
+    
+      
+}
+.button-shop:hover{
+    
+    width: 183px;
+    height: 43px;
+    transition: scale 0.3 all ease-in;
+    transform: scale(1.1);
+}
+.btn-Cart
+{
+    float: right;
+    border:'2px solid black';
+    border-radius: 6px;
+    width: 180px;
+    height: 40px;
+    
+      background-color: white;
+      transition: 0.3s all ease;
+
+}
+.btn-Cart:hover{
+    width: 183px;
+    height: 43px;
+    transition: scale 0.3 all ease-in;
+    transform: scale(1.1);
+}
+.coupon-code
+{
+    border:'2px solid black';
+    width: 130px;
+    height: 40px;
+    border: 2px solid black;
+    border-radius: 4px;
+      
+      background-color: white;
+      transition: 0.3s all ease;
+}
+.coupon-code:hover{
+    width: 133px;
+    height: 43px;
+    transition: scale 0.3 all ease-in;
+    transform: scale(1.1);
+
+}
+
+
+
+
+.apply-coupon
+{
+height: 40px;
+width: 130px;
+color: white;
+border: 2px solid red;
+border-radius: 4px;
+
+     
+      background-color: red;
+      margin-left: 30%;
+      transition: 0.3s all ease;
+}
+.apply-coupon:hover{
+
+
+    width: 133px;
+    height: 43px;
+    transform: scale(1.1);
+    transition: 0.3 all ease-in;
+
+
+
+}
+.cart-total 
+{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+.Shipment
+{
+    border: 2px solid black;
+   
+}
+.Proceed
+{
+    height: 40px;
+width: 200px;
+color: white;
+border: 2px solid red;
+border-radius: 6px;
+
+     
+      background-color: red;
+      
+      transition: 0.3s all ease;
+
+}
+.Proceed:hover
+{
+    width: 203px;
+    height: 43px;
+    transform: scale(1.1);
+    transition: 0.3 all ease-in;
+}

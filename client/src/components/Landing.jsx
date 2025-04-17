@@ -38,6 +38,7 @@ import security from './images/security.png';
 import Footer from "./Footer";
 import Accessibilityprovider from "./context/Accessibility";
 
+
 function Landing() {
 
 const [activeCategory, setActiveCategory] = useState(null);

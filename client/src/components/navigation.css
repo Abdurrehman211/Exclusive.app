@@ -122,3 +122,49 @@ padding: 5px;
     width: 100%;
     height: -webkit-fill-available;
 }
+.dropdown-menu
+{
+    display: none;
+    min-width: 10px;
+    
+   
+    
+   
+}
+.profile-dropdown img {
+    cursor: pointer;
+  }
+.profile-dropdown
+{
+    z-index: 1;
+   
+    height: 10px;
+    
+    
+
+}
+.dropdown-menu a {
+    color: black;
+    padding: 10px 0px;
+    text-decoration: none;
+    
+    
+    transition: background 0.2s ease;
+    display: block;
+    
+    
+    
+}
+.dropdown-menu a:hover {background-color: #ddd;}
+.profile-dropdown:hover .dropdown-menu
+ {
+    display: block;
+    margin-left: -110px;
+  
+
+    
+    
+    
+ 
+    
+}

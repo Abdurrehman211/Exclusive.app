@@ -35,3 +35,25 @@ display: flex;
 {
     padding-left: 44%;
 }
+.coupon
+{
+    border:'2px solid black';
+     margin-left: 3%;
+
+    border-radius: 6px;
+    width: 180px;
+    height: 40px;
+    color: white;
+      box-sizing: border-box; 
+      background-color: rgba(61, 64, 222, 0.733);
+      transition: 0.3s all ease;
+}
+.coupon:hover
+{
+    width: 185px;
+    height: 45px;
+    transform: scale(1.1);
+    transition: scale 0,3 all ease-in;
+    
+
+}

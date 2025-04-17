@@ -66,11 +66,11 @@ function Account ()
                     <input className="ms-5" type="text" placeholder="Address" value={address} onChange={(e)=>setaddress(e.target.value)} />
 
                     <h6> Passward Change</h6>
-                    <input className="mt-5 password" type="password" placeholder="Old Password" value={password} onChange={(e)=>setpassword(e.target.value)}/>
+                    <input className="mt-4 password" type="password" placeholder="Old Password" value={password} onChange={(e)=>setpassword(e.target.value)}/>
                     <br/>
-                    <input className="mt-5 password" type="password" placeholder="New Password" value={newpassword} onChange={(e)=>setnewpassword(e.target.value)}  />
+                    <input className="mt-4 password" type="password" placeholder="New Password" value={newpassword} onChange={(e)=>setnewpassword(e.target.value)}  />
                     <br/>
-                    <input className="mt-5 password" type="password" placeholder=" Confirm New Password" value={confirmpassword} onChange={(e)=>setconfirmpassword(e.target.value)} />
+                    <input className="mt-4 password" type="password" placeholder=" Confirm New Password" value={confirmpassword} onChange={(e)=>setconfirmpassword(e.target.value)} />
                     <br/>
 
                     <button  className=" btn btn-danger">Save Changes</button>

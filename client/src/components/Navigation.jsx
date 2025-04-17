@@ -57,7 +57,7 @@ function Navigation() {
                     <li><a href='/about'>About</a></li>
                     <li><a href='/sign-up'>Sign up</a></li>
                     
-                    <li><a href='/checkout'> Checkout</a></li>
+                  
                 </ul>
             </div>
             <div className="customs">
@@ -83,9 +83,20 @@ function Navigation() {
                     </>
                 ) : (
                     <>
-                        <a href="/Account"><img src={cart} alt='cart' id='cart' /></a>
+                        <a href="/Cart"><img src={cart} alt='cart' id='cart' /></a>
                         <a href='/Wishlist'><img src={wish} alt="Wish" id='wish' /></a>
-                        <Link to={`/login`}><img src={profile} alt="Profile" id='profile' width={'30px'} height={'30px'} style={{ cursor: 'pointer' }} /></Link>
+                        
+                        <div className="profile-dropdown">
+  <img src={profile} alt="Profile" id="profile" width="30px" height="30px" />
+  <div className="dropdown-menu  ">
+   <a href="/Account">My Account</a>
+   <a href="/Login">Login</a>
+   <a href="#">profile</a>
+   
+  </div>
+</div>
+                        
+                        
                     </> 
                 )}
             </div>

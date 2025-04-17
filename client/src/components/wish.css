@@ -1,0 +1,110 @@
+#p1
+{
+    display: block;
+}
+
+.bag
+{
+    margin-top: -10px;
+    border:'2px solid black';
+    border-radius: 6px;
+    width: 180px;
+    height: 40px;
+    float: right;
+    
+      background-color: white;
+      transition: 0.3s all ease;
+}
+.bag:hover{
+    width: 185px;
+    height: 43px;
+    transform: scale(1.1);
+    transition: scale 0.3 all ease-in;
+
+}
+
+
+
+.dark
+{
+    color: white;
+    background-color: black;
+    width: 100%;
+    height: 30px;
+   
+   
+    
+
+}
+
+
+.pricee
+{
+    display: flex;
+    gap: 10%;
+    
+    
+}
+.wish-card
+{
+    background: #f9f9f9;
+    border: 1px solid;
+    border-radius: 5px;
+    box-shadow: 1px 1px  rgb(46, 45, 45);
+    
+}
+.card-body
+{
+    background:white;
+  
+}
+#qiuckview
+{
+    position: relative;
+}
+
+.see-all
+{
+    
+    margin-top: -10px;
+    border:'2px solid black';
+    border-radius: 6px;
+    width: 180px;
+    height: 40px;
+    float: right;
+    
+      background-color: white;
+      transition: 0.3s all ease;
+}
+.see-all:hover{
+    width: 185px;
+    height: 43px;
+    transform: scale(1.1);
+    transition: scale 0.3 all ease-in;
+
+}
+.rating
+{
+    display: flex;
+    gap: 10%;
+    margin-left: 23px;
+
+}
+#Stars
+{
+width: 60px;
+height: 30px;
+}
+#none
+{
+    background-color: red;
+    width: 40px;
+    height: 60px;
+    margin-top: -7px;
+    border-radius: 6px;
+}
+.side-para
+{
+    display: flex;
+    gap: 3%;
+}

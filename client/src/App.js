@@ -17,6 +17,8 @@ import About from './components/About';
 import Accessibilityprovider from './components/context/Accessibility';
 import Account from './components/Account';
 import Checkout from './components/Checkout';
+import  Cart from './components/Cart'; 
+import Wishlist from './components/Wishlist';
 
 function App() {
 
@@ -45,6 +47,8 @@ function App() {
       <Route path='/Contact' element={<Contact/>}/>
       <Route path='/About' element={<About/>}/>
       <Route path='/Account' element={<Account/>}/>
+      <Route path='/Cart' element={<Cart/>}/>
+      <Route path='/Wishlist' element={<Wishlist/>}/>
     
       <Route path='/Checkout' element={<Checkout/>}/>
       </Routes>
