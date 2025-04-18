@@ -8,7 +8,9 @@ import img1 from './images/images2.jpeg';
 import head from './images/headphines.png';
 import deliver from './images/delivery.png';
 import secure from './images/security.png';
+import shop from './images/shoping.jpeg';
 import Footer from './Footer';
+
 
 function About ()
 {
@@ -18,17 +20,16 @@ function About ()
         <div className='row'>
         
 <div className="col-lg-6 col-md-12 col-sm-12"> 
-    <div className='our-story'> 
-       <h1> Our Story</h1>  
-        <p>Lorem ipsum dolor, sit amet consectetur adipisicing elit.<br/> Laborum deleniti accusamus obcaecati dolor dicta ab quas cumque<br/>  reiciendis voluptatem, natus magnam soluta nobis harum eaque reprehenderit aliquid m<br/> aiores voluptas vitae?</p>
+    <div className='our-story '> 
+       <h1 > Our Story</h1>  
+        <p className='mt-4'>Lorem ipsum dolor, sit amet consectetur adipisicing elit.<br/> Laborum deleniti accusamus obcaecati dolor dicta ab quas cumque<br/>  reiciendis voluptatem, natus magnam soluta nobis harum eaque reprehenderit aliquid m<br/> aiores voluptas vitae?</p>
     <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Similique impedit corporis, quaerat dicta quisquam fugit ratione facere placeat deleniti optio atque eos. Similique obcaecati velit ex eum sed iusto nihil?</p>
     </div>
 </div>
 <div className="col-lg-6 col-md-12 col-sm-12 ">
     <div className='picture'>
-        sdjdnsjdsndjsdbkjb
-        <p>Lorem ipsum dolor, sit amet consectetur adipisicing elit. Doloribus illum tempora optio, tenetur ducimus sunt eum culpa sint nemo, ex dolorem repellat eos adipisci officia eaque molestiae rem totam voluptas.</p>
-<p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Natus atque nobis, sint dolor earum non sunt delectus quidem, necessitatibus commodi quae veritatis voluptatem! Itaque illum illo, debitis deleniti error natus.</p>
+        <img src={shop} alt="img"  style={{width:'700px' , height:'400px'}}/>
+      
     </div>
 </div>
 </div>
