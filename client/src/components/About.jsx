@@ -138,6 +138,17 @@ function About() {
                 <h5>
                   Muhammad Hammad
                 </h5>
+                <div className="social">
+                  <a href="https://facebook.com" target="_blank" rel="noopener noreferrer">
+        <FaFacebook color="#3b5998" />
+      </a>
+      <a href="https://instagram.com" target="_blank" rel="noopener noreferrer">
+        <FaTwitter color="#3b5998" />
+      </a>
+      <a href="mailto:example@mail.com">
+        <FaLinkedin color="#3b5998" />
+      </a>
+                </div>
               </div>
               </div>
             </div>
@@ -153,6 +164,17 @@ function About() {
                 <h5>
                   Huzaifa Khan Niazi
                 </h5>
+                  <div className="social">
+                  <a href="https://facebook.com" target="_blank" rel="noopener noreferrer">
+        <FaFacebook color="#3b5998" />
+      </a>
+      <a href="https://instagram.com" target="_blank" rel="noopener noreferrer">
+        <FaTwitter color="#3b5998" />
+      </a>
+      <a href="mailto:example@mail.com">
+        <FaLinkedin color="#3b5998" />
+      </a>
+                </div>
               </div>
               </div>
             </div>
@@ -168,6 +190,17 @@ function About() {
                 <h5>
                   Abdurrehman Abid
                 </h5>
+                  <div className="social">
+                  <a href="https://facebook.com" target="_blank" rel="noopener noreferrer">
+        <FaFacebook color="#3b5998" />
+      </a>
+      <a href="https://instagram.com" target="_blank" rel="noopener noreferrer">
+        <FaTwitter color="#3b5998" />
+      </a>
+      <a href="mailto:example@mail.com">
+        <FaLinkedin color="#3b5998" />
+      </a>
+                </div>
               </div>
               </div>
             </div>
