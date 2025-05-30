@@ -135,6 +135,9 @@ function About() {
                 <h4>
                   CEO
                 </h4>
+                <h5>
+                  Muhammad Hammad
+                </h5>
               </div>
               </div>
             </div>
@@ -147,6 +150,9 @@ function About() {
                 <h4>
                   Manager
                 </h4>
+                <h5>
+                  Huzaifa Khan Niazi
+                </h5>
               </div>
               </div>
             </div>
@@ -159,6 +165,9 @@ function About() {
                 <h4>
                   Developer
                 </h4>
+                <h5>
+                  Abdurrehman Abid
+                </h5>
               </div>
               </div>
             </div>
