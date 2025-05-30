@@ -17,7 +17,7 @@ app.use(
 );
 
 mongoose
-  .connect("mongodb://127.0.0.1:27017/Exclusive", {
+  .connect("mongodb+srv://battlemani790:swistan%4012@buyers.vg5z41x.mongodb.net/Exclusive", {
     useNewUrlParser: true,
     useUnifiedTopology: true,
   })

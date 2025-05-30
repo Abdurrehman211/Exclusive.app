@@ -23,19 +23,9 @@ import Wishlist from './components/Wishlist';
 function App() {
 
 
-  return (
-    
-    
-  
-   <Router>
- 
+  return ( 
+  <Router>
       <Navigation />
-      
-      
-      
-      
-      
-  
     <Routes>
       <Route path='/' element={<Landing />} />
       <Route path='/Counter' element={<Counter />} />
@@ -49,7 +39,6 @@ function App() {
       <Route path='/Account' element={<Account/>}/>
       <Route path='/Cart' element={<Cart/>}/>
       <Route path='/Wishlist' element={<Wishlist/>}/>
-    
       <Route path='/Checkout' element={<Checkout/>}/>
       </Routes>
     <ToastContainer
@@ -60,10 +49,7 @@ function App() {
     <footer>
       <TawkToChat />
     </footer>
-
    </Router>
-   
-   
   );
 }
 

@@ -1,24 +1,100 @@
-.picture{
-    background-color: red;
-    width :100%;
+#Links{
+     font-family: "Montserrat";
+}
+#Hero-About {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 10px;
+    position: relative;
+    font-family: "Montserrat";
+    height: 100vh;
+    width: 100%;
+}
+#Story {
+    display: flex;
+    align-items: flex-start;
+    justify-content: center;
+    flex-direction: column;
+    text-align: left;
+}
+#Story h2 {
+    width: 100%;
+    font-size: 45px;
+    padding-bottom: 20px;
+    margin-bottom: 50px;
+    border-bottom: 1px solid grey;
+}
+#Story p {
+    font-size: 20px;
+}
+#Story img {
+    margin-right: -20px;
+}
+#Cards-about{
+      display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 10px;
+    position: relative;
+    font-family: "Montserrat";
+    background: url('./images/cart_4.jpg') no-repeat;
+    background-attachment: fixed;
+      height: 70vh;
+    width: 100%;
+}
+#Cards-about .container{
+    margin: 0;
+}
+.card-head .p{
+width: 60px;
+height: 60px;
+border-radius: 50%;
+background-color: black;
+transition: 0.2s all ease-in;
+display: flex;
+align-items: center;
+justify-content: center;
+}
+#Cards-about .card1{
+   color: aliceblue;
+}
+#Cards-about .card1:hover .p{
+background-color: transparent;
+transition: 0.2s all ease-in;
+}
+#Cards-about .card1 h4{
+    margin-bottom: 8px;
+}
+#Cards-about .card1 p{
+    margin: 0;
+}
+#our_team{
+        display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 10px;
+    position: relative;
+    font-family: "Montserrat";
+    height: 100vh;
+    width: 100%;
+}
+#our_team img{
+    aspect-ratio: 3/4;
+}
+#our_team .card3{
+    height: 100%;
+    padding: 5px;
+    border: 1px solid black;
+}
+#our_team .card3 .card-team{
+
+padding: 5px;
+display: flex;
+align-items: center;
+justify-content: center;
 
 }
-.col-sm-12
-{
-    box-sizing: border-box;
+#our_team .card3 .card-team img{
+border-bottom: 1px solid grey;
 }
-.row-3
-{
-padding-left: 15%;
-   padding-top: 10%;
-   margin-top: 8%;
-}
-.icon-body
-{
-   padding-right: 10%;
-}
-
-
-
-
-
