@@ -1,8 +1,11 @@
 const express = require("express");
 const mongoose = require("mongoose");
+const nodemailer = require("nodemailer");
 const cors = require("cors");
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
+require('dotenv').config();
+
 
 const JWT_Secret = "BDFFAA1591D84498FA9213C88D522";
 const app = express();
@@ -16,8 +19,8 @@ app.use(
   })
 );
 
-mongoose
-  .connect("mongodb+srv://battlemani790:buyers.vg5z41x.mongodb.net/Exclusive", {
+
+mongoose.connect(process.env.CONN_STRING, {
     useNewUrlParser: true,
     useUnifiedTopology: true,
   })
@@ -99,14 +102,12 @@ app.post("/login", async (req, res) => {
 
 app.get("/getuser", async (req, res) => {
   const authHeader = req.headers.authorization;
-
   if (!authHeader) {
     return res.status(401).json({
       message: "No token provided",
       success: false,
     });
   }
-
   const token = authHeader.split(" ")[1]; // Extract the token
   if (!token) {
     return res.status(401).json({
@@ -114,7 +115,6 @@ app.get("/getuser", async (req, res) => {
       success: false,
     });
   }
-
   try {
     const decoded = jwt.verify(token, JWT_Secret);
     const user = await User.findOne({ _id: decoded.id });
@@ -143,6 +143,56 @@ app.get("/getuser", async (req, res) => {
 
 //*********************************************** */
 
+
+
+//Email Roue Start
+//********************************************* */
+
+app.post("/send-mail",async (req,res)=>{
+  const {email,name,message,phone}=req.body;
+  //transporter
+  const transporter = nodemailer.createTransport({
+    service: "gmail",
+  host: "smtp.gmail.com",
+  port: 587,                     // Use 587 for STARTTLS
+  secure: false,                // MUST be false for STARTTLS
+  auth: {
+    user: process.env.EMAIL_USER,     // Your Gmail address
+    pass: process.env.EMAIL_PASS,               // Your **App Password**, not Gmail login password
+  },
+  tls: {
+    rejectUnauthorized: false   // Optional: sometimes needed for local dev
+  }
+});
+  //creating Mail fucntion
+  const mailOptions = {
+    from: email,
+    subject: "Complaint",
+    to: "battlemani790@gmail.com",
+    text: `
+    A new Message from ${email} \n
+    Name: ${name} \n
+    Email: ${email} \n
+    Phone No: ${phone} \n 
+    Message: ${message} \n
+    `
+  };
+  try{
+    await transporter.sendMail(mailOptions);
+    res.status(200).json({ success: true, message: "Email sent successfully!" });
+  }catch(err){
+   console.error("Email send failed:", err);
+    res.status(500).json({ success: false, message: "Failed to send email." });
+  }
+})
+
+
+
+// Email Roue End
+//********************************************************* */
+
+
+
 app.get("/", (req, res) => {
   res.send("Backend is running");
 });
@@ -152,3 +202,11 @@ const PORT = 3001;
 app.listen(PORT, () => {
   console.log(`Server is running on http://localhost:${PORT}`);
 });
+
+
+
+  // service: "gmail",
+    // auth:{
+    //   user: "battlemani790@gmail.com",
+    //   pass: "pmyxcfrzkcbqhcbg",
+    // },

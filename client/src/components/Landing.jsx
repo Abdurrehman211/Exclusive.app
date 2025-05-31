@@ -671,24 +671,53 @@ function Landing() {
           </div>
         </div>
       </section>
-      <section id="info">
-        <div className="info-main">
-          <div className="services">
-            <img src={service} alt="Service" id="service" />
-            <h4 id="h4">Free and Fast Delivery</h4>
-            <p id="p2">Free delivery for all orders over $140</p>
-          </div>
-          <div className="headphines">
-            <img src={headphines} alt="headphones" id="Headphines" />
-            <h4 id="h4">24/7 Customer Service</h4>
-            <p id="p2">Friendly 24/7 customer support</p>
-          </div>
-          <div className="security">
-            <img src={security} alt="security" id="security" />
-            <h4 id="h4">Money Back Guarantee</h4>
-            <p id="p2">We reurn money within 30 days</p>
-          </div>
-        </div>
+      <section id="our_team1">
+       <div className="contianer">
+            <div className="row ">
+                    <div className="col-lg-4 col-md-6 col-sm-12">
+                      <div className="card4">
+                        <div className="card-head ">
+                          <p className="p">
+                            <img
+                              src={service}
+                              alt="Some image of the user shopping | Exclusive site"
+                            />
+                          </p>
+                        </div>
+                        <h3>FREE AND FAST DELIVERY</h3>
+                        <p>Free delivery on more than 50K </p>
+                      </div>
+                    </div>
+                     <div className="col-lg-4 col-md-6 col-sm-12">
+                        <div className="card4">
+                        <div className="card-head ">
+                          <p className="p">
+                            <img
+                              src={security}
+                              alt="Some image of the user shopping | Exclusive site"
+                            />
+                          </p>
+                        </div>
+                        <h3>MONEY BACK GUARANTEE</h3>
+                        <p>We return money within 30 days</p>
+                      </div>
+                    </div>
+                     <div className="col-lg-4 col-md-6 col-sm-12">
+                        <div className="card4">
+                        <div className="card-head ">
+                          <p className="p">
+                            <img
+                              src={headphines}
+                              alt="Some image of the user shopping | Exclusive site"
+                            />
+                          </p>
+                        </div>
+                        <h3>24/7 CUSTOMER SERVICE</h3>
+                        <p>Friendly 24/7 customer support</p>
+                      </div>
+                    </div>
+                  </div>
+       </div>
       </section>
       <footer>
         <Footer />

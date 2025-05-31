@@ -6,13 +6,13 @@ import dollar from "./images/dollar.png";
 import customer from "./images/customer.png";
 import seller from "./images/sellers.png";
 import cash from "./images/cash.png";
-import team1 from './images/team1.jpg';
-import team2 from './images/team2.jpg';
-import team3 from './images/team3.jpg';
-import team4 from './images/team4.jpg';
+import team1 from "./images/team1.jpg";
+import team2 from "./images/team2.jpg";
+import team3 from "./images/team3.jpg";
+import team4 from "./images/team4.jpg";
 import deliver from "./images/delivery.png";
 import secure from "./images/security.png";
-import shop from "./images/shoping.jpeg";
+import shop from "./images/headphines.png";
 import Footer from "./Footer";
 import { useLocation } from "react-router-dom";
 import "bootstrap/dist/js/bootstrap.bundle.min";
@@ -125,83 +125,165 @@ function About() {
       </section>
       <section id="our_team">
         <div className="container">
-          <div className="row">
+          <div className="row mb-5">
+            <div className="col-lg-12 col-md-12 col-sm-12">
+              <h1 className="border-bottom">
+                Our <span className="Hero-highlight">Team</span>
+              </h1>
+            </div>
+          </div>
+          <div className="row mb-5">
             <div className="col-lg-4 col-md-6 col-sm-12">
               <div className="card3">
-              <div className="card-team">
-                <img src={team3} alt="Some image of the user shopping | Exclusive site" width={"90%"} height={"90%"} />
-              </div>
-              <div className="card-body">
-                <h4>
-                  CEO
-                </h4>
-                <h5>
-                  Muhammad Hammad
-                </h5>
-                <div className="social">
-                  <a href="https://facebook.com" target="_blank" rel="noopener noreferrer">
-        <FaFacebook color="#3b5998" />
-      </a>
-      <a href="https://instagram.com" target="_blank" rel="noopener noreferrer">
-        <FaTwitter color="#3b5998" />
-      </a>
-      <a href="mailto:example@mail.com">
-        <FaLinkedin color="#3b5998" />
-      </a>
+                <div className="card-team">
+                  <img
+                    src={team3}
+                    alt="Some image of the user shopping | Exclusive site"
+                    width={"90%"}
+                    height={"90%"}
+                  />
                 </div>
-              </div>
+                <div className="card-body">
+                  <h4>CEO</h4>
+                  <h5>Muhammad Hammad</h5>
+                  <div className="social">
+                    <a
+                      href="https://facebook.com"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                    >
+                      <FaFacebook color="#3b5998" style={{ height: "50px", width: "50px" }}  />
+                    </a>
+                    <a
+                      href="https://instagram.com"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                    >
+                      <FaTwitter color="#3b5998" style={{ height: "50px", width: "50px" }}  />
+                    </a>
+                    <a href="mailto:example@mail.com">
+                      <FaLinkedin color="#3b5998" style={{ height: "50px", width: "50px" }}  />
+                    </a>
+                  </div>
+                </div>
               </div>
             </div>
             <div className="col-lg-4 col-md-6 col-sm-12">
-   <div className="card3">
-              <div className="card-team">
-                 <img src={team2} alt="Some image of the user shopping | Exclusive site" width={"90%"} height={"90%"} />
-              </div>
-              <div className="card-body">
-                <h4>
-                  Manager
-                </h4>
-                <h5>
-                  Huzaifa Khan Niazi
-                </h5>
-                  <div className="social">
-                  <a href="https://facebook.com" target="_blank" rel="noopener noreferrer">
-        <FaFacebook color="#3b5998" />
-      </a>
-      <a href="https://instagram.com" target="_blank" rel="noopener noreferrer">
-        <FaTwitter color="#3b5998" />
-      </a>
-      <a href="mailto:example@mail.com">
-        <FaLinkedin color="#3b5998" />
-      </a>
+              <div className="card3">
+                <div className="card-team">
+                  <img
+                    src={team2}
+                    alt="Some image of the user shopping | Exclusive site"
+                    width={"90%"}
+                    height={"90%"}
+                  />
                 </div>
-              </div>
+                <div className="card-body">
+                  <h4>Manager</h4>
+                  <h5>Huzaifa Khan Niazi</h5>
+                  <div className="social">
+                    <a
+                      href="https://facebook.com"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                    >
+                      <FaFacebook color="#3b5998"  style={{ height: "50px", width: "50px" }} />
+                    </a>
+                    <a
+                      href="https://instagram.com"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                    >
+                      <FaTwitter color="#3b5998" style={{ height: "50px", width: "50px" }}  />
+                    </a>
+                    <a href="mailto:example@mail.com">
+                      <FaLinkedin color="#3b5998" style={{ height: "50px", width: "50px" }} />
+                    </a>
+                  </div>
+                </div>
               </div>
             </div>
             <div className="col-lg-4 col-md-6 col-sm-12">
-                 <div className="card3">
-              <div className="card-team">
-                 <img src={team4} alt="Some image of the user shopping | Exclusive site" width={"90%"} height={"90%"} />
-              </div>
-              <div className="card-body">
-                <h4>
-                  Developer
-                </h4>
-                <h5>
-                  Abdurrehman Abid
-                </h5>
+              <div className="card3">
+                <div className="card-team">
+                  <img
+                    src={team4}
+                    alt="Some image of the user shopping | Exclusive site"
+                    width={"90%"}
+                    height={"90%"}
+                  />
+                </div>  
+                <div className="card-body">
+                  <h4>Developer</h4>
+                  <h5>Abdurrehman Abid</h5>
                   <div className="social">
-                  <a href="https://facebook.com" target="_blank" rel="noopener noreferrer">
-        <FaFacebook color="#3b5998" />
-      </a>
-      <a href="https://instagram.com" target="_blank" rel="noopener noreferrer">
-        <FaTwitter color="#3b5998" />
-      </a>
-      <a href="mailto:example@mail.com">
-        <FaLinkedin color="#3b5998" />
-      </a>
+                    <a
+                      href="https://facebook.com"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                    >
+                      <FaFacebook color="#3b5998" style={{ height: "50px", width: "50px" }}  />
+                    </a>
+                    <a
+                      href="https://instagram.com"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                    >
+                      <FaTwitter color="#3b5998" style={{ height: "50px", width: "50px" }} />
+                    </a>
+                    <a href="mailto:example@mail.com">
+                      <FaLinkedin color="#3b5998" style={{ height: "50px", width: "50px" }} />
+                    </a>
+                  </div>
                 </div>
               </div>
+            </div>
+          </div>
+        </div>
+      </section>
+      <section id="our_team1">
+        <div className="container">
+          <div className="row ">
+            <div className="col-lg-4 col-md-6 col-sm-12">
+              <div className="card4">
+                <div className="card-head ">
+                  <p className="p">
+                    <img
+                      src={deliver}
+                      alt="Some image of the user shopping | Exclusive site"
+                    />
+                  </p>
+                </div>
+                <h3>FREE AND FAST DELIVERY</h3>
+                <p>Free delivery on more than 50K </p>
+              </div>
+            </div>
+             <div className="col-lg-4 col-md-6 col-sm-12">
+                <div className="card4">
+                <div className="card-head ">
+                  <p className="p">
+                    <img
+                      src={secure}
+                      alt="Some image of the user shopping | Exclusive site"
+                    />
+                  </p>
+                </div>
+                <h3>MONEY BACK GUARANTEE</h3>
+                <p>We return money within 30 days</p>
+              </div>
+            </div>
+             <div className="col-lg-4 col-md-6 col-sm-12">
+                <div className="card4">
+                <div className="card-head ">
+                  <p className="p">
+                    <img
+                      src={shop}
+                      alt="Some image of the user shopping | Exclusive site"
+                    />
+                  </p>
+                </div>
+                <h3>24/7 CUSTOMER SERVICE</h3>
+                <p>Friendly 24/7 customer support</p>
               </div>
             </div>
           </div>
