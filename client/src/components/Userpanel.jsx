@@ -3,8 +3,9 @@ import { useEffect, useState } from "react";
 import axios from "axios";
 import './dashboard.css';
 import { FaShoppingCart, FaUsers, FaChartLine, FaBoxOpen,FaCog, FaSignOutAlt   } from 'react-icons/fa';
-import { useNavigate } from "react-router";
+import { Link, useNavigate } from "react-router";
 import { toast } from "react-toastify";
+import { googleLogout } from '@react-oauth/google';
 import profile from './images/Profile.png';
 function Userpanel() {
 const navigate = useNavigate();
@@ -13,9 +14,14 @@ const [user, setUser] = useState({
   name: "",
 });
 
-useEffect(() => { 
-  FetchuserDetail(); 
-}, );
+useEffect(() => {
+  const controller = new AbortController();
+  FetchuserDetail(controller.signal);
+
+  return () => {
+    controller.abort(); // cancel on unmount
+  };
+}, []);
 
 const FetchuserDetail = async () => {
   try {
@@ -35,15 +41,19 @@ const FetchuserDetail = async () => {
           setUser({
               name: response.data.user.name || "Username",
               email: response.data.user.email || "example@gmail.com",
+              profilePic: response.data.user.profilePic || "",
           });
 
           let userDetails = {
               loggedIn: true,
               name: response.data.user.name,
               email: response.data.user.email,
-              role: response.data.user.role
+              role: response.data.user.role,
+              Pic: response.data.user.profilePic,
           };
-          sessionStorage.setItem("userDetails", JSON.stringify(userDetails));
+           const link = userDetails.Pic;
+           sessionStorage.setItem("userDetails", JSON.stringify(userDetails));
+
 
           // Redirect if admin
           if (role === "admin") {
@@ -57,7 +67,25 @@ const FetchuserDetail = async () => {
       console.error(error);
   }
 };
+ const handleLogout = () => {
 
+
+  console.log("Clearing the Session storage")
+  sessionStorage.clear(); // Remove all session storage items at once
+
+
+    // Google logout
+    googleLogout();
+
+    // Show toast
+    toast.info("Please Login Again", {
+      position: "top-right",
+      autoClose: 3000,
+    });
+
+    // Navigate to login/home
+    navigate("/");
+  };
     return(
 <>
 <div className="dashboard">
@@ -69,18 +97,20 @@ const FetchuserDetail = async () => {
           <li><FaUsers /> Customers</li>
           <li><FaBoxOpen /> Products</li>
           <li><FaCog/> Settings</li>
-          <li onClick={() => navigate("/Logout")}><FaSignOutAlt /> Logout</li>
+          <li onClick={handleLogout}><FaSignOutAlt /> Logout</li>
         </ul>
       </aside>
       <main className="content">
         <h1>Welcome to the Dashboard</h1>
         <div className="profile-section">
             <div className="profile-info">
-              <img 
-                src={profile} 
-                alt="Profile" 
-                className="profile-image"
-              />
+           <img 
+  src={user.profilePic ? user.profilePic : profile} 
+  alt="Profile" 
+  className="profile-image"
+/>
+
+
               <div className="profile-details">
                 <h2 className="profile-name">{user.name}</h2>
                 <p className="profile-email">{user.email}</p>

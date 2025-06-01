@@ -13,6 +13,8 @@ function Navigation() {
     const [admindata, setAdmin] = useState("");
     const location = useLocation();
 
+    const profilePic = sessionStorage.getItem('Pic');
+
     // Fetch user data when location changes
     useEffect(() => {
         getData();
@@ -20,6 +22,7 @@ function Navigation() {
 
     const getData = async () => {
         let data = sessionStorage.getItem("userDetails");
+        
         if (data){
             let parseData = JSON.parse(data);
             if (parseData.loggedIn){
@@ -69,7 +72,7 @@ function Navigation() {
                         <a href="/Cart"><img src={cart} alt='cart' id='cart' /></a>
                         <a href='/Wishlist'><img src={wish} alt="Wish" id='wish' /></a>
                         <Link to={`/Userpanel`} className='admin'>
-                            <img src={profile} alt="Profile" id='profile' width={'30px'} height={'30px'} style={{ cursor: 'pointer' }} />
+                            <img src={profilePic ? profilePic : profile} alt="Profile" id='profile' width={'30px'} height={'30px'} style={{ cursor: 'pointer' }} />
                             {userdata.name}
                         </Link>
                     </>

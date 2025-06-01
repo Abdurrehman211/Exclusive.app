@@ -5,15 +5,18 @@ import signup from "./images/signup.png";
 import Google from "./images/Icon-Google.png";
 import axios from "axios";
 import {  toast } from "react-toastify";
+import { GoogleLogin } from "@react-oauth/google";
 
-// hellooo
 
 const Login = () => {
+
+
     const navigate = useNavigate();
     const [email1, setEmail] = useState("");
     const [password2, setPassword] = useState("");
     const [isLoading, setIsLoading] = useState(false); // Add loading state
 
+// normal Login*****
     const HandleLogin = async () => {
         try {
             setIsLoading(true); // Start loading
@@ -54,6 +57,31 @@ const Login = () => {
         }
     };
 
+    // Google Login 
+
+const HandleGoogleLogin = async (credentialResponse) => {
+  const googleToken = credentialResponse.credential;
+
+  try {
+    const res = await axios.post('http://localhost:3001/login-google', {
+      token: googleToken,
+    });
+
+    if (res.status === 200) {
+      const jwtToken = res.data.token;
+      sessionStorage.setItem("Auth-Token", jwtToken);
+
+      toast.success("Login Success!");
+     FetchuserDetail(); // Also handles navigation
+    }
+  } catch (error) {
+    console.error("Google login error:", error);
+    const errorMsg = error.response?.data?.error || "Google login failed";
+    toast.error(errorMsg);
+  }
+};
+
+
 const FetchuserDetail =async () => {
 try {
     const token = sessionStorage.getItem("Auth-Token");
@@ -68,8 +96,11 @@ try {
         loggedIn: true,
         name: response.data.user.name,
         email: response.data.user.email,
-        role: response.data.user.role
+        role: response.data.user.role,
+        Pic: response.data.user.profilePic,
     }
+   
+
     sessionStorage.setItem("userDetails", JSON.stringify(userDetails));
     
     // toast.success(response.data.message ||"Login Success!")
@@ -139,10 +170,23 @@ try {
                                 {isLoading ? "Logging in..." : "Login"}
                             </button>
                             <br />
-                            <button type="button" className="google">
-                                <img src={Google} alt="Google" />
-                                Sign up with Google
-                            </button>
+                    
+                               <GoogleLogin
+  onSuccess={HandleGoogleLogin}
+  onError={() => {
+    toast.error("Invalid Email or Password", {
+                position: "top-right",
+                autoClose: 3000,
+                hideProgressBar: false,
+                closeOnClick: true,
+                pauseOnHover: true,
+                draggable: true,
+                theme: "light",
+            });
+  }}
+  className="google"
+/>
+                          
                             <br />
                         </form>
                         <Link to="/sign-up" className="link">

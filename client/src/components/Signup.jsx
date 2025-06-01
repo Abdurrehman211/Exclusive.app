@@ -4,6 +4,7 @@ import { Link, useNavigate } from "react-router-dom";
 import signup from './images/signup.png';
 import Google from './images/Icon-Google.png';
 import axios from "axios";
+import {  toast } from "react-toastify";
 import { useState } from "react";
 const Signup = () => {
     const navigate = useNavigate();
@@ -21,12 +22,23 @@ const role = "user";
             role:role
         }).then(Response =>{
             console.log(Response.data);
-            alert("Signup Success");
+            if(Response.status == 201){
+                toast.success("Signup Successfull");
             navigate("/login");
+            }
+           
+            else{
+                toast.error("Something went wrong");
+            }
+       
         })
         .catch(err =>{
-            console.log(err);
-            alert("Signup Failed");
+           if (err.response && err.response.status === 409) {
+            toast.error("Email already exists. Please use a different one.");
+        } else {
+            toast.error("Signup failed. Please try again.");
+            console.error(err);
+        }
         })
     }
 const HandleSignup =(e)=>{
@@ -58,7 +70,7 @@ HandleSign();
                         <input type="password" placeholder="Confirm Password" required onChange={(e) => setConfirmPassword(e.target.value)}/>
                         <br />
                         <button type="submit" className="btn22">Create Account</button><br />
-                        <button type="Google-login" className="google"><img src={Google} alt="Google" />Sign up with Google</button>
+                       
                         <br />
                        
                     </form>

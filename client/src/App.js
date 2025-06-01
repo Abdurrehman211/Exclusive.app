@@ -19,9 +19,31 @@ import Account from './components/Account';
 import Checkout from './components/Checkout';
 import  Cart from './components/Cart'; 
 import Wishlist from './components/Wishlist';
-
+import axios from 'axios';
+import { toast } from 'react-toastify';
 function App() {
 
+  // Token Evaluator 
+axios.interceptors.response.use(
+  response => response,
+  error => {
+    if (
+      error.response &&
+      error.response.status === 401 &&
+      error.response.data.message === "Token expired. Please login again."
+    ) {
+
+      sessionStorage.clear();
+
+      // Inform the user
+      toast.info("Session expired. Please login again.");
+
+    
+      window.location.href = "/login";
+    }
+    return Promise.reject(error);
+  }
+);
 
   return ( 
   <Router>

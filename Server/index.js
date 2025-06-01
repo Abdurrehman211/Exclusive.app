@@ -4,10 +4,14 @@ const nodemailer = require("nodemailer");
 const cors = require("cors");
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
-require('dotenv').config();
+require("dotenv").config();
+const { OAuth2Client } = require("google-auth-library");
 
+// Variables..
+const JWT_Secret = process.env.JWT_Secret;
+const client = new OAuth2Client(process.env.Google_Client);
 
-const JWT_Secret = "BDFFAA1591D84498FA9213C88D522";
+//Headers and CORS....
 const app = express();
 app.use(express.json());
 app.use(
@@ -19,8 +23,9 @@ app.use(
   })
 );
 
-
-mongoose.connect(process.env.CONN_STRING, {
+// MONGO Connection....
+mongoose
+  .connect(process.env.CONN_STRING, {
     useNewUrlParser: true,
     useUnifiedTopology: true,
   })
@@ -33,25 +38,34 @@ const userSchema = new mongoose.Schema({
   name: String,
   email: String,
   password: String,
-  role: String,
+  role: {
+    type: String,
+    default: "user",
+  },
+  profilePic: {
+    type: String,
+    default: "", // Safe default if not provided
+  },
 });
+
 const User = mongoose.model("Registers", userSchema);
 
 //Register Route
 
-app.post("/register", (req, res) => {
-  console.log(req.body);
+app.post("/register", async (req, res) => {
   const { name, email, password, role } = req.body;
+  const existingUser = await User.findOne({ email });
+  if (existingUser) {
+    return res.status(409).json({ message: "Email already exists" });
+  }
   bcrypt
     .hash(password, 10)
     .then((hash) => {
       User.create({ name, email, password: hash, role }).then((user) => {
-        console.log("Data stored:", user);
         res.status(201).send("User registered successfully"); // Respond to the frontend
       });
     })
     .catch((err) => {
-      console.error(err);
       res.status(500).send("Error storing user data"); // Handle error response
     });
 });
@@ -73,7 +87,7 @@ app.post("/login", async (req, res) => {
       return res.status(404).send("User not found");
     }
     console.log("Finding Pass");
-    const isValidPassword = await bcrypt.compare(password, user.password);
+    const isValidPassword = bcrypt.compare(password, user.password);
     if (!isValidPassword) {
       console.log("Invalid password");
       return res.status(401).send("Invalid password");
@@ -98,6 +112,56 @@ app.post("/login", async (req, res) => {
 
 //********************************************************************** */
 
+//Login with Google
+
+//***************************************************** */
+app.post("/login-google", async (req, res) => {
+  const token = req.body.token;
+  try {
+    const ticket = await client.verifyIdToken({
+      idToken: token,
+      audience: process.env.GOOGLE_CLIENT_ID,
+    });
+
+    const payload = ticket.getPayload();
+
+    const { email, name, picture } = payload;
+
+    let user = await User.findOne({ email: email });
+
+    if (!user) {
+      user = await User.create({
+        name,
+        email,
+        password: null,
+        role: "user",
+        profilePic: picture,
+      });
+    }
+    const jwtToken = jwt.sign(
+      { id: user._id, role: user.role, username: user.name },
+      JWT_Secret,
+      { expiresIn: "1h" }
+    );
+    res.json({
+      success: true,
+      token: jwtToken,
+      user: {
+        name: user.name,
+        email: user.email,
+        role: user.role,
+      },
+    });
+  } catch (error) {
+    console.error(error);
+    res.status(401).json({ success: false, error: "Invalid Google token" });
+  }
+});
+
+//Login with Google END
+
+//***************************************************** */
+
 //User data ROUTE Start
 
 app.get("/getuser", async (req, res) => {
@@ -116,9 +180,8 @@ app.get("/getuser", async (req, res) => {
     });
   }
   try {
-    const decoded = jwt.verify(token, JWT_Secret);
-    const user = await User.findOne({ _id: decoded.id });
-
+    const decoded = jwt.verify(token, JWT_Secret); // jwt.verify throws if expired or invalid
+    const user = await User.findOne({ _id: decoded.id }).select("-password");
     if (user) {
       return res.status(200).json({
         success: true,
@@ -131,10 +194,16 @@ app.get("/getuser", async (req, res) => {
       });
     }
   } catch (error) {
+    if (error.name === "TokenExpiredError") {
+      return res.status(401).json({
+        success: false,
+        message: "Token expired. Please login again.",
+      });
+    }
     console.error(error);
-    return res.status(500).json({
+    return res.status(401).json({
       success: false,
-      message: "Error decoding token",
+      message: "Invalid token",
     });
   }
 });
@@ -143,27 +212,25 @@ app.get("/getuser", async (req, res) => {
 
 //*********************************************** */
 
-
-
 //Email Roue Start
 //********************************************* */
 
-app.post("/send-mail",async (req,res)=>{
-  const {email,name,message,phone}=req.body;
+app.post("/send-mail", async (req, res) => {
+  const { email, name, message, phone } = req.body;
   //transporter
   const transporter = nodemailer.createTransport({
     service: "gmail",
-  host: "smtp.gmail.com",
-  port: 587,                     // Use 587 for STARTTLS
-  secure: false,                // MUST be false for STARTTLS
-  auth: {
-    user: process.env.EMAIL_USER,     // Your Gmail address
-    pass: process.env.EMAIL_PASS,               // Your **App Password**, not Gmail login password
-  },
-  tls: {
-    rejectUnauthorized: false   // Optional: sometimes needed for local dev
-  }
-});
+    host: "smtp.gmail.com",
+    port: 587,
+    secure: false,
+    auth: {
+      user: process.env.EMAIL_USER,
+      pass: process.env.EMAIL_PASS,
+    },
+    tls: {
+      rejectUnauthorized: false,
+    },
+  });
   //creating Mail fucntion
   const mailOptions = {
     from: email,
@@ -175,23 +242,21 @@ app.post("/send-mail",async (req,res)=>{
     Email: ${email} \n
     Phone No: ${phone} \n 
     Message: ${message} \n
-    `
+    `,
   };
-  try{
+  try {
     await transporter.sendMail(mailOptions);
-    res.status(200).json({ success: true, message: "Email sent successfully!" });
-  }catch(err){
-   console.error("Email send failed:", err);
+    res
+      .status(200)
+      .json({ success: true, message: "Email sent successfully!" });
+  } catch (err) {
+    console.error("Email send failed:", err);
     res.status(500).json({ success: false, message: "Failed to send email." });
   }
-})
-
-
+});
 
 // Email Roue End
 //********************************************************* */
-
-
 
 app.get("/", (req, res) => {
   res.send("Backend is running");
@@ -202,11 +267,3 @@ const PORT = 3001;
 app.listen(PORT, () => {
   console.log(`Server is running on http://localhost:${PORT}`);
 });
-
-
-
-  // service: "gmail",
-    // auth:{
-    //   user: "battlemani790@gmail.com",
-    //   pass: "pmyxcfrzkcbqhcbg",
-    // },
