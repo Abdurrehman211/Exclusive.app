@@ -94,6 +94,7 @@ try {
     console.log(response.data);
     let userDetails = {
         loggedIn: true,
+ 
         name: response.data.user.name,
         email: response.data.user.email,
         role: response.data.user.role,

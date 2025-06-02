@@ -1,7 +1,7 @@
 
 import './App.css';
 import Navigation from './components/Navigation';
-import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import { BrowserRouter as Router, Routes, Route, Navigate, useNavigate } from "react-router-dom";
 import Landing from './components/Landing';
 import Counter from './components/Counter';
 import Signup from './components/Signup';
@@ -21,8 +21,8 @@ import  Cart from './components/Cart';
 import Wishlist from './components/Wishlist';
 import axios from 'axios';
 import { toast } from 'react-toastify';
+import ChatRoom from './components/Chatroom';
 function App() {
-
   // Token Evaluator 
 axios.interceptors.response.use(
   response => response,
@@ -45,6 +45,21 @@ axios.interceptors.response.use(
   }
 );
 
+const getUserID = ()=>{
+const user  = sessionStorage.getItem('id');
+if(!user){
+toast.error("Log in to use chats");
+window.location.href = '/login';
+return null;
+}
+else{
+  return user;
+}
+}
+
+
+
+
   return ( 
   <Router>
       <Navigation />
@@ -62,6 +77,7 @@ axios.interceptors.response.use(
       <Route path='/Cart' element={<Cart/>}/>
       <Route path='/Wishlist' element={<Wishlist/>}/>
       <Route path='/Checkout' element={<Checkout/>}/>
+      <Route path='/chat-room' element = {<ChatRoom user={getUserID} />} />
       </Routes>
     <ToastContainer
     position='top-right'

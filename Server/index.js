@@ -6,13 +6,25 @@ const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 require("dotenv").config();
 const { OAuth2Client } = require("google-auth-library");
+const app = express();
+const http = require("http");
+const { Server } = require("socket.io");
+
+//Setting the Sockets: 
+const server = http.createServer(app);
+const io = new Server(server, {
+  cors: {
+    origin: "*",
+    methods: ["GET", "POST"]
+  }
+});
 
 // Variables..
 const JWT_Secret = process.env.JWT_Secret;
 const client = new OAuth2Client(process.env.Google_Client);
 
 //Headers and CORS....
-const app = express();
+
 app.use(express.json());
 app.use(
   cors({
@@ -47,6 +59,29 @@ const userSchema = new mongoose.Schema({
     default: "", // Safe default if not provided
   },
 });
+
+
+const MessageSchema = new mongoose.Schema({
+  sender: {
+    type: String,
+    required: true
+  },
+  receiver: {
+    type: String,
+    required: true
+  },
+  message: {
+    type: String,
+    required: true
+  },
+  timestamp: {
+    type: Date,
+    default: Date.now
+  }
+});
+
+const Message = mongoose.model("Message", MessageSchema);
+
 
 const User = mongoose.model("Registers", userSchema);
 
@@ -262,8 +297,57 @@ app.get("/", (req, res) => {
   res.send("Backend is running");
 });
 
+
+// Sockets!!!
+io.use((socket,next)=>{
+  const token = socket.handshake.auth.token;
+  if (!token) {
+    return next(new Error('No Authentication'));
+  }
+  try {
+const user = jwt.verify(token, JWT_Secret);
+    socket.user = user;
+    next();
+  } catch (error) {
+    next(new Error('Authentication error'));
+  }
+})
+
+const userId = {};
+
+io.on("connection",(socket)=>{
+ const user_id = socket.user.id;
+  userId[user_id] = socket.id;
+   console.log(`${userId} connected on socket ${socket.id}`);
+
+   socket.on('send_message', async ({receiver_id,message})=>{
+    const sender_id = socket.user.id;
+ const response = await Message.create({
+  sender: sender_id,
+  receiver: receiver_id,
+  message,
+});
+
+const saved = response;
+     const receiverSocketID = userId[receiver_id];
+     if (receiverSocketID) {
+      io.to(receiverSocketID).emit("receive_message", saved);
+    }
+     socket.emit("message_sent", saved);
+
+     console.log(`${message} Sent from ${userId} to ${receiver_id}`);
+   })
+ socket.on("disconnect", () => {
+    delete userId[userId];
+    console.log(` ${userId} disconnected`);
+  });
+   
+});
+
+
 // Start the server
 const PORT = 3001;
-app.listen(PORT, () => {
+server.listen(PORT, () => {
   console.log(`Server is running on http://localhost:${PORT}`);
 });
+

@@ -52,6 +52,8 @@ const FetchuserDetail = async () => {
               Pic: response.data.user.profilePic,
           };
            const link = userDetails.Pic;
+               sessionStorage.setItem('id',response.data.user._id
+);
            sessionStorage.setItem("userDetails", JSON.stringify(userDetails));
 
 
