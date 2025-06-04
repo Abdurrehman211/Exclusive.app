@@ -22,6 +22,7 @@ import Wishlist from './components/Wishlist';
 import axios from 'axios';
 import { toast } from 'react-toastify';
 import ChatRoom from './components/Chatroom';
+import AdminChat from './components/AdminChat';
 function App() {
   // Token Evaluator 
 axios.interceptors.response.use(
@@ -55,11 +56,20 @@ return null;
 else{
   return user;
 }
+
+
 }
-
-
-
-
+const getAdminId = ()=>{
+  const admin = sessionStorage.getItem('admin');
+  if(!admin){
+    toast.error("Log in to use chats");
+    window.location.href = '/login';
+    return null;
+  }
+  else{
+    return admin;
+  }
+}
   return ( 
   <Router>
       <Navigation />
@@ -78,6 +88,7 @@ else{
       <Route path='/Wishlist' element={<Wishlist/>}/>
       <Route path='/Checkout' element={<Checkout/>}/>
       <Route path='/chat-room' element = {<ChatRoom user={getUserID} />} />
+      <Route path="/admin-chat" element={<AdminChat admin={getAdminId} />} />
       </Routes>
     <ToastContainer
     position='top-right'

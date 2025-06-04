@@ -3,20 +3,22 @@ import React, { useEffect, useState, useRef } from 'react';
 import { io } from 'socket.io-client';
 import axios from 'axios';
 
+const auth = sessionStorage.getItem("Auth-Token");
 const socket = io("http://localhost:3001", {
-  transports: ["websocket", "polling"], // Explicitly set transports to avoid fallback errors
+  transports: ["websocket", "polling"],
+  auth:{
+    token: auth
+  },
 });
  // Replace with your backend URL
 
 const ChatRoom = ({ user }) => {
   const [message, setMessage] = useState('');
   const [chat, setChat] = useState([]);
+  const [adminID, setUserId] = useState("");
   const chatEndRef = useRef(null);
 
   useEffect(() => {
-    // Fetch chat history
-  
-
     // Listen for new messages
     socket.on('receive_message', (data) => {
       setChat(prev => [...prev, data]);
@@ -30,20 +32,27 @@ const ChatRoom = ({ user }) => {
   useEffect(() => {
     chatEndRef.current?.scrollIntoView({ behavior: 'smooth' });
   }, [chat]);
-
+const userId ='683df0d88971fa30a49c50a9';
   const sendMessage = () => {
     if (!message.trim()) return;
 
     const msgData = {
       sender: user.id,
-      receiver: 'user', // or another user ID
+      receiver: userId, // or another user ID
       message,
       timestamp: new Date(),
     };
 
- socket.emit('send_message', { receiver_id: 'user', message });
+ socket.emit('send_message', { receiver_id: userId, message });
 
-
+ socket.on("message_sent", (saved) => {
+ setChat(prev => [...prev, saved]);
+ })
+  socket.on("receive_message", (message) => {
+      setChat((prev) => [...prev, message]);
+      alert(message);
+        alert(message.sender);
+    });
     // Save message to DB
     setMessage("");
   };

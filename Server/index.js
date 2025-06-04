@@ -300,10 +300,12 @@ app.get("/", (req, res) => {
 
 // Sockets!!!
 io.use((socket,next)=>{
+  
   const token = socket.handshake.auth.token;
   if (!token) {
     return next(new Error('No Authentication'));
   }
+
   try {
 const user = jwt.verify(token, JWT_Secret);
     socket.user = user;
@@ -317,11 +319,21 @@ const userId = {};
 
 io.on("connection",(socket)=>{
  const user_id = socket.user.id;
+
+//  if (userId[user_id]) {
+//     const oldSocketId = userId[user_id];
+//     io.sockets.sockets.get(oldSocketId)?.disconnect();
+//   }
   userId[user_id] = socket.id;
-   console.log(`${userId} connected on socket ${socket.id}`);
+   console.log(`${user_id} connected on socket ${socket.id}`);
 
    socket.on('send_message', async ({receiver_id,message})=>{
     const sender_id = socket.user.id;
+
+    // io.emit("message",{
+    //   sender_id,
+    //   message
+    // });
  const response = await Message.create({
   sender: sender_id,
   receiver: receiver_id,
@@ -335,13 +347,31 @@ const saved = response;
     }
      socket.emit("message_sent", saved);
 
-     console.log(`${message} Sent from ${userId} to ${receiver_id}`);
+console.log(`${message} sent from ${sender_id} to ${receiver_id}`);
+
    })
  socket.on("disconnect", () => {
-    delete userId[userId];
-    console.log(` ${userId} disconnected`);
-  });
+  const user_id = socket.user.id;
+  delete userId[user_id];
+  console.log(`${user_id} disconnected`);
+});
    
+});
+
+app.get("/chat/users", async (req, res) => {
+  const users = await Message.distinct("sender", { receiver: "admin_id_here" });
+  const userDetails = await User.find({ _id: { $in: users } });
+  res.json(userDetails);
+});
+
+app.get("/chat/messages/:userId", async (req, res) => {
+  const messages = await Message.find({
+    $or: [
+      { sender: req.params.userId, receiver: "admin_id_here" },
+      { sender: "admin_id_here", receiver: req.params.userId },
+    ],
+  }).sort({ timestamp: 1 });
+  res.json(messages);
 });
 
 

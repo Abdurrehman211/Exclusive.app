@@ -1,38 +1,62 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router";
 import { FiMenu, FiX, FiBox, FiUsers, FiSettings, FiLogOut } from 'react-icons/fi';
+import { FaShoppingCart, FaUsers, FaChartLine, FaBoxOpen,FaCog, FaSignOutAlt   } from 'react-icons/fa';
+import { toast } from "react-toastify";
+import { googleLogout } from '@react-oauth/google';
+import axios from "axios";
 const Admin = () => {
     const navigate = useNavigate();
     const [adminDetails, setAdminDetails] = useState(null);
     const [accessDenied, setAccessDenied] = useState(false);
     const [checked, setChecked] = useState(false);
 
-    useEffect(() => {
-        const data = sessionStorage.getItem("userDetails");
+ const fetchAdminDetails = async () => {
+    try {
+      const token = sessionStorage.getItem("Auth-Token");
+      if (!token) {
+        navigate("/login");
+        return;
+      }
 
-        if (!data) {
-            setChecked(true);
-            navigate("/login");
-            return;
+      const response = await axios.get('http://localhost:3001/getuser', {
+        headers: { Authorization: `Bearer ${token}` },
+      });
+
+      if (response.data.success) {
+        const user = response.data.user;
+
+        if (user.role !== "admin") {
+          setAccessDenied(true);
+          setChecked(true);
+          return;
         }
 
-        const adminData = JSON.parse(data);
-
-        if (!adminData.loggedIn) {
-            setChecked(true);
-            navigate("/login");
-            return;
-        }
-
-        if (adminData.role !== "admin") {
-            setAccessDenied(true);
-            setChecked(true);
-            return;
-        }
-
+        const adminData = {
+          loggedIn: true,
+          name: user.name,
+          email: user.email,
+          role: user.role,
+          Pic: user.profilePic,
+        };
+        sessionStorage.setItem("id", user._id);
+        sessionStorage.setItem("userDetails", JSON.stringify(adminData));
+        sessionStorage.setItem("id", user._id);
         setAdminDetails(adminData);
         setChecked(true);
-    }, [navigate]); // ✅ No external function, warning is gone
+      } else {
+        console.log(response.data.message || 'Error occurred');
+        navigate("/login");
+      }
+    } catch (error) {
+      console.error("Error fetching admin details:", error);
+      navigate("/login");
+    }
+  };
+
+  useEffect(() => {
+    fetchAdminDetails();
+  }, []); // ✅ No external function, warning is gone
 
     if (!checked) {
         return <div>Loading...</div>;
@@ -64,7 +88,25 @@ const AdminPage = ({ adminDetails }) => {
     const handleDeleteProduct = (productId) => {
       setProducts(products.filter(product => product.id !== productId));
     };
-  
+   const handleLogout = () => {
+
+
+  console.log("Clearing the Session storage")
+  sessionStorage.clear(); // Remove all session storage items at once
+
+
+    // Google logout
+    googleLogout();
+
+    // Show toast
+    toast.info("Please Login Again", {
+      position: "top-right",
+      autoClose: 3000,
+    });
+
+    // Navigate to login/home
+    navigate("/");
+  };
     return (
       <div className="admin-container">
         {/* Sidebar */}
@@ -86,6 +128,11 @@ const AdminPage = ({ adminDetails }) => {
                 <FiUsers />
                 <span>Users</span>
               </li>
+                <li><FaShoppingCart /> Orders</li>
+                        <li onClick={()=>{
+                          navigate('/admin-chat');
+                        }}><FaUsers /> Chats</li>
+                        <li><FaBoxOpen /> Products</li>
               <li>
                 <FiSettings />
                 <span>Settings</span>
@@ -102,7 +149,7 @@ const AdminPage = ({ adminDetails }) => {
               <h1>Welcome back, <span>{adminDetails?.name}</span></h1>
             </div>
             <div className="header-right">
-              <a href="/logout" style={{ textDecoration: 'none' }}>  
+              <a  style={{ textDecoration: 'none' }} onClick={handleLogout}>  
               <button className="logout-btn">
                 <FiLogOut />
                 <span style={{color:"white"}}>Logout</span>
@@ -165,7 +212,7 @@ const AdminPage = ({ adminDetails }) => {
       background-color: #f5f6fa;
     }
   
-    .sidebar {
+   .admin-container .sidebar {
       background: #2a3042;
       color: white;
       width: 280px;
@@ -174,7 +221,7 @@ const AdminPage = ({ adminDetails }) => {
     }
   
     .sidebar.closed {
-      margin-left: -280px;
+      margin-left: -230px;
     }
   
     .sidebar-header {

@@ -36,7 +36,7 @@ const FetchuserDetail = async () => {
           headers: { 'Authorization': `Bearer ${token}` }
       });
 
-      console.log(response.data);
+     
       if (response.data.success) {
           setUser({
               name: response.data.user.name || "Username",
@@ -95,17 +95,20 @@ const FetchuserDetail = async () => {
         <h2>User Dashboard</h2>
         <ul>
           <li><FaChartLine /> Overview</li>
-          <li><FaShoppingCart /> Orders</li>
-          <li><FaUsers /> Customers</li>
-          <li><FaBoxOpen /> Products</li>
-          <li><FaCog/> Settings</li>
+        
+          <li onClick={()=>{
+            navigate("/Account");
+          }}><FaCog/> Settings</li>
+          <li onClick={()=>{
+            window.location.href = "/chat-room";
+          }}><FaUsers/> Chats</li>
           <li onClick={handleLogout}><FaSignOutAlt /> Logout</li>
         </ul>
       </aside>
       <main className="content">
         <h1>Welcome to the Dashboard</h1>
         <div className="profile-section">
-            <div className="profile-info">
+            <div className="profile-info"> 
            <img 
   src={user.profilePic ? user.profilePic : profile} 
   alt="Profile" 
