@@ -359,7 +359,7 @@ console.log(`${message} sent from ${sender_id} to ${receiver_id}`);
 });
 
 app.get("/chat/users", async (req, res) => {
-  const users = await Message.distinct("sender", { receiver: "admin_id_here" });
+  const users = await Message.distinct("sender", { receiver: "683df0d88971fa30a49c50a9" });
   const userDetails = await User.find({ _id: { $in: users } });
   res.json(userDetails);
 });
@@ -367,8 +367,8 @@ app.get("/chat/users", async (req, res) => {
 app.get("/chat/messages/:userId", async (req, res) => {
   const messages = await Message.find({
     $or: [
-      { sender: req.params.userId, receiver: "admin_id_here" },
-      { sender: "admin_id_here", receiver: req.params.userId },
+      { sender: req.params.userId, receiver: "683df0d88971fa30a49c50a9" },
+      { sender: "683df0d88971fa30a49c50a9", receiver: req.params.userId },
     ],
   }).sort({ timestamp: 1 });
   res.json(messages);
