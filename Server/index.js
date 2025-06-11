@@ -300,12 +300,10 @@ app.get("/", (req, res) => {
 
 // Sockets!!!
 io.use((socket,next)=>{
-  
   const token = socket.handshake.auth.token;
   if (!token) {
     return next(new Error('No Authentication'));
   }
-
   try {
 const user = jwt.verify(token, JWT_Secret);
     socket.user = user;
@@ -317,45 +315,51 @@ const user = jwt.verify(token, JWT_Secret);
 
 const userId = {};
 
-io.on("connection",(socket)=>{
- const user_id = socket.user.id;
-
-//  if (userId[user_id]) {
-//     const oldSocketId = userId[user_id];
-//     io.sockets.sockets.get(oldSocketId)?.disconnect();
-//   }
-  userId[user_id] = socket.id;
-   console.log(`${user_id} connected on socket ${socket.id}`);
-
-   socket.on('send_message', async ({receiver_id,message})=>{
-    const sender_id = socket.user.id;
-
-    // io.emit("message",{
-    //   sender_id,
-    //   message
-    // });
- const response = await Message.create({
-  sender: sender_id,
-  receiver: receiver_id,
-  message,
-});
-
-const saved = response;
-     const receiverSocketID = userId[receiver_id];
-     if (receiverSocketID) {
-      io.to(receiverSocketID).emit("receive_message", saved);
-    }
-     socket.emit("message_sent", saved);
-
-console.log(`${message} sent from ${sender_id} to ${receiver_id}`);
-
-   })
- socket.on("disconnect", () => {
+io.on("connection", (socket) => {
   const user_id = socket.user.id;
-  delete userId[user_id];
-  console.log(`${user_id} disconnected`);
-});
-   
+  userId[user_id] = socket.id;
+  
+  console.log(`${user_id} connected on socket ${socket.id}`);
+
+  socket.on('send_message', async ({ receiver_id, message, tempId }) => {
+  try {
+    const sender_id = socket.user.id;
+    
+    const savedMessage = await Message.create({
+      sender: sender_id,
+      receiver: receiver_id,
+      message,
+    });
+
+    const clientMessage = {
+      ...savedMessage.toObject(), // Convert mongoose doc to plain object
+      tempId // Include the temporary ID
+    };
+    console.log(clientMessage);
+    // Confirm to sender
+    socket.emit("message_sent", clientMessage);
+      
+      // Emit to receiver if online
+      const receiverSocketID = userId[receiver_id];
+      console.log(`Receiver Socket ID: ${receiverSocketID}`);
+      
+    if (receiverSocketID) {
+      io.to(receiverSocketID).emit("new_message", clientMessage);
+    }
+    
+  } catch (error) {
+    console.error("Message send error:", error);
+    socket.emit("message_error", { error: "Failed to send message" });
+    
+    // Optionally: Remove optimistic update on error
+    socket.emit("remove_optimistic", { tempId });
+  }
+  });
+
+  socket.on("disconnect", () => {
+    delete userId[user_id];
+    console.log(`${user_id} disconnected`);
+  });
 });
 
 app.get("/chat/users", async (req, res) => {

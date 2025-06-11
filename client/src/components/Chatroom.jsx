@@ -1,85 +1,179 @@
-// src/chat/ChatRoom.js
-import React, { useEffect, useState, useRef } from 'react';
-import { io } from 'socket.io-client';
-import axios from 'axios';
+import React, { useEffect, useState, useRef } from "react";
+import { io } from "socket.io-client";
+import { useNavigate } from "react-router-dom";
+import "./AdminChat.css";
 
 const auth = sessionStorage.getItem("Auth-Token");
 const socket = io("http://localhost:3001", {
   transports: ["websocket", "polling"],
-  auth:{
-    token: auth
-  },
+  auth: { token: auth },
+  reconnectionAttempts: 5,
+  reconnectionDelay: 1000
 });
- // Replace with your backend URL
 
 const ChatRoom = ({ user }) => {
-  const [message, setMessage] = useState('');
+  const [message, setMessage] = useState("");
   const [chat, setChat] = useState([]);
-  const [adminID, setUserId] = useState("");
   const chatEndRef = useRef(null);
+const [firstMessageSent, setFirstMessageSent] = useState(false);
 
+const navigate = useNavigate();
+  // Debug connection status
   useEffect(() => {
-    // Listen for new messages
-    socket.on('receive_message', (data) => {
-      setChat(prev => [...prev, data]);
+    console.log("Socket connection status:", socket.connected);
+    
+    socket.on("connect", () => {
+      console.log("Connected to server with ID:", socket.id);
     });
 
+    socket.on("disconnect", () => {
+      console.log("Disconnected from server");
+    });
+  }, []);
+
+  // Message handling
+  useEffect(() => {
+    const handleIncomingMessage = (data) => {
+      console.log("Received message data:", data);
+      setChat(prev => {
+        const exists = prev.some(msg => 
+          msg._id === data._id || (msg.tempId && msg.tempId === data.tempId)
+        );
+        return exists ? prev : [...prev, data];
+      });
+    };
+
+    // Listen to BOTH event names for compatibility
+    socket.on("new_message", handleIncomingMessage);
+    socket.on("receive_message", handleIncomingMessage);
+    socket.on("message_sent", handleIncomingMessage);
+
     return () => {
-      socket.off('receive_message');
+      socket.off("new_message", handleIncomingMessage);
+      socket.off("receive_message", handleIncomingMessage);
+      socket.off("message_sent", handleIncomingMessage);
     };
   }, [user.id]);
 
-  useEffect(() => {
-    chatEndRef.current?.scrollIntoView({ behavior: 'smooth' });
-  }, [chat]);
-const userId ='683df0d88971fa30a49c50a9';
   const sendMessage = () => {
+      if (!firstMessageSent) setFirstMessageSent(true);
     if (!message.trim()) return;
 
-    const msgData = {
+    const tempId = Date.now().toString();
+    const receiver_id = "683df0d88971fa30a49c50a9"; // Admin ID
+    
+    // Optimistic update with tempId
+    setChat(prev => [...prev, {
+      _id: tempId,
+      tempId,
       sender: user.id,
-      receiver: userId, // or another user ID
+      receiver: receiver_id,
       message,
       timestamp: new Date(),
-    };
-
- socket.emit('send_message', { receiver_id: userId, message });
-
- socket.on("message_sent", (saved) => {
- setChat(prev => [...prev, saved]);
- })
-  socket.on("receive_message", (message) => {
-      setChat((prev) => [...prev, message]);
-      alert(message);
-        alert(message.sender);
+      isOptimistic: true
+    }]);
+    
+    socket.emit("send_message", { 
+      receiver_id, 
+      message,
+      tempId // Include tempId for deduplication
     });
-    // Save message to DB
+    
     setMessage("");
   };
 
+  // Error handling
+  useEffect(() => {
+    const errorHandler = (error) => {
+      console.error("Socket error:", error);
+      // Display to user if needed
+    };
+
+    socket.on("message_error", errorHandler);
+    socket.on("connect_error", errorHandler);
+
+    return () => {
+      socket.off("message_error", errorHandler);
+      socket.off("connect_error", errorHandler);
+    };
+  }, []);
+
+  // Auto-scroll
+  useEffect(() => {
+    chatEndRef.current?.scrollIntoView({ behavior: "smooth" });
+  }, [chat]);
+
   return (
-    <div style={{ padding: 20, border: '1px solid #ccc', maxWidth: 500 }}>
-      <h3>Chat Room</h3>
-      <div style={{ height: 300, overflowY: 'auto', border: '1px solid #ddd', padding: 10 }}>
-        {chat.map((msg, idx) => (
-          <div key={idx} style={{ marginBottom: 10, textAlign: msg.sender === user.id ? 'right' : 'left' }}>
-            <b>{msg.sender === user.id ? 'You' : msg.sender}</b>: {msg.message}
-          </div>
-        ))}
-        <div ref={chatEndRef} />
-      </div>
-      <div style={{ marginTop: 10 }}>
-        <input
-          type="text"
-          value={message}
-          onChange={e => setMessage(e.target.value)}
-          onKeyDown={e => e.key === 'Enter' && sendMessage()}
-          placeholder="Type your message..."
-          style={{ width: '80%', padding: 5 }}
-        />
-        <button onClick={sendMessage} style={{ padding: '6px 10px' }}>Send</button>
+    <div className="chat-area" style={{ height: "70vh", overflow: "none" }}>
+   <div className="chat-header d-flex justify-content-between align-items-center p-2 bg-primary text-white rounded">
+      <button
+        onClick={() => navigate("/Userpanel")} // Change to your actual admin panel route
+        className="btn btn-sm btn-outline-light mx-5"
+        aria-label="Back to Admin Panel"
+        style={{ fontSize: "1.25rem" }}
+      >
+        ←
+      </button>
+
+      <h4 className="mb-0 flex-grow-1" style={{ paddingRight: "2rem" }}>
+        💬 Chat with Admin
+      </h4>
+
+      <div className="connection-status badge bg-light text-dark">
+        {socket.connected ? "🟢 Connected" : "🔴 Disconnected"}
       </div>
     </div>
+
+  {/* Alert when user sends the first message */}
+  {chat.length === 0 && (
+    <div className="alert alert-warning mt-3 mx-2" role="alert">
+      <strong>Heads up!</strong> Your message will notify an admin. Make sure it's something meaningful. <br />
+      <strong>Admin will respond when he gets the message. Donot leave the Site.</strong>
+    </div>
+  )}
+
+  <div className="chat-messages p-3 border bg-light rounded mt-2" style={{ height: "60vh", overflowY: "auto" }}>
+
+    {chat.map((msg, idx) => (
+      <div
+        key={msg._id || idx}
+        className={`message ${msg.sender === user.id ? "sent" : "received"} ${
+          msg.isOptimistic ? "optimistic" : ""
+        } mb-2`}
+      >
+        <div className="d-flex flex-column">
+          <span className="fw-bold">{msg.sender === user.id ? "🧑 You" : "👨‍💼 Admin"}:</span>
+          <span className=" p-2 ">{msg.message}</span>
+          <small className="text-muted message-time mt-1">
+            {new Date(msg.timestamp).toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" })}
+          </small>
+        </div>
+      </div>
+    ))}
+    <div ref={chatEndRef} />
+  </div>
+
+  <div className="chat-input-container mt-3">
+    <div className="chat-input-wrapper d-flex">
+      <input
+        type="text"
+        className="chat-input form-control me-2"
+        placeholder="Type your message..."
+        value={message}
+        onChange={(e) => setMessage(e.target.value)}
+        onKeyDown={(e) => e.key === "Enter" && sendMessage()}
+      />
+      <button
+        className="send-button btn btn-success"
+        onClick={sendMessage}
+        disabled={!socket.connected || !message.trim()}
+      >
+        {socket.connected ? "📨 Send" : "⏳ Connecting..."}
+      </button>
+    </div>
+  </div>
+</div>
+
   );
 };
 

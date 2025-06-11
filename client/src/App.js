@@ -23,6 +23,7 @@ import axios from 'axios';
 import { toast } from 'react-toastify';
 import ChatRoom from './components/Chatroom';
 import AdminChat from './components/AdminChat';
+import { NotificationProvider } from './components/context/NotificationContext';
 function App() {
   // Token Evaluator 
 axios.interceptors.response.use(
@@ -71,34 +72,37 @@ const getAdminId = ()=>{
   }
 }
   return ( 
-  <Router>
-      <Navigation />
-    <Routes>
-      <Route path='/' element={<Landing />} />
-      <Route path='/Counter' element={<Counter />} />
-      <Route path='/sign-up' element={<Signup />}/>
-      <Route path='/login' element={<Login />}/>
-      <Route path='/Userpanel' element={<Userpanel />} />
-      <Route path='/admin' element={<Admin />}  />  
-      <Route path='/Logout' element={<Logout />} />   
-      <Route path='/Contact' element={<Contact/>}/>
-      <Route path='/About' element={<About/>}/>
-      <Route path='/Account' element={<Account/>}/>
-      <Route path='/Cart' element={<Cart/>}/>
-      <Route path='/Wishlist' element={<Wishlist/>}/>
-      <Route path='/Checkout' element={<Checkout/>}/>
-      <Route path='/chat-room' element = {<ChatRoom user={getUserID} />} />
-      <Route path="/admin-chat" element={<AdminChat admin={getAdminId} />} />
-      </Routes>
-    <ToastContainer
-    position='top-right'
-    autoClose={1000}
-    theme='colored'
-    />
-    <footer>
-      <TawkToChat />
-    </footer>
-   </Router>
+ <Router>
+      <NotificationProvider> {/* ✅ Wrap the entire app */}
+        <Navigation />
+        <Routes>
+          <Route path='/' element={<Landing />} />
+          <Route path='/Counter' element={<Counter />} />
+          <Route path='/sign-up' element={<Signup />} />
+          <Route path='/login' element={<Login />} />
+          <Route path='/Userpanel' element={<Userpanel />} />
+          <Route path='/admin' element={<Admin />} />
+          <Route path='/Logout' element={<Logout />} />
+          <Route path='/Contact' element={<Contact />} />
+          <Route path='/About' element={<About />} />
+          <Route path='/Account' element={<Account />} />
+          <Route path='/Cart' element={<Cart />} />
+          <Route path='/Wishlist' element={<Wishlist />} />
+          <Route path='/Checkout' element={<Checkout />} />
+          <Route path='/chat-room' element={<ChatRoom user={getUserID} />} />
+          <Route path="/admin-chat" element={<AdminChat admin={getAdminId} />} />
+        </Routes>
+
+        <ToastContainer
+          position='top-right'
+          autoClose={1000}
+          theme='colored'
+        />
+        <footer>
+          <TawkToChat />
+        </footer>
+      </NotificationProvider>
+    </Router>
   );
 }
 
