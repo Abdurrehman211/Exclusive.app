@@ -10,6 +10,8 @@ const app = express();
 const http = require("http");
 const { Server } = require("socket.io");
 
+
+
 //Setting the Sockets: 
 const server = http.createServer(app);
 const io = new Server(server, {
@@ -80,10 +82,22 @@ const MessageSchema = new mongoose.Schema({
   }
 });
 
+
+const orderSchema = new mongoose.Schema({
+  order_id: { type: String, required: true },
+  tracker: { type: String, required: true },
+  amount: { type: Number, required: true },
+  currency: { type: String, default: 'PKR' },
+  status: { type: String, default: 'PENDING' }, // or COMPLETED / FAILED
+  createdAt: { type: Date, default: Date.now }
+});
+
+const Order = mongoose.model('Order', orderSchema);
 const Message = mongoose.model("Message", MessageSchema);
 
 
 const User = mongoose.model("Registers", userSchema);
+
 
 //Register Route
 
@@ -377,6 +391,80 @@ app.get("/chat/messages/:userId", async (req, res) => {
   }).sort({ timestamp: 1 });
   res.json(messages);
 });
+
+// Safe PAy integration !!!
+
+
+//safepay initailization
+const safepay = require('@sfpy/node-core')(process.env.Safe_pay_SECRET_KEY, {
+  authType: 'secret',
+  host: process.env.Safe_pay_Host 
+});
+
+// Route CREATION
+
+app.post('/gateway/payment', async (req,res)=>{
+try{
+  const {amount , Order_id} = req.body;
+  const payment = safepay.payments.session.setup({
+    merchant_api_key: process.env.SAFEPAY_API_KEY,
+      intent: "CYBERSOURCE",  // Payment gateway
+      mode: "payment",        // One-time payment
+      currency: "PKR",        // Default currency
+      amount: amount * 100,   // Convert to paisa
+      metadata: {
+         order_id: Order_id 
+      }
+  })
+
+  const order = new Order.create({
+    order_id: Order_id,
+    tracker: payment.token,
+    amount: amount * 100, // Convert to paisa
+    currency: "PKR",
+    status: "PENDING"
+  });
+  await order.save();
+  console.log(payment);
+  res.json({
+        checkout_url: payment.redirect_url, // Redirect user here
+      tracker: payment.token,  
+  })
+}catch(err){
+ console.error(err);
+    res.status(500).json({ error: "Failed to create payment session" });
+}
+})
+ 
+// For Payment Verifications:
+
+app.get('/gateway/verification/:token',async(req,res)=>{
+  try {
+    const token = req.params.token;
+    const details = await safepay.payments.session.fetch(token);
+    const order = await Order.findOne({
+      tracker: token
+    });
+    if(!order){
+      return res.status(404).json({
+        error: 'Order not Found'
+      });
+    }
+    order.status = details.status;
+    await order.save();
+
+    res.json({
+      message: "Payment Verified",
+      status: details.status,
+      order
+    });
+
+  } catch (error) {
+    console.error(err);
+    res.status(500).json({ error: 'Payment verification failed' });
+  }
+})
+
 
 
 // Start the server
