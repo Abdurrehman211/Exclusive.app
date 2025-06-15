@@ -92,6 +92,30 @@ const orderSchema = new mongoose.Schema({
   createdAt: { type: Date, default: Date.now }
 });
 
+const addressSchema = new mongoose.Schema({
+  userId: {
+    type: mongoose.Schema.Types.ObjectId,
+    required: true,
+    ref: "User"
+  },
+  name: {
+    type: String,
+    required: true
+  },
+  addressLine: {
+    type: String,
+    required: true
+  },
+  city: String,
+  postalCode: String,
+  country: String,
+  createdAt: {
+    type: Date,
+    default: Date.now
+  }
+});
+
+const Address = mongoose.model("Address", addressSchema);
 const Order = mongoose.model('Order', orderSchema);
 const Message = mongoose.model("Message", MessageSchema);
 
@@ -437,7 +461,7 @@ try{
 })
  
 // For Payment Verifications:
-
+//03363973553
 app.get('/gateway/verification/:token',async(req,res)=>{
   try {
     const token = req.params.token;

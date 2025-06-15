@@ -1,134 +1,121 @@
-import React from "react";  
+import React, { useEffect, useState } from "react";
 import './checkout.css';
 import controler from './images/controlller.png';
 import lcdd from './images/LCD.png';
 import Footer from './Footer';
-
-import {useState} from "react"
-
-
+import './checkout.css';
 
 function Checkout() {
-
-    const [ firstname, setfirstname] = useState("");
-    const [ companyname, setcompanyname] = useState("");
-    const [ streetaddress, setstreetadddress] = useState("");
-    const [ Appartment, setAppartment] = useState("");
-    const [ city, setcity] = useState("");
-    const [ phone, setphone] = useState("");
-    const [ email, setemail] = useState("");
-    const [payment, setpayment] = useState("");
-
-    const handlesubmet=(e)=>{
-        e.preventDefault();
-        alert ("message send");
-          setfirstname("");
-          setcompanyname("");
-          setstreetadddress("");
-          setAppartment("");
-          setcity("");
-          setphone("");
-          setemail("");
-          setpayment("");
-
-      }
-
-
-    return (
-
-        <>
-        <div className="container">
-        <form onSubmit={(e)=>handlesubmet(e)}>
-            <div className="row mb-5">
-                <div className="col-lg-6 col-mid-12 col-sm-12">
-<h4> Billing Detail</h4>
-
-    <input className="mt-4 " type="text" placeholder="First Name" style={{width: '60%', height:'40px', border: '2px solid rgb(160, 157, 157)',borderRadius:'5px'}} value={firstname} onChange={(e)=>setfirstname(e.target.value)} />
-    <br/>
-    <input className="mt-4" type="text" placeholder="Company Name"  style={{width: '60%' , height:'40px', border: '2px solid rgb(160, 157, 157)',borderRadius:'5px'}} value={companyname} onChange={(e)=>setcompanyname(e.target.value)} />
-    <br/>
-    <input className="mt-4" type="text" placeholder="Street Address"  style={{width: '60%' , height:'40px', border: '2px solid rgb(160, 157, 157)',borderRadius:'5px'}} value={streetaddress} onChange={(e)=>setstreetadddress(e.target.value)} />
-    <br/>
-    <input className="mt-4" type="text" placeholder="Appartment, Suite, etc." style={{width: '60%' , height:'40px', border: '2px solid rgb(160, 157, 157)',borderRadius:'5px'}}  value={Appartment} onChange={(e)=>setAppartment(e.target.value)} />
-    <br/>
-    <input className="mt-4" type="text" placeholder="City" style={{width: '60%' , height:'40px', border: '2px solid rgb(160, 157, 157)',borderRadius:'5px'}} value={city} onChange={(e)=>setcity(e.target.value)} />
-    <br/>
-    <input className="mt-4" type="text" placeholder="Phone Number" style={{width: '60%' , height:'40px', border: '2px solid rgb(160, 157, 157)',borderRadius:'5px'}} value={phone} onChange={(e)=>setphone(e.target.value)} />
-    <br/>
-    <input className="mt-4" type="email" placeholder="Email Address" style={{width: '60%' , height:'40px', border: '2px solid rgb(160, 157, 157)',borderRadius:'5px'}} value={email} onChange={(e)=>setemail(e.target.value)} />
-    <br/>
     
-<label >
-    <input className=" mt-4   input-check " type="checkbox"  />
-    Save this information for faster check out next time</label>
-    </div>
+  const [formData, setFormData] = useState({
+    firstname: '',
+    companyname: '',
+    streetaddress: '',
+    apartment: '',
+    city: '',
+    phone: '',
+    email: '',
+    payment: ''
+  });
+  const [checked , setChecked] = useState(false);
 
-    <div className="col-lg-6 col-md-12 col-sm-12">
-        <div className="list mt-5">  
-            <li> <img src={controler} alt=" image"  style={{width:'50px',height:'50px' }} /> </li> 
-            <li className="lcd">LCD Monitor</li>
-            <li className="price"> $650</li>
-             </div>
-
-
-             <div className="list-1 mt-5">  
-            <li> <img src={lcdd} alt=" image"  style={{width:'50px',height:'50px' }} /> </li> 
-            <li className="lcd">H1 Gamepad</li>
-            <li className="price"> $1100</li>
-             </div>
-
-             <div  className="mt-5">
-                <li >Subtotal</li>
-                <li className="pricetotal">$170</li>
-                
-             </div>
-             <hr />
-             <div  className="mt-5">
-                <li >Shipping</li>
-                <li className="pricetotal">free</li>
-                
-             </div>
-             <hr />
-             <div className="mt-5" >
-                <label >
-                <input   type="radio" value={payment} onChange={(e)=>setpayment(e.target.value)}  style={{transform:'scale(1.5)' }} />
-                Bank
-                </label>
-                <br/>
-
-                <label  >
-                <input type="radio" value={payment} onChange={(e)=>setpayment(e.target.value)}  style={{transform:'scale(1.5)' }} />
-                Cash on Delivery
-                </label>
-
-             </div>
-             <div className=" mt-5" >
-            <button className="coupon"  >Coupal Code</button>
-            <button className=" coupon" > Apple Coupal</button>
-            <button className="coupon ">Place Order</button>
-            </div>
-
-
-        
-
-    </div>
-
-    </div>
-
-</form>
- 
-
-                
-            </div>
-
-            <footer>
-                <Footer/>
-            </footer>
-
+  const handleChecked = ()=>{
+    setChecked(!checked);
+    if(checked){
        
-        
-        
+    }else{
+     
+    }
+  }
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setFormData({ ...formData, [name]: value });
+  };
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    alert("Order placed successfully!");
+    console.log("Form Data:", formData);
+    setFormData({
+      firstname: '',
+      companyname: '',
+      streetaddress: '',
+      apartment: '',
+      city: '',
+      phone: '',
+      email: '',
+      payment: ''
+    });
+  };
+
+  return (
+    <>
+
+    <div className="checkout-container">
+      <form onSubmit={handleSubmit} className="checkout-form">
+        <div className="form-section">
+          <h4>Billing Details</h4>
+          <input name="firstname" type="text" placeholder="First Name" value={formData.firstname} onChange={handleChange} />
+          <input name="companyname" type="text" placeholder="Company Name" value={formData.companyname} onChange={handleChange} />
+          <input name="streetaddress" type="text" placeholder="Street Address" value={formData.streetaddress} onChange={handleChange} />
+          <input name="apartment" type="text" placeholder="Apartment, Suite, etc." value={formData.apartment} onChange={handleChange} />
+          <input name="city" type="text" placeholder="City" value={formData.city} onChange={handleChange} />
+          <input name="phone" type="text" placeholder="Phone Number" value={formData.phone} onChange={handleChange} />
+          <input name="email" type="email" placeholder="Email Address" value={formData.email} onChange={handleChange} />
+          <div className="terms ">
+            <input type="checkbox" onChange={handleChecked} /> Save this information for faster checkout next time
+          </div>
+          
+        </div>
+
+        <div className="order-summary">
+          <div className="item">
+            <img src={controler} alt="LCD Monitor" />
+            <div className="item-info">
+              <span>LCD Monitor</span>
+              <span>$650</span>
+            </div>
+          </div>
+
+          <div className="item">
+            <img src={lcdd} alt="H1 Gamepad" />
+            <div className="item-info">
+              <span>H1 Gamepad</span>
+              <span>$1100</span>
+            </div>
+          </div>
+
+          <div className="summary-row">
+            <span>Subtotal</span>
+            <span>$1750</span>
+          </div>
+          <div className="summary-row">
+            <span>Shipping</span>
+            <span>Free</span>
+          </div>
+
+          <div className="payment-options">
+            <label>
+              <input type="radio" name="payment" value="Bank" checked={formData.payment === 'Bank'} onChange={handleChange} /> Bank
+            </label>
+            <label>
+              <input type="radio" name="payment" value="COD" checked={formData.payment === 'COD'} onChange={handleChange} /> Cash on Delivery
+            </label>
+          </div>
+
+          <div className="checkout-buttons">
+            <button type="submit" className="nav0cta1">Place Order</button>
+          </div>
+        </div>
+      </form>
+
+  
+    </div>
+        <footer>
+        <Footer />
+      </footer>
         </>
-    )
+  );
 }
+
 export default Checkout;

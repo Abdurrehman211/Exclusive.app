@@ -1,20 +1,46 @@
-.headingg
-{
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    height: 66px;
-    box-sizing: border-box;
-    
-    background-color: #dee2e642;
+.cart-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 20px;
+  border-radius: 10px;
+  overflow: hidden;
+    font-family: "Montserrat";
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+.cart-table thead {
+  background-color: #f8f9fa;
+  color: #333;
+}
+
+.cart-table th, .cart-table td {
+  text-align: center;
+  padding: 16px;
+  border-bottom: 1px solid #dee2e6;
+}
+
+.cart-table tbody tr:hover {
+  background-color: #f1f3f5;
+}
+
+.cart-table img {
+  width: 50px;
+  height: 50px;
+  margin-right: 12px;
+  border-radius: 8px;
+  object-fit: cover;
+}
+
+.product-cell {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  font-weight: bold;
 }
 .proced
 {
     float: right;
-}
-.mt-2
-{
-    padding-right: 100px;
 }
 .button-shop
 {
@@ -110,8 +136,36 @@ border-radius: 4px;
 }
 .Shipment
 {
-    border: 2px solid black;
-   
+    border: 1px solid rgb(0 0 0 / 14%);
+       font-family: "Montserrat";
+       padding: 20px;
+}
+.qty-controls {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+}
+
+.qty-controls button {
+  background-color: #e9ecef;
+  border: none;
+  padding: 4px 10px;
+  font-size: 16px;
+  cursor: pointer;
+  border-radius: 4px;
+  transition: background-color 0.2s;
+}
+
+.qty-controls button:hover {
+  background-color: #ced4da;
+}
+
+.qty-controls span {
+  font-weight: 500;
+  min-width: 20px;
+  text-align: center;
+  display: inline-block;
 }
 .Proceed
 {
@@ -133,4 +187,73 @@ border-radius: 6px;
     height: 43px;
     transform: scale(1.1);
     transition: 0.3 all ease-in;
+}
+#Cart-button{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 20px; 
+        font-family: "Montserrat";
+}
+#Cart-button .btn {
+  margin-left: 0;
+}
+#Coupon{
+        display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    padding-left: 20px;
+}
+#Coupon fieldset {
+    width: 90%;
+    margin-right: 10px;
+    font-family: "Montserrat";
+}
+.bin-icon{
+    cursor: pointer;
+    color: red;
+    font-size: 20px;
+    transition: color 0.3s ease;
+}
+/* From Uiverse.io by andrew-demchenk0 */ 
+.warning {
+ 
+width: 100%;
+  padding: 12px;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: start;
+  background: #FEF7D1;
+  border-radius: 8px;
+  box-shadow: 0px 0px 5px -3px #111;
+}
+
+.warning__icon {
+  width: 20px;
+  height: 20px;
+  transform: translateY(-2px);
+  margin-right: 8px;
+}
+
+.warning__icon path {
+  fill: #F7C752;
+}
+
+.warning__title {
+  font-weight: 500;
+  font-size: 16px;
+  padding-left: 10px;
+  color: #755118;
+}
+
+.warning__close {
+  width: 20px;
+  height: 20px;
+  margin-left: auto;
+  cursor: pointer;
+}
+
+.warning__close path {
+  fill: #755118;
 }
