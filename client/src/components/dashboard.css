@@ -2,7 +2,7 @@
 
 .dashboard {
     display: flex;
-    height: 100vh;
+    height: 100%;
      font-family: "Montserrat";
     background-color: #f4f4f4;
   }

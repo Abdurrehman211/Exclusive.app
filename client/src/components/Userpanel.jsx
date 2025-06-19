@@ -7,12 +7,15 @@ import { Link, useNavigate } from "react-router";
 import { toast } from "react-toastify";
 import { googleLogout } from '@react-oauth/google';
 import profile from './images/Profile.png';
+import AddressCard from "./AddressCard";
 function Userpanel() {
 const navigate = useNavigate();
 const [user, setUser] = useState({
   email: "",
   name: "",
 });
+const [userAddress, setUserAddress] = useState(null);
+
 
 useEffect(() => {
   const controller = new AbortController();
@@ -44,6 +47,9 @@ const FetchuserDetail = async () => {
               profilePic: response.data.user.profilePic || "",
           });
 
+          console.log("User Details:", response);
+          // Set user address
+ setUserAddress(response.data.user.address);
           let userDetails = {
               loggedIn: true,
               name: response.data.user.name,
@@ -114,8 +120,6 @@ const FetchuserDetail = async () => {
   alt="Profile" 
   className="profile-image"
 />
-
-
               <div className="profile-details">
                 <h2 className="profile-name">{user.name}</h2>
                 <p className="profile-email">{user.email}</p>
@@ -144,6 +148,8 @@ const FetchuserDetail = async () => {
             <p>Products Available</p>
           </div>
         </div>
+  <AddressCard userAddress={userAddress} />
+
       </main>
      
     </div>

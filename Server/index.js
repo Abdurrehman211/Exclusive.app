@@ -82,14 +82,45 @@ const MessageSchema = new mongoose.Schema({
   }
 });
 
-
 const orderSchema = new mongoose.Schema({
+  userId: {
+    type: mongoose.Schema.Types.ObjectId,
+    required: true,
+    ref: 'User'
+  },
   order_id: { type: String, required: true },
   tracker: { type: String, required: true },
   amount: { type: Number, required: true },
   currency: { type: String, default: 'PKR' },
-  status: { type: String, default: 'PENDING' }, // or COMPLETED / FAILED
-  createdAt: { type: Date, default: Date.now }
+  address: {
+    name: String,
+    addressLine: String,
+    city: String,
+    postalCode: String,
+    phoneNo: String,
+    country: String
+  },
+  items: [
+    {
+      productName: String,
+      quantity: Number,
+      price: Number
+    }
+  ],
+  paymentMethod: {
+    type: String,
+    enum: ['COD', 'Bank','GOOGLE_PAY', 'SAFE_PAY'],
+    required: true
+  },
+  status: {
+    type: String,
+    enum: ['PENDING', 'COMPLETED', 'FAILED'],
+    default: 'PENDING'
+  },
+  createdAt: {
+    type: Date,
+    default: Date.now
+  }
 });
 
 const addressSchema = new mongoose.Schema({
@@ -106,6 +137,11 @@ const addressSchema = new mongoose.Schema({
     type: String,
     required: true
   },
+  phoneNo :{
+    type: String,
+    required: true
+  },
+  email: String,
   city: String,
   postalCode: String,
   country: String,
@@ -256,9 +292,18 @@ app.get("/getuser", async (req, res) => {
     const decoded = jwt.verify(token, JWT_Secret); // jwt.verify throws if expired or invalid
     const user = await User.findOne({ _id: decoded.id }).select("-password");
     if (user) {
+const address = await Address.findOne({ userId: user._id }).select("-_id -__v");
+ const userObj = user.toObject();
+    if (address) {
+      userObj.address = address;
+     
+    } else {
+       userObj.address  = null;
+       
+    }
       return res.status(200).json({
         success: true,
-        user,
+        user:  userObj,
       });
     } else {
       return res.status(404).json({
@@ -420,48 +465,114 @@ app.get("/chat/messages/:userId", async (req, res) => {
 
 
 //safepay initailization
-const safepay = require('@sfpy/node-core')(process.env.Safe_pay_SECRET_KEY, {
+const safepay = require('@sfpy/node-core')(process.env.SAFE_PAY_SECRET_KEY, {
   authType: 'secret',
-  host: process.env.Safe_pay_Host 
+  host: process.env.SAFE_PAY_HOST
 });
 
-// Route CREATION
+app.post('/gateway/payment', async (req, res) => {
+  try {
+    const {
+      userId,
+      amount,
+      Order_id,
+      address,
+      items,
+      paymentMethod,
+      saved
+    } = req.body;
 
-app.post('/gateway/payment', async (req,res)=>{
-try{
-  const {amount , Order_id} = req.body;
-  const payment = safepay.payments.session.setup({
-    merchant_api_key: process.env.SAFEPAY_API_KEY,
-      intent: "CYBERSOURCE",  // Payment gateway
-      mode: "payment",        // One-time payment
-      currency: "PKR",        // Default currency
-      amount: amount * 100,   // Convert to paisa
-      metadata: {
-         order_id: Order_id 
-      }
-  })
-
-  const order = new Order.create({
+    // STEP 1: Setup Safepay payment session
+    const payment = await safepay.payments.session.setup({
+      merchant_api_key: process.env.SAFEPAY_API_KEY,
+      intent: "CYBERSOURCE",
+      mode: "payment",
+      currency: "PKR",
+      customer: {  // Add customer details
+    email: address.email,  // Required field
+    first_name: address.name,
+  },
+  metadata: {
     order_id: Order_id,
-    tracker: payment.token,
-    amount: amount * 100, // Convert to paisa
-    currency: "PKR",
-    status: "PENDING"
-  });
-  await order.save();
-  console.log(payment);
-  res.json({
-        checkout_url: payment.redirect_url, // Redirect user here
-      tracker: payment.token,  
-  })
-}catch(err){
- console.error(err);
-    res.status(500).json({ error: "Failed to create payment session" });
+    source: "your-website"  // Additional identifying info
+  }
+    });
+
+
+console.log("Full Payment Session Response:", payment.data);  // Debug output
+
+const token = payment?.data?.tracker?.token;
+if (!token) {
+  throw new Error(`Token generation failed. Response: ${JSON.stringify(payment)}`);
 }
-})
+
+
+
+    // STEP 2: Generate checkout URL directly (no need for separate auth in most cases)
+const baseParams = {
+      tracker: token,
+      client: client,
+      env: 'sandbox',
+      redirect_url: encodeURIComponent("http://localhost:3000/success"),
+      cancel_url: encodeURIComponent("http://localhost:3000/cancel")
+    };
+
+    const checkoutUrl = `https://sandbox.api.getsafepay.com/checkout/pay?${new URLSearchParams(baseParams)}`;
+
+    console.log("Final Checkout URL:", checkoutUrl);
+
+
+    // STEP 4: Save address if needed
+    let finalAddress = address;
+    if (saved === true || saved === 'true') {
+      const savedAddress = await Address.create({
+        userId,
+        name: address.name,
+        addressLine: address.addressLine,
+        city: address.city,
+        postalCode: address.postalCode,
+        country: address.country
+      });
+      finalAddress = {
+        name: savedAddress.name,
+        addressLine: savedAddress.addressLine,
+        city: savedAddress.city,
+        postalCode: savedAddress.postalCode,
+        country: savedAddress.country
+      };
+    }
+
+    // STEP 5: Save order
+    const order = await Order.create({
+      userId,
+      order_id: Order_id,
+      tracker: token,
+      amount: amount * 100,
+      currency: "PKR",
+      address: finalAddress,
+      items,
+      paymentMethod,
+      status: "PENDING"
+    });
+
+    // STEP 6: Return response
+     res.json({
+      success: true,
+      checkout_url: checkoutUrl.toString(),
+      debug: {  // Remove in production
+        tracker: payment.data.tracker,
+        capabilities: payment.data.capabilities
+      }
+    });
+
+  } catch (err) {
+    console.error("Safepay Payment Error:", err);
+    res.status(500).json({ error: "Failed to create payment session" });
+  }
+});
+
  
 // For Payment Verifications:
-//03363973553
 app.get('/gateway/verification/:token',async(req,res)=>{
   try {
     const token = req.params.token;
@@ -474,7 +585,7 @@ app.get('/gateway/verification/:token',async(req,res)=>{
         error: 'Order not Found'
       });
     }
-    order.status = details.status;
+    order.status = details.status || "Failed";
     await order.save();
 
     res.json({
@@ -490,6 +601,126 @@ app.get('/gateway/verification/:token',async(req,res)=>{
 })
 
 
+//For COD*******************
+
+app.post('/gateway/COD' , async (req , res)=>{
+  try {
+    const {
+  userId,amount,Order_id,address,items,paymentMethod,saved} = req.body;
+  if (paymentMethod !== 'COD'){
+    return res.status(400).json({
+      error: "Invalid Payment Method"
+    });
+  }
+  let finalAddress = address;
+  if(saved === true || saved === 'true'){
+    const savedAddress = await Address.create({
+        userId,
+        name: address.name,
+        addressLine: address.addressLine,
+        city: address.city,
+        phoneNo: address.phoneNo,
+        postalCode: address.postalCode,
+        country: address.country
+      });
+
+      // store the Mongo document reference in order if needed (optional)
+      // or continue embedding the raw address (depends on your schema)
+      finalAddress = {
+        name: savedAddress.name,
+        addressLine: savedAddress.addressLine,
+        city: savedAddress.city,
+        postalCode: savedAddress.postalCode,
+        country: savedAddress.country
+      };
+  }
+
+
+    const order  =await Order.create({
+       userId,
+      order_id: Order_id,
+      tracker: "COD_" + Date.now(), 
+      amount: amount * 100,
+      currency: "PKR",
+      address:finalAddress,
+      items,
+      paymentMethod: "COD",
+      status: "PENDING" 
+    });
+
+    await order.save();
+      res.status(201).json({
+      message: "Order placed with Cash on Delivery",
+      order
+    });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: "Failed to place COD order" });
+  }
+
+
+});
+
+//Google playgteway
+
+app.post('/gateway/GooglePay' , async (req , res)=>{
+  try {
+    const {
+  userId,amount,Order_id,address,items,paymentMethod,saved} = req.body;
+  if (paymentMethod !== 'Google Pay'){
+    return res.status(400).json({
+      error: "Invalid Payment Method"
+    });
+  }
+  let finalAddress = address;
+  if(saved === true || saved === 'true'){
+    const savedAddress = await Address.create({
+        userId,
+        name: address.name,
+        addressLine: address.addressLine,
+        city: address.city,
+        phoneNo: address.phoneNo,
+        postalCode: address.postalCode,
+        country: address.country
+      });
+
+      // store the Mongo document reference in order if needed (optional)
+      // or continue embedding the raw address (depends on your schema)
+      finalAddress = {
+        name: savedAddress.name,
+        addressLine: savedAddress.addressLine,
+        city: savedAddress.city,
+        postalCode: savedAddress.postalCode,
+        country: savedAddress.country
+      };
+  }
+
+
+    const order  =await Order.create({
+       userId,
+      order_id: Order_id,
+      tracker: "GooglePay_" + Date.now(), 
+      amount: amount * 100,
+      currency: "PKR",
+      address:finalAddress,
+      items,
+    paymentMethod: "GOOGLE_PAY",
+      status: "PENDING" 
+    });
+
+    await order.save();
+
+      res.status(201).json({
+      message: "Order placed with Google Pay",
+      order
+    });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: "Failed to place GPay order" });
+  }
+
+
+});
 
 // Start the server
 const PORT = 3001;
