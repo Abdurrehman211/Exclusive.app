@@ -24,6 +24,7 @@ import { toast } from 'react-toastify';
 import ChatRoom from './components/Chatroom';
 import AdminChat from './components/AdminChat';
 import { NotificationProvider } from './components/context/NotificationContext';
+import AddProduct from './components/Addproduct';
 function App() {
   // Token Evaluator 
 axios.interceptors.response.use(
@@ -91,6 +92,7 @@ const getAdminId = ()=>{
           <Route path='/Checkout' element={<Checkout />} />
           <Route path='/chat-room' element={<ChatRoom user={getUserID} />} />
           <Route path="/admin-chat" element={<AdminChat admin={getAdminId} />} />
+          <Route path='/AdminPanel/AddProduct' element={<AddProduct />} />
         </Routes>
 
         <ToastContainer

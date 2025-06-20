@@ -126,28 +126,7 @@ const FetchuserDetail = async () => {
               </div>
             </div>
           </div>
-        <div className="stats">
-          <div className="stat-card">
-            <FaShoppingCart />
-            <h3>1,250</h3>
-            <p>Total Orders</p>
-          </div>
-          <div className="stat-card">
-            <FaUsers />
-            <h3>3,500</h3>
-            <p>Customers</p>
-          </div>
-          <div className="stat-card">
-            <FaChartLine />
-            <h3>$120,000</h3>
-            <p>Revenue</p>
-          </div>
-          <div className="stat-card">
-            <FaBoxOpen />
-            <h3>650</h3>
-            <p>Products Available</p>
-          </div>
-        </div>
+        
   <AddressCard userAddress={userAddress} />
 
       </main>

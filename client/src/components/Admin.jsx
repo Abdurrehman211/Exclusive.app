@@ -107,6 +107,10 @@ const AdminPage = ({ adminDetails }) => {
     // Navigate to login/home
     navigate("/");
   };
+
+  const HandleRouting =()=>{
+    navigate('/AdminPanel/AddProduct');
+  }
     return (
       <div className="admin-container">
         {/* Sidebar */}
@@ -122,8 +126,9 @@ const AdminPage = ({ adminDetails }) => {
             <ul>
               <li className="active">
                 <FiBox />
-                <span>Products</span>
+                <span>Dashboard</span>
               </li>
+               <li onClick={HandleRouting}><FaBoxOpen /> Products</li>
               <li>
                 <FiUsers />
                 <span>Users</span>
@@ -132,11 +137,11 @@ const AdminPage = ({ adminDetails }) => {
                         <li onClick={()=>{
                           navigate('/admin-chat');
                         }}><FaUsers /> Chats</li>
-                        <li><FaBoxOpen /> Products</li>
-              <li>
+                       
+              {/* <li >
                 <FiSettings />
-                <span>Settings</span>
-              </li>
+                <span> Settings</span>
+              </li> */}
             </ul>
           </nav>
         </aside>
@@ -162,7 +167,7 @@ const AdminPage = ({ adminDetails }) => {
           <section className="products-section">
             <div className="section-header">
               <h2>Manage Products</h2>
-              <button className="add-product-btn">+ Add New Product</button>
+              {/* <button className="add-product-btn" onClick={HandleRouting}>+ Add New Product</button> */}
             </div>
   
             <div className="products-table-container">
@@ -198,6 +203,28 @@ const AdminPage = ({ adminDetails }) => {
               </table>
             </div>
           </section>
+                 <div className="stats mt-5">
+          <div className="stat-card">
+            <FaShoppingCart />
+            <h3>1,250</h3>
+            <p>Total Orders</p>
+          </div>
+          <div className="stat-card">
+            <FaUsers />
+            <h3>3,500</h3>
+            <p>Customers</p>
+          </div>
+          <div className="stat-card">
+            <FaChartLine />
+            <h3>$120,000</h3>
+            <p>Revenue</p>
+          </div>
+          <div className="stat-card">
+            <FaBoxOpen />
+            <h3>650</h3>
+            <p>Products Available</p>
+          </div>
+        </div>
         </main>
       </div>
     );
