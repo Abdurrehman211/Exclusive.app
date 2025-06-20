@@ -407,7 +407,6 @@ io.on("connection", (socket) => {
   socket.on('send_message', async ({ receiver_id, message, tempId }) => {
   try {
     const sender_id = socket.user.id;
-    
     const savedMessage = await Message.create({
       sender: sender_id,
       receiver: receiver_id,
