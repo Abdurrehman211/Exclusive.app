@@ -123,6 +123,55 @@ const orderSchema = new mongoose.Schema({
   }
 });
 
+const productSchema = new mongoose.Schema({
+  Title: {
+    type: String,
+    required: true,
+    trim: true,
+  },
+  Brand: {
+    type: String,
+    required: true,
+    trim: true,
+  },
+  Price: {
+    type: Number,
+    required: true,
+  },
+  Description: {
+    type: String,
+    required: true,
+  },
+  Category: {
+    type: String,
+    required: true,
+  },
+  Tags: {
+    type: [String], // store as array of tags
+    default: [],
+  },
+  ImageURL: {
+    type: [String], // array of Cloudinary URLs
+    default: [],
+  },
+  Stock: {
+    type: Number,
+    required: true,
+  },
+  Rating: {
+    type: Number,
+    default: 0,
+    min: 0,
+    max: 5
+  },
+  discount: {
+    type: Number,
+    default: 0,
+  },
+}, {
+  timestamps: true
+});
+
 const addressSchema = new mongoose.Schema({
   userId: {
     type: mongoose.Schema.Types.ObjectId,
@@ -154,7 +203,7 @@ const addressSchema = new mongoose.Schema({
 const Address = mongoose.model("Address", addressSchema);
 const Order = mongoose.model('Order', orderSchema);
 const Message = mongoose.model("Message", MessageSchema);
-
+const Products = mongoose.model("Products", productSchema);
 
 const User = mongoose.model("Registers", userSchema);
 
@@ -720,6 +769,77 @@ app.post('/gateway/GooglePay' , async (req , res)=>{
 
 
 });
+
+
+
+//Add new products
+app.post("/add-product", async (req, res) => {
+const {Title,
+    Brand,
+    Price,
+    Description,
+    Category,
+    Tags,
+    ImageURL,
+    Stock,
+    Rating,
+    discount,} = req.body;
+    try {
+      const authHeader = req.headers.authorization;
+      if (!authHeader) {
+    return res.status(401).json({
+      message: "No token provided",
+      success: false,
+    });
+  }
+  const token = authHeader.split(" ")[1]; // Extract the token
+  if (!token) {
+    return res.status(401).json({
+      message: "Invalid token format",
+      success: false,
+    });
+  }
+  const decoded = jwt.verify(token, JWT_Secret);
+  if (!decoded || decoded.role !== 'admin') {
+    return res.status(403).json({
+      message: "Forbidden",
+      success: false,
+    });
+  }
+      const newProduct = new Products({
+        Title,
+        Brand,
+        Price,
+        Description,
+        Category,
+         Tags: Tags.split(",").map((tag) => tag.trim()), 
+        ImageURL,
+        Stock,
+        Rating,
+        discount
+      });
+      await newProduct.save();
+      res.status(201).json({ success: true, message: "Product added successfully" });
+    } catch (error) {
+      res.status(500).json({ success: false, message: "Failed to add product", error: error.message });s
+    }
+});
+
+app.post('/get-product', async (req, res) => {
+try {
+  const products = await Products.find({});
+  if (!products || products.length === 0) {
+    return res.status(404).json({ message: "No products found" });
+  }
+  res.status(200).json({ success: true, products });
+
+} catch (error) {
+  res.status(500).json({ success: false, message: "Failed to fetch products", error: error.message });
+  console.error("Error fetching products:", error);
+}
+});
+
+
 
 // Start the server
 const PORT = 3001;
