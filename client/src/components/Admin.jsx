@@ -153,7 +153,9 @@ const AdminPage = ({ adminDetails }) => {
               <FiUsers />
               <span>Users</span>
             </li>
-            <li>
+            <li onClick={() => {
+              navigate("/AdminPanel/Orders");
+            }}>
               <FaShoppingCart /> Orders
             </li>
             <li

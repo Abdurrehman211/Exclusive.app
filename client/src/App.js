@@ -25,6 +25,9 @@ import ChatRoom from './components/Chatroom';
 import AdminChat from './components/AdminChat';
 import { NotificationProvider } from './components/context/NotificationContext';
 import AddProduct from './components/Addproduct';
+import Order from './components/order';
+import Product from './components/Product';
+import QuickViewModal from './components/ProductView';
 function App() {
   // Token Evaluator 
 axios.interceptors.response.use(
@@ -93,6 +96,9 @@ const getAdminId = ()=>{
           <Route path='/chat-room' element={<ChatRoom user={getUserID} />} />
           <Route path="/admin-chat" element={<AdminChat admin={getAdminId} />} />
           <Route path='/AdminPanel/AddProduct' element={<AddProduct />} />
+          <Route path='/AdminPanel/Orders' element={<Order />} />
+          <Route path='/product' element={<Product />} />
+          {/* <Route path='/product/:id' element={<QuickViewModal />} /> */}
         </Routes>
 
         <ToastContainer

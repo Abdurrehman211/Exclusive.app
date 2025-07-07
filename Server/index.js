@@ -199,12 +199,54 @@ const addressSchema = new mongoose.Schema({
     default: Date.now
   }
 });
+const CartSchema = new mongoose.Schema(
+  {
+    userId: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "User",
+      required: true,
+    },
+    items: [
+      {
+        productId: {
+          type: mongoose.Schema.Types.ObjectId,
+          ref: "Product",
+          required: true,
+        },
+        quantity: {
+          type: Number,
+          default: 1,
+          min: 1,
+        },
+      },
+    ],
+  },
+  { timestamps: true }
+);
+
+const WishlistSchema = new mongoose.Schema(
+  {
+    userId: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "User",
+      required: true,
+    },
+    products: [
+      {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "Product",
+      },
+    ],
+  },
+  { timestamps: true }
+);
 
 const Address = mongoose.model("Address", addressSchema);
 const Order = mongoose.model('Order', orderSchema);
 const Message = mongoose.model("Message", MessageSchema);
 const Products = mongoose.model("Products", productSchema);
-
+const Cart = mongoose.model("Cart", CartSchema);
+const Wishlist = mongoose.model("Wishlist", WishlistSchema);
 const User = mongoose.model("Registers", userSchema);
 
 
@@ -827,6 +869,7 @@ const {Title,
 
 app.post('/get-product', async (req, res) => {
 try {
+
   const products = await Products.find({});
   if (!products || products.length === 0) {
     return res.status(404).json({ message: "No products found" });
@@ -839,7 +882,185 @@ try {
 }
 });
 
+app.post('/get-product-by-id', async (req, res) => {
+  const { productId } = req.body;
+  try {
+    const product = await Products.findById(productId);
+    if (!product) {
+      return res.status(404).json({ success: false, message: "Product not found" });
+    }
+    res.status(200).json({ success: true, product });
+  } catch (error) {
+    console.error("Error fetching product by ID:", error);
+    res.status(500).json({ success: false, message: "Failed to fetch product", error: error.message });
+  }
+});
 
+//Delete Product
+
+app.post('/delete-item-from-cart', async (req, res) => {
+  const { userId, cartItemId } = req.body;
+
+  try {
+    const authHeader = req.headers.authorization;
+    if (!authHeader) {
+      return res.status(401).json({
+        message: "No token provided",
+        success: false,
+      });
+    }
+
+    const token = authHeader.split(" ")[1];
+    if (!token) {
+      return res.status(401).json({
+        message: "Invalid token format",
+        success: false,
+      });
+    }
+
+    // Remove the item with the given productId from the items array
+    const updatedCart = await Cart.findOneAndUpdate(
+      { userId },
+      { $pull: { items: { cartItemId } } }, // This line does the deletion
+      { new: true }
+    );
+
+    if (!updatedCart) {
+      return res.status(404).json({ success: false, message: "Cart not found" });
+    }
+
+    res.status(200).json({ success: true, message: "Item removed from cart", cart: updatedCart });
+  } catch (error) {
+    console.error("Error removing item:", error);
+    res.status(500).json({
+      success: false,
+      message: "Failed to delete item",
+      error: error.message,
+    });
+  }
+});
+
+// Retrieve all orders for Admin 
+
+app.post('/get-orders', async (req, res) => {
+  try {
+    const authHeader = req.headers.authorization;
+    if (!authHeader) {
+      return res.status(401).json({
+        message: "No token provided",
+        success: false,
+      });
+    }
+    const token = authHeader.split(" ")[1]; // Extract the token
+    if (!token) {
+      return res.status(401).json({
+        message: "Invalid token format",
+        success: false,
+      });
+    }
+    const decoded = jwt.verify(token, JWT_Secret);
+    if (!decoded || decoded.role !== 'admin') {
+      return res.status(403).json({
+        message: "Forbidden",
+        success: false,
+      });
+    }
+    
+    const orders = await Order.find({})
+    res.status(200).json({ success: true, orders });
+  } catch (error) {
+    console.error("Error fetching orders:", error);
+    res.status(500).json({ success: false, message: "Failed to fetch orders", error: error.message });
+  }
+});
+
+
+
+// Add to cart 
+
+app.post('/add-to-cart', async (req, res) => {
+const {userId, productId, quantity} = req.body;
+try {
+  const cart = await Cart.findOne({ userId: userId });
+  if (cart) {
+    const itemIndex = cart.items.findIndex(item => item.productId.toString() === productId);
+    if (itemIndex > -1) {
+      cart.items[itemIndex].quantity += quantity;
+    } else {
+      cart.items.push({ productId, quantity });
+    }
+    await cart.save();
+  } else {
+    const newCart = new Cart({
+      userId: userId,
+      items: [{ productId, quantity }]
+    });
+    await newCart.save();
+  }
+  res.status(200).json({ success: true, message: "Product added to cart" });
+} catch (error) {
+  console.error("Error adding to cart:", error);
+  res.status(500).json({ success: false, message: "Failed to add to cart", error: error.message });
+}
+});
+
+// retrieve from cart
+
+app.post('/get-cart-item',async (req, res) => {
+  const { userId } = req.body;
+  try {
+    const cart = await Cart.findOne({ userId: userId })
+    if (!cart) {
+      return res.status(404).json({ success: false, message: "Cart not found" });
+    }
+    res.status(200).json({ success: true, items: cart });
+  } catch (error) {
+    console.error("Error retrieving cart items:", error);
+    res.status(500).json({ success: false, message: "Failed to retrieve cart items", error: error.message });
+  }
+})
+
+// Add to wishlist
+app.post('/add-to-wishlist', async (req, res) => {
+  const { user_id, productId } = req.body;
+  try {
+    let wishlist = await Wishlist.findOne({ userId: user_id });
+    if (wishlist) {
+      if (!wishlist.products.includes(productId)) {
+        wishlist.products.push(productId);
+        await wishlist.save();
+      } else {
+        return res.status(400).json({ success: false, message: "Product already in wishlist" });
+      }
+    } else {
+      wishlist = new Wishlist({
+        userId: user_id,
+        products: [productId]
+      });
+      await wishlist.save();
+    }
+    res.status(200).json({ success: true, message: "Product added to wishlist" });
+  } catch (error) {
+    console.error("Error adding to wishlist:", error);
+    res.status(500).json({ success: false, message: "Failed to add to wishlist", error: error.message });
+  }
+}
+);
+
+// Retrieve wishlist items
+app.post('/get-wishlist-items', async (req, res) => {
+  const { user_id } = req.body;
+  try {
+    const wishlist = await Wishlist.findOne({ userId: user_id }).populate('products');
+    if (!wishlist) {
+      return res.status(404).json({ success: false, message: "Wishlist not found" });
+    }
+    res.status(200).json({ success: true, products: wishlist.products });
+  } catch (error) {
+    console.error("Error retrieving wishlist items:", error);
+    res.status(500).json({ success: false, message: "Failed to retrieve wishlist items", error: error.message });
+  }
+});
 
 // Start the server
 const PORT = 3001;
