@@ -26,11 +26,23 @@ const JWT_Secret = process.env.JWT_Secret;
 const client = new OAuth2Client(process.env.Google_Client);
 
 //Headers and CORS....
+const allowedOrigins = [
+  "http://localhost:3000",
+  "https://exclusive-app-rho.vercel.app"
+];
 
 app.use(express.json());
 app.use(
   cors({
-    origin: "http://localhost:3000",
+  origin: function (origin, callback) {
+      // Allow requests with no origin (like mobile apps, curl, etc.)
+      if (!origin) return callback(null, true);
+      if (allowedOrigins.includes(origin)) {
+        return callback(null, true);
+      } else {
+        return callback(new Error("Not allowed by CORS"));
+      }
+    },
     methods: ["POST", "GET", "OPTIONS"],
     allowedHeaders: ["Content-Type", "Authorization"],
     credentials: true,
