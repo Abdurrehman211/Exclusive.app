@@ -182,7 +182,9 @@ setCartCounter(updatedItems.length);
         </div>
       </section>
       <div className="container">
-        <table className="cart-table">
+        <div className="row">
+          <div className="col-lg-12 col-md-12 col-sm-12">
+             <table className="cart-table">
           <thead>
             <tr>
               <th>Product</th>
@@ -223,6 +225,9 @@ setCartCounter(updatedItems.length);
             ))}
           </tbody>
         </table>
+          </div>
+        </div>
+       
         {/* <div className="row mt-5">
           <div className="col-lg-12 col-sm-12 col-md-12" id="Cart-button">
             <button className="btn btn-primary"> Return To Home</button>

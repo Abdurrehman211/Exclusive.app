@@ -11,7 +11,7 @@ function Product() {
   const [selectedProduct, setSelectedProduct] = useState(null);
 
   // Filter states
-  const [priceRange, setPriceRange] = useState([0, 50000]);
+  const [priceRange, setPriceRange] = useState([0, 200000]);
   const [selectedCategories, setSelectedCategories] = useState([]);
   const [selectedBrands, setSelectedBrands] = useState([]);
   const [minRating, setMinRating] = useState(0);
@@ -121,7 +121,7 @@ function Product() {
   };
 
   const clearAllFilters = () => {
-    setPriceRange([0, 50000]);
+    setPriceRange([0, 200000]);
     setSelectedCategories([]);
     setSelectedBrands([]);
     setMinRating(0);
@@ -182,7 +182,7 @@ const addToWishlist = async (productId) => {
               <input 
                 type="range" 
                 min="0" 
-                max="50000" 
+                max="200000" 
                 value={priceRange[1]} 
                 onChange={(e) => setPriceRange([priceRange[0], parseInt(e.target.value)])}
               />
