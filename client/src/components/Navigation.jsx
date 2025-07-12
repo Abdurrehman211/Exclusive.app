@@ -8,7 +8,16 @@ import { Link, useLocation, useNavigate } from "react-router-dom";
 import Business from "./images/Busines.gif";
 import { googleLogout } from '@react-oauth/google';
 import { toast } from "react-toastify";
+import { useContext } from "react";
+import { CartCounterContext } from "./context/CartCouter";
 function Navigation() {
+  const context = useContext(CartCounterContext);
+
+  if (!context) {
+    throw new Error("CartCounterContext is not provided");
+  return null; // or handle the error as needed
+  }
+
   const [userdata, setUser] = useState("");
   const [admindata, setAdmin] = useState("");
   const location = useLocation();
@@ -96,8 +105,11 @@ function Navigation() {
 
         {userdata ? (
           <>
-            <a href="/Cart">
-              <img src={cart} alt="cart" id="cart" />
+            <a href="/Cart" className="cart-link">
+              <img src={cart} alt="cart" id="cart" /> 
+               {context.cartCounter > 0 && (
+    <span className="cart-counter">{context.cartCounter}</span>
+  )}
             </a>
             <a href="/Wishlist">
               <img src={wish} alt="Wish" id="wish" />

@@ -28,6 +28,7 @@ import AddProduct from './components/Addproduct';
 import Order from './components/order';
 import Product from './components/Product';
 import QuickViewModal from './components/ProductView';
+import { CartCounterContext, CartCounterProvider } from './components/context/CartCouter';
 function App() {
   // Token Evaluator 
 axios.interceptors.response.use(
@@ -77,6 +78,7 @@ const getAdminId = ()=>{
 }
   return ( 
  <Router>
+  <CartCounterProvider> 
       <NotificationProvider> {/* ✅ Wrap the entire app */}
         <Navigation />
         <Routes>
@@ -110,6 +112,7 @@ const getAdminId = ()=>{
           <TawkToChat />
         </footer>
       </NotificationProvider>
+      </CartCounterProvider>
     </Router>
   );
 }

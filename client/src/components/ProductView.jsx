@@ -1,9 +1,13 @@
-import React, { useState } from 'react';
+import React, { useState, useContext } from 'react';
 import { FaStar, FaRegStar, FaTimes, FaShoppingCart, FaHeart, FaShare } from 'react-icons/fa';
 import './QuickViewModal.css';
 import axios from 'axios';
 import { toast } from 'react-toastify';
+import { CartCounterContext } from './context/CartCouter';
 const QuickViewModal = ({ product, onClose, onAddToCart, onAddToWishlist }) => {
+
+ const { setCartCounter } = useContext(CartCounterContext);
+
   const [activeImageIndex, setActiveImageIndex] = useState(0);
   const [quantity, setQuantity] = useState(1);
   const [userRating, setUserRating] = useState(0);
@@ -57,6 +61,7 @@ const addToCart = async (productId, quantity) => {
 
       toast.success("Product added to cart successfully!");
         onAddToCart(productId, quantity);
+ setCartCounter(prev => prev + 1);  // Update cart counter
         setLoading(false);
     } else {
       toast.error("Failed to add product to cart.");

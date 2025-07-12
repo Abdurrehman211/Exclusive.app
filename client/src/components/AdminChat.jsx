@@ -84,15 +84,27 @@ const AdminChat = ({ admin }) => {
   setChat(prev => [...prev, data]);
 
   // Only notify if the sender is not the admin
-  if (data.sender !== sessionStorage.getItem("adminId")) {
+   if (data.sender !== sessionStorage.getItem("adminId") && 
+        data.sender !== selectedUser?._id) {
+      
+      // Find the sender in users array
+      const sender = users.find(user => user._id === data.sender);
+      
     addNotification({
-      id: Date.now(),
-      title: "New Message",
-      message: `New message from user`,
-    });
-  }
-};
+        id: `chat-${data.sender}-${Date.now()}`,
+        title: "New Chat Message",
+        message: `${sender?.name || 'A user'}: ${data.message.substring(0, 30)}${data.message.length > 30 ? '...' : ''}`,
+        onClick: () => {
+          navigate(`/admin/chat?select=${data.sender}`);
+        },
+        isChatNotification: true
+      });
 
+      // Add to new message users set
+      setNewMessageUsers(prev => new Set(prev).add(data.sender));
+    }
+  };
+ 
   const handleTyping = (userId) => {
     if (userId === selectedUser?._id) {
       setTyping(true);

@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useContext } from "react";
 import controler from "./images/controlller.png";
 import lcdd from "./images/LCD.png";
 import Footer from "./Footer";
@@ -8,8 +8,10 @@ import { useLocation, useNavigate } from "react-router";
 import axios from "axios";
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import { CartCounterContext } from "./context/CartCouter";
 
 function Cart() {
+ const { setCartCounter } = useContext(CartCounterContext);
   const Location = useLocation();
   const navigate = useNavigate();
   const [cart, setCart] = useState([]);
@@ -86,6 +88,7 @@ function Cart() {
 
       const updatedItems = cartItems.filter((item) => item.cartItemId !== id);
 setCartItems(updatedItems);
+setCartCounter(updatedItems.length);
       setTimeout(() => {
   try {
     toast.success("Item removed from cart successfully");
@@ -158,6 +161,8 @@ setCartItems(updatedItems);
       );
       const filteredItems = updatedItems.filter(Boolean); // remove nulls
       setCartItems(filteredItems);
+    setCartCounter(filteredItems.length); // Update cart counter in context
+      console.log("Updated Cart Items:", filteredItems);
     } catch (error) {
       console.error("Error fetching cart items:", error);
       toast.error("Error fetching cart");
