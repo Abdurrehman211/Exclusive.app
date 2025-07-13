@@ -39,7 +39,7 @@ const fetchAdminDetails = async () => {
         return;
       }
 
-      const response = await axios.get("http://localhost:3001/getuser", {
+      const response = await axios.get("https://exclusive-app-z5t7.onrender.com/getuser", {
         headers: { Authorization: `Bearer ${token}` },
       });
 
@@ -84,7 +84,7 @@ const fetchAdminDetails = async () => {
 const fetchOrders = async () => {
 
     try {
-        const reponse = await axios.post("http://localhost:3001/get-orders",{}, {
+        const reponse = await axios.post("https://exclusive-app-z5t7.onrender.com/get-orders",{}, {
             headers: { authorization: `Bearer ${token}` }
         })
         if (reponse.data.success) {

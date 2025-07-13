@@ -27,7 +27,7 @@ function Cart() {
         return;
       }
 
-      const response = await axios.get("http://localhost:3001/getuser", {
+      const response = await axios.get("https://exclusive-app-z5t7.onrender.com/getuser", {
         headers: { Authorization: `Bearer ${token}` },
       });
 
@@ -69,7 +69,7 @@ function Cart() {
   const handleDelete = async (id) => {
   try {
     const response = await axios.post(
-      "http://localhost:3001/delete-item-from-cart",
+      "https://exclusive-app-z5t7.onrender.com/delete-item-from-cart",
       {
         userId,
         productId: id, // This must be the actual productId, NOT the cart item _id
@@ -121,7 +121,7 @@ setCartCounter(updatedItems.length);
 
   const addToCart = async () => {
     try {
-      const response = await axios.post("http://localhost:3001/get-cart-item", {
+      const response = await axios.post("https://exclusive-app-z5t7.onrender.com/get-cart-item", {
         userId,
       });
 
@@ -139,7 +139,7 @@ setCartCounter(updatedItems.length);
         cartItems.items.map(async (item) => {
           try {
             const res = await axios.post(
-              "http://localhost:3001/get-product-by-id",
+              "https://exclusive-app-z5t7.onrender.com/get-product-by-id",
               {
                 productId: item.productId,
               }

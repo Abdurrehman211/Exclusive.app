@@ -4,7 +4,7 @@ import { useNavigate } from "react-router-dom";
 import "./AdminChat.css";
 
 const auth = sessionStorage.getItem("Auth-Token");
-const socket = io("http://localhost:3001", {
+const socket = io("https://exclusive-app-z5t7.onrender.com", {
   transports: ["websocket", "polling"],
   auth: { token: auth },
   reconnectionAttempts: 5,

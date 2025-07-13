@@ -35,7 +35,7 @@ const FetchuserDetail = async () => {
           return;
       }
 
-      const response = await axios.get('http://localhost:3001/getuser', {
+      const response = await axios.get('https://exclusive-app-z5t7.onrender.com/getuser', {
           headers: { 'Authorization': `Bearer ${token}` }
       });
 

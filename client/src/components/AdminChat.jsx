@@ -30,7 +30,7 @@ const AdminChat = ({ admin }) => {
   const token = sessionStorage.getItem("Auth-Token");
   if (!token) return;
 
-  const newSocket = io("http://localhost:3001", {
+  const newSocket = io("https://exclusive-app-z5t7.onrender.com", {
     auth: { token }
   });
 
@@ -56,7 +56,7 @@ const AdminChat = ({ admin }) => {
       return;
     }
 
-    axios.get("http://localhost:3001/getuser", {
+    axios.get("https://exclusive-app-z5t7.onrender.com/getuser", {
       headers: {
         Authorization: `Bearer ${token}`,
       },
@@ -156,7 +156,7 @@ const AdminChat = ({ admin }) => {
 //   }, [selectedUser, admin._id]);
 
   useEffect(() => {
-    axios.get("http://localhost:3001/chat/users")
+    axios.get("https://exclusive-app-z5t7.onrender.com/chat/users")
       .then((response) => {
         console.log(response);
         setUsers(response.data)
@@ -195,7 +195,7 @@ const handleSend = () => {
       return newSet;
     });
     try {
-      const response = await axios.get(`http://localhost:3001/chat/messages/${user._id}`);
+      const response = await axios.get(`https://exclusive-app-z5t7.onrender.com/chat/messages/${user._id}`);
            console.log(response);
       setChat(response.data);
     } catch (error) {

@@ -52,7 +52,7 @@ const addToCart = async (productId, quantity) => {
     return;
   }
   try {
-    const response = await axios.post("http://localhost:3001/add-to-cart", {userId, productId, quantity}, {
+    const response = await axios.post("https://exclusive-app-z5t7.onrender.com/add-to-cart", {userId, productId, quantity}, {
       headers: {
         Authorization: `Bearer ${token}`
       }

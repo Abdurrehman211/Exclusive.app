@@ -42,7 +42,7 @@ const FetchuserDetail = async () => {
           return;
       }
 
-      const response = await axios.get('http://localhost:3001/getuser', {
+      const response = await axios.get('https://exclusive-app-z5t7.onrender.com/getuser', {
           headers: { 'Authorization': `Bearer ${token}` }
       });
 
@@ -104,7 +104,7 @@ const FetchuserDetail = async () => {
         saved: checked
     };
     try {
-        const response = await axios.post('http://localhost:3001/gateway/GooglePay', payload, {
+        const response = await axios.post('https://exclusive-app-z5t7.onrender.com/gateway/GooglePay', payload, {
             headers: {
                 authorization: `Bearer ${token}`,
                 'Content-Type': 'application/json',
@@ -182,7 +182,7 @@ const FetchuserDetail = async () => {
   };
   const endpoint = paymentMethod === 'Bank' ? '/gateway/payment' : '/gateway/COD';
 try {
-      const response  = await axios.post(`http://localhost:3001${endpoint}`, payload, {
+      const response  = await axios.post(`https://exclusive-app-z5t7.onrender.com${endpoint}`, payload, {
     headers: {
         authorization: `Bearer ${token}`,
       'Content-Type': 'application/json',

@@ -23,7 +23,7 @@ function Contact() {
     e.preventDefault();
     try {
       setSubmit(true);
-      const res = await axios.post("http://localhost:3001/send-mail", {
+      const res = await axios.post("https://exclusive-app-z5t7.onrender.com/send-mail", {
         name,
         email: mail,
         message,

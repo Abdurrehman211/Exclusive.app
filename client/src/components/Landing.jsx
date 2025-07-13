@@ -117,7 +117,7 @@ useEffect(() => {
 
   const getAllProducts = async () => {
     try {
-      const response = await axios.post("http://localhost:3001/get-product");
+      const response = await axios.post("https://exclusive-app-z5t7.onrender.com/get-product");
       if (response.data.success) {
         const products = response.data.products || [];
         setProducts(products);

@@ -15,7 +15,7 @@ const [confirmPassword, setConfirmPassword] = useState("");
 const role = "user";
 
     const HandleSign=()=>{
-        axios.post("http://localhost:3001/register",{
+        axios.post("https://exclusive-app-z5t7.onrender.com/register",{
             name:name,
             email:email,
             password:password,

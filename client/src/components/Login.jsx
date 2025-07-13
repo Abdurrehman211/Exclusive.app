@@ -20,7 +20,7 @@ const Login = () => {
     const HandleLogin = async () => {
         try {
             setIsLoading(true); // Start loading
-            const res = await axios.post("http://localhost:3001/login", {
+            const res = await axios.post("https://exclusive-app-z5t7.onrender.com/login", {
                 email: email1,
                 password: password2,
             });

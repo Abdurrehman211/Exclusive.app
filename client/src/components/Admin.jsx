@@ -34,7 +34,7 @@ const Admin = () => {
         return;
       }
 
-      const response = await axios.get("http://localhost:3001/getuser", {
+      const response = await axios.get("https://exclusive-app-z5t7.onrender.com/getuser", {
         headers: { Authorization: `Bearer ${token}` },
       });
 
@@ -101,7 +101,7 @@ const AdminPage = ({ adminDetails }) => {
   }, []);
   const getAllProducts = async () => {
     try {
-      const response = await axios.post("http://localhost:3001/get-product");
+      const response = await axios.post("https://exclusive-app-z5t7.onrender.com/get-product");
       const data = response.data;
       setProducts(data.products || []);
     } catch (error) {
