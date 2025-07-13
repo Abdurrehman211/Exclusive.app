@@ -40,6 +40,10 @@ import Accessibilityprovider from "./context/Accessibility";
 import axios from "axios";
 import { CartCounterContext } from "./context/CartCouter";
 import { useNavigate } from "react-router";
+import { toast } from "react-toastify";
+import "bootstrap/dist/css/bootstrap.min.css";
+import WatchCarousel from "./Header";
+
 
 function Landing() {
   const navigate = useNavigate();
@@ -169,16 +173,26 @@ const formatFlashTime = (time) => {
                   <li>
                     <a href="/product">Watches</a>
                   </li>
-                  <li>
-                    <a href="/product">Dresses</a>
+                  <li style={{color: 'grey'}} onMouseEnter={()=>{
+              toast.info("Coming Soon")
+            }}> 
+                    <a href="/product" onMouseEnter={()=>{
+              toast.info("Coming Soon")
+            }}>Dresses</a>
                   </li>
-                  <li>
+                  <li style={{color: 'grey'}} onMouseEnter={()=>{
+              toast.info("Coming Soon")
+            }}>
                     <a href="/product">Bottom</a>
                   </li>
-                  <li>
+                  <li style={{color: 'grey'}} onMouseEnter={()=>{
+              toast.info("Coming Soon")
+            }}>
                     <a href="/product">Tops</a>
                   </li>
-                  <li>
+                  <li style={{color: 'grey'}} onMouseEnter={()=>{
+              toast.info("Coming Soon")
+            }}>
                     <a href="/product">Accessories</a>
                   </li>
                 </ul>
@@ -191,31 +205,55 @@ const formatFlashTime = (time) => {
             {activeCategory === "men" && (
               <div className="dropdown">
                 <ul>
-                  <li>
+                  <li >
                     <a href="/product">Watches</a>
                   </li>
-                  <li>
-                    <a href="/product">T-Shirts</a>
+                  <li style={{color: 'grey'}} onMouseEnter={()=>{
+              toast.info("Coming Soon")
+            }}>
+                    <a href="/product" onMouseEnter={()=>{
+              toast.info("Coming Soon")
+            }}>T-Shirts</a>
                   </li>
-                  <li>
+                  <li style={{color: 'grey'}} onMouseEnter={()=>{
+              toast.info("Coming Soon")
+            }}>
                     <a href="/product">Pants</a>
                   </li>
-                  <li>
+                  <li style={{color: 'grey'}} onMouseEnter={()=>{
+              toast.info("Coming Soon")
+            }}>
                     <a href="/product">Footwears</a>
                   </li>
-                  <li>
+                  <li style={{color: 'grey'}} onMouseEnter={()=>{
+              toast.info("Coming Soon")
+            }}>
                     <a href="/product">Accessories</a>
                   </li>
                 </ul>
               </div>
             )}
-            <li>Electronics</li>
-            <li>Home & Lifestyle</li>
-            <li>Medicine</li>
-            <li>Sports & Outdoor</li>
-            <li>Baby's & Toys</li>
-            <li>Groceries & Pets</li>
-            <li>Health & Beauty</li>
+            <li style={{color: 'grey'}} onMouseEnter={()=>{
+              toast.info("Coming Soon")
+            }}>Electronics</li>
+            <li style={{color: 'grey'}} onMouseEnter={()=>{
+              toast.info("Coming Soon")
+            }} >Home & Lifestyle</li>
+            <li style={{color: 'grey'}} onMouseEnter={()=>{
+              toast.info("Coming Soon")
+            }}>Medicine</li>
+            <li style={{color: 'grey'}} onMouseEnter={()=>{
+              toast.info("Coming Soon")
+            }}>Sports & Outdoor</li>
+            <li style={{color: 'grey'}} onMouseEnter={()=>{
+              toast.info("Coming Soon")
+            }}>Baby's & Toys</li>
+            <li style={{color: 'grey'}} onMouseEnter={()=>{
+              toast.info("Coming Soon")
+            }}>Groceries & Pets</li>
+            <li style={{color: 'grey'}} onMouseEnter={()=>{
+              toast.info("Coming Soon")
+            }}>Health & Beauty</li>
           </ul>
         </aside>
         {/* <div className="access" onClick={togglebutton} >
@@ -229,29 +267,9 @@ const formatFlashTime = (time) => {
     </div>
         )}
     </div> */}
-        <div className="main">
-          <img src={dropdown} alt="dropdown" className="dropdown1" />
-
-          <div className="ads">
-            <div className="text">
-              <div className="company">
-                <img src={apple} alt="apple" className="apple" />
-                <p>iPhone 14 Series</p>
-              </div>
-              <div className="main-text">
-                Up to 10% <br /> off Voucher
-              </div>
-              <div className="button">
-                <button>Shop Now</button>
-                <img src={arrow33} alt="arrow" className="arrow" />
-              </div>
-            </div>
-            <div className="pics">
-              <img src={phone} alt="phone" className="phone" />
-            </div>
-          </div>
-          <img src={dropdown} alt="dropdown" className="dropdown3" />
-        </div>
+    <div className="main">
+      <WatchCarousel products={products} />
+    </div>
       </section>
       <section id="Sales">
         <div className="main-sales">
@@ -394,7 +412,73 @@ const formatFlashTime = (time) => {
           <div id="space"></div>
         </div>
       </section>
-
+     <section id="arrivals">
+        <div className="main-sales">
+          <div className="day">
+            <p id="p1"></p>
+            <p className="p">Look our new arrivals</p>
+          </div>
+          <div className="timer">
+            <div className="time">
+              <h1>Highlights</h1>
+            </div>
+          </div>
+          <div className="row mt-5">
+            <div className="col-lg-6 col-md-6 col-sm-12">
+              <div className="left">
+                <div className="wrapper"></div>
+                 <div className="wrapper"></div>
+              <img src={ps5} alt="ps5" id="ps5" width={'100%'} />
+              <div className="text-left">
+                <h3>Men Watches</h3>
+                <p id="p-text">
+                  All Brand new Watches !
+                </p>
+                <button id="Button" onClick={()=>{
+                  navigate('/product')
+                }}>Shop Now</button>
+              </div>
+              </div>
+            </div>
+            <div className="col-lg-6 col-md-6 col-sm-12">
+              <div className="right">
+              <div className="upper">
+                <div className="upper-left"></div>
+                <div className="text-upper">
+                  <h3>Women’s Collections</h3>
+                  <p id="p-text">
+                    Featured woman collections that give you another vibe.
+                  </p>
+                  <button id="Button" nClick={()=>{
+                  navigate('/product')
+                }}>Shop Now</button>
+                </div>
+                <div className="img">
+                  <img src={hat} alt="hat" id="hat" />
+                </div>
+              </div>
+              <div className="upper">
+                <div className="upper">
+                  <div className="upper-left1"></div>
+                  <div className="text-upper">
+                    <h3>Iconic Collections</h3>
+                    <p id="p-text">
+                      Featured Antique collections that give you Classy Looks.
+                    </p>
+                    <button id="Button" onClick={()=>{
+                  navigate('/product')
+                }}>Shop Now</button>
+                  </div>
+                  <div className="img1">
+                    <img src={perfumes} alt="hat" id="perfumes" />
+                  </div>
+                </div>
+              </div>
+            </div>
+            </div>
+          </div>
+        </div>
+      </section>
       <section id="Category">
         <div className="main-sales1">
           <div className="day">
@@ -626,6 +710,7 @@ const formatFlashTime = (time) => {
       )}
     </div>
 </section>
+
       <section id="Sales">
         <div className="main-sales">
           <div className="day">
@@ -764,13 +849,13 @@ const formatFlashTime = (time) => {
                 </div>
               ))}
           </div>
-       <div className="row mt-5">
+       <div className="row mt-5 mb-5 pb-5">
         <div className="col-lg-12 col-md-12 co-sm-12">
           <h1 className="border-bottom pb-4">
             Top Sellings
           </h1>
         </div>
-          <div className="products-container mt-3 ">
+          <div className="products-container mt-3  ">
             {highRated 
               .slice(0, 4)
               .map((product) => (
@@ -891,65 +976,7 @@ const formatFlashTime = (time) => {
               ))}
           </div>
        </div>
-          <button id="button">View All</button>
           <div id="space"></div>
-        </div>
-      </section>
-
-      <section id="arrivals">
-        <div className="main-sales">
-          <div className="day">
-            <p id="p1"></p>
-            <p className="p">Featured</p>
-          </div>
-          <div className="timer">
-            <div className="time">
-              <h1>New Arrival</h1>
-            </div>
-          </div>
-          <div className="main-container">
-            <div className="left">
-              <div className="wrapper"></div>
-              <img src={ps5} alt="ps5" id="ps5" />
-              <div className="text-left">
-                <h3>PlayStation 5</h3>
-                <p id="p-text">
-                  Black and White version of the PS5 coming out on sale.
-                </p>
-                <button id="Button">Shop Now</button>
-              </div>
-            </div>
-            <div className="right">
-              <div className="upper">
-                <div className="upper-left"></div>
-                <div className="text-upper">
-                  <h3>Women’s Collections</h3>
-                  <p id="p-text">
-                    Featured woman collections that give you another vibe.
-                  </p>
-                  <button id="Button">Shop Now</button>
-                </div>
-                <div className="img">
-                  <img src={hat} alt="hat" id="hat" />
-                </div>
-              </div>
-              <div className="upper">
-                <div className="upper">
-                  <div className="upper-left1"></div>
-                  <div className="text-upper">
-                    <h3>Perfume's Collections</h3>
-                    <p id="p-text">
-                      Featured woman collections that give you another vibe.
-                    </p>
-                    <button id="Button">Shop Now</button>
-                  </div>
-                  <div className="img1">
-                    <img src={perfumes} alt="hat" id="perfumes" />
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
         </div>
       </section>
       <section id="our_team1">
