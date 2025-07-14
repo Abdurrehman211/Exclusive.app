@@ -154,7 +154,9 @@ const addToWishlist = async (productId) => {
     alert("An error occurred while adding the product to wishlist.");
     }
 }
-
+const HandleProductNext =(id)=>{
+  window.location.href =`./product/${id}`;
+}
   return (
     <div className="products-page mb-5">
       {/* Hero Banner */}
@@ -331,7 +333,9 @@ const addToWishlist = async (productId) => {
                     <div className="price-rating">
                       {product.discount > 0 && (
                 <>
-                  <span className="original-price">PKR {product.Price.toLocaleString()}</span>
+                  <span className="original-price">PKR {(
+    product.Price + (product.Price * (product.discount / 100))
+  ).toLocaleString()} </span>
                 </>
                 
               )}
@@ -342,9 +346,7 @@ const addToWishlist = async (productId) => {
                       </div>
                     </div>
                        <span className="current-price">
-                PKR {(
-    product.Price - (product.Price * (product.discount / 100))
-  ).toLocaleString()}
+                PKR {product.Price.toLocaleString()}
               </span>
                     <p className="product-description">
                       {product.Description || "Premium quality product with exceptional features"}
@@ -353,7 +355,7 @@ const addToWishlist = async (productId) => {
                   
                   <div className="product-actions">
                     <button className="nav0cta1" style={{width: "100%"}} onClick={()=>{
-                        HandleQuickView(product._id);
+                        HandleProductNext(product._id);
                     }}>View Product</button>
                   </div>
                 </div>

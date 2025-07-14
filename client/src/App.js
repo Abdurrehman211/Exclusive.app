@@ -29,6 +29,7 @@ import Order from './components/order';
 import Product from './components/Product';
 import QuickViewModal from './components/ProductView';
 import { CartCounterContext, CartCounterProvider } from './components/context/CartCouter';
+import ProductPage from './components/ProductModel';
 function App() {
   // Token Evaluator 
 axios.interceptors.response.use(
@@ -100,7 +101,7 @@ const getAdminId = ()=>{
           <Route path='/AdminPanel/AddProduct' element={<AddProduct />} />
           <Route path='/AdminPanel/Orders' element={<Order />} />
           <Route path='/product' element={<Product />} />
-          {/* <Route path='/product/:id' element={<QuickViewModal />} /> */}
+          <Route path='/product/:id' element={<ProductPage />} />
         </Routes>
 
         <ToastContainer

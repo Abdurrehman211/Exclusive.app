@@ -43,7 +43,7 @@ const QuickViewModal = ({ product, onClose, onAddToCart, onAddToWishlist }) => {
   };
 
   const calculateDiscountedPrice = () => {
-    return product.Price - (product.Price * (product.discount / 100));
+    return product.Price + (product.Price * (product.discount / 100));
   };
 const addToCart = async (productId, quantity) => {
     setLoading(true);
@@ -123,12 +123,12 @@ const addToCart = async (productId, quantity) => {
             <div className="price-section">
               {product.discount > 0 && (
                 <>
-                  <span className="original-price">PKR {product.Price.toLocaleString()}</span>
+                  <span className="original-price">PKR {calculateDiscountedPrice().toLocaleString()} </span>
                   <span className="discount-badge">{product.discount}% OFF</span>
                 </>
               )}
               <span className="current-price">
-                PKR {calculateDiscountedPrice().toLocaleString()}
+                PKR {product.Price.toLocaleString()}
               </span>
             </div>
 
