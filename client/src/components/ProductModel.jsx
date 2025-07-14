@@ -620,7 +620,7 @@ const handleReviewSubmit = async (e) => {
           ></textarea>
         </div>
 
-        <button type="submit" className="submit-review-btn" disabled={isSubmitting}>
+        <button type="submit" className="nav0cta1" disabled={isSubmitting}>
           {isSubmitting ? 'Submitting...' : 'Submit Review'}
         </button>
       </form>
