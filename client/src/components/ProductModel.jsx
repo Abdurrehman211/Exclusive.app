@@ -1,21 +1,23 @@
 import React, { useState, useEffect, useRef } from "react";
 import axios from "axios";
-import { FiStar, FiShoppingCart, FiHeart, FiShare2, FiMaximize, FiMinimize } from "react-icons/fi";
-import { useParams } from "react-router-dom";
+import { FiStar, FiShoppingCart, FiHeart, FiShare2, FiMaximize, FiMinimize, FiChevronLeft } from "react-icons/fi";
+import { useNavigate, useParams } from "react-router-dom";
 import * as THREE from 'three';
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls';
 import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader';
 import './productmodel.css';
 
 function ProductPage() {
-  const { productId } = useParams();
   const [product, setProduct] = useState(null);
+  const [products, setProducts] = useState([]);
+
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [selectedImage, setSelectedImage] = useState(0);
   const [quantity, setQuantity] = useState(1);
-  const [viewMode, setViewMode] = useState('2d'); // '2d' or '3d'
+  const [viewMode, setViewMode] = useState('2d');
   const [isFullscreen, setIsFullscreen] = useState(false);
+  const [activeTab, setActiveTab] = useState('description');
   const token = sessionStorage.getItem("Auth-Token");
   const userId = sessionStorage.getItem("id");
   const threeContainerRef = useRef(null);
@@ -24,13 +26,24 @@ function ProductPage() {
   const cameraRef = useRef(null);
   const controlsRef = useRef(null);
   const modelRef = useRef(null);
-
-  const {id} = useParams();
-
+  const [categories, setCategories] = useState([]);
+  const [brands, setBrands] = useState([]);
+  const { id } = useParams();
+  const navigate = useNavigate();
+const [reviewData, setReviewData] = useState({
+  rating: 0,
+  name: '',
+  email: '',
+  comment: ''
+});
+const [isSubmitting, setIsSubmitting] = useState(false);
   useEffect(() => {
     const fetchProduct = async () => {
+        console.log(id)
       try {
-        const response = await axios.get(`https://exclusive-app-z5t7.onrender.com/get-product-by-id`,{id});
+        const response = await axios.post(`https://exclusive-app-z5t7.onrender.com/get-product-by-id`,{
+            productId: id
+        },{});
         if (response.data.success) {
           setProduct(response.data.product);
         } else {
@@ -45,7 +58,7 @@ function ProductPage() {
     };
 
     fetchProduct();
-  }, [productId]);
+  }, [id]);
 
   useEffect(() => {
     if (viewMode === '3d' && product?.Model3DUrl && threeContainerRef.current) {
@@ -70,8 +83,15 @@ function ProductPage() {
         }
       };
     }
+    getAllProducts();
   }, [viewMode, product]);
-
+const handleShare = () => {
+  const productUrl = `${window.location.origin}/product/${id}`;
+  const message = `Check out this product: ${product.Title}\n${productUrl}`;
+  const encodedMessage = encodeURIComponent(message);
+  const whatsappUrl = `https://wa.me/?text=${encodedMessage}`;
+  window.open(whatsappUrl, '_blank');
+};
   const initThreeJS = () => {
     // Scene
     const scene = new THREE.Scene();
@@ -188,7 +208,7 @@ function ProductPage() {
     try {
       const response = await axios.post(
         "https://exclusive-app-z5t7.onrender.com/add-to-cart",
-        { userId, productId, quantity },
+        { userId, id, quantity },
         {
           headers: {
             Authorization: `Bearer ${token}`
@@ -205,12 +225,73 @@ function ProductPage() {
       alert("An error occurred while adding the product to cart.");
     }
   };
+const handleReviewSubmit = async (e) => {
+  e.preventDefault();
+  setIsSubmitting(true);
+
+  try {
+    const response = await axios.post(
+      `https://exclusive-app-z5t7.onrender.com/add-review/${id}`,
+      {
+        ...reviewData,
+        userId: userId // If you want to associate with logged in user
+      },
+      {
+        headers: {
+          Authorization: `Bearer ${token}`
+        }
+      }
+    );
+
+    if (response.data.success) {
+      // Refresh product data to show new review
+      const updatedProduct = await axios.get(`https://exclusive-app-z5t7.onrender.com/get-product/${id}`);
+      setProduct(updatedProduct.data.product);
+      
+      // Reset form
+      setReviewData({
+        rating: 0,
+        name: '',
+        email: '',
+        comment: ''
+      });
+      
+      alert('Thank you for your review!');
+    }
+  } catch (error) {
+    console.error('Error submitting review:', error);
+    alert('Failed to submit review. Please try again.');
+  } finally {
+    setIsSubmitting(false);
+  }
+};
+   const getAllProducts = async () => {
+      try {
+        const response = await axios.post("https://exclusive-app-z5t7.onrender.com/get-product");
+        if (response.data.success) {
+          const products = response.data.products || [];
+          setProducts(products);
+          
+          // Extract unique categories and brands
+          const uniqueCategories = [...new Set(products.map(p => p.Category))];
+          const uniqueBrands = [...new Set(products.map(p => p.Brand))];
+          
+          setCategories(uniqueCategories);
+          setBrands(uniqueBrands);
+        }
+      } catch (error) {
+        console.error("Error fetching products", error);
+      }
+    };
+
+
+
 
   const addToWishlist = async () => {
     try {
       const response = await axios.post(
         "https://exclusive-app-z5t7.onrender.com/add-to-wishlist",
-        { userId, productId },
+        { userId, id },
         {
           headers: {
             Authorization: `Bearer ${token}`
@@ -255,51 +336,35 @@ function ProductPage() {
     );
   }
 
-  return (
+ return (
     <div className="product-page">
-      {/* Breadcrumb Navigation */}
-      <div className="breadcrumb">
-        <span>Home</span> &gt; <span>{product.Category}</span> &gt; <span>{product.Title}</span>
-      </div>
+      {/* Header with back button */}
+      <header className="product-header">
+        <button className="back-button" onClick={() => navigate(-1)}>
+          <FiChevronLeft /> Back
+        </button>
+      </header>
 
-      {/* View Mode Toggle */}
-      {product.Model3DUrl && (
-        <div className="view-mode-toggle">
-          <button
-            className={viewMode === '2d' ? 'active' : ''}
-            onClick={() => setViewMode('2d')}
-          >
-            2D View
-          </button>
-          <button
-            className={viewMode === '3d' ? 'active' : ''}
-            onClick={() => setViewMode('3d')}
-          >
-            3D View
-          </button>
-        </div>
-      )}
-
-      {/* Product Main Section */}
-      <div className="product-main">
-        {/* Product Viewer (2D or 3D) */}
-        <div className="product-viewer">
+      {/* Main Product Container */}
+      <div className="product-container">
+        {/* Product Visuals */}
+        <div className="product-visuals">
           {viewMode === '2d' ? (
-            <>
-              <div className="main-image">
+            <div className="image-viewer">
+              <div className="main-image-container">
                 <img
-                  src={
-                    product.ImageURL && product.ImageURL.length > selectedImage
-                      ? product.ImageURL[selectedImage]
-                      : "https://via.placeholder.com/600x600?text=Product+Image"
-                  }
+                  src={product.ImageURL?.[selectedImage] || "https://via.placeholder.com/800x800?text=Product+Image"}
                   alt={product.Title}
+                  className="main-image"
                 />
+                {product.discount > 0 && (
+                  <span className="discount-badge">-{product.discount}%</span>
+                )}
               </div>
-              <div className="thumbnail-gallery">
-                {product.ImageURL && product.ImageURL.map((img, index) => (
-                  <div 
-                    key={index} 
+              <div className="thumbnail-scroller">
+                {product.ImageURL?.map((img, index) => (
+                  <div
+                    key={index}
                     className={`thumbnail ${selectedImage === index ? 'active' : ''}`}
                     onClick={() => setSelectedImage(index)}
                   >
@@ -307,67 +372,81 @@ function ProductPage() {
                   </div>
                 ))}
               </div>
-            </>
+            </div>
           ) : (
-            <div className="threejs-container" ref={threeContainerRef}>
-              {product.Model3DUrl ? (
-                <button className="fullscreen-toggle" onClick={toggleFullscreen}>
-                  {isFullscreen ? <FiMinimize /> : <FiMaximize />}
-                </button>
-              ) : (
-                <div className="no-3d-model">
-                  <p>3D model not available for this product</p>
-                  <button onClick={() => setViewMode('2d')}>Switch to 2D View</button>
-                </div>
-              )}
+            <div className="three-d-viewer">
+              <div className="viewer-container" ref={threeContainerRef}>
+                {product.Model3DUrl ? (
+                  <>
+                    <button className="viewer-control fullscreen" onClick={toggleFullscreen}>
+                      {isFullscreen ? <FiMinimize /> : <FiMaximize />}
+                    </button>
+                    <div className="viewer-instructions">
+                      <span>Drag to rotate • Scroll to zoom</span>
+                    </div>
+                  </>
+                ) : (
+                  <div className="no-model-message">
+                    <p>3D model not available</p>
+                    <button onClick={() => setViewMode('2d')} className="switch-mode-btn">
+                      Switch to 2D View
+                    </button>
+                  </div>
+                )}
+              </div>
+            </div>
+          )}
+
+          {/* View Mode Toggle */}
+          {product.Model3DUrl && (
+            <div className="view-mode-toggle">
+              <button
+                className={`view-mode-btn ${viewMode === '2d' ? 'active' : ''}`}
+                onClick={() => setViewMode('2d')}
+              >
+                2D Photos
+              </button>
+              <button
+                className={`view-mode-btn ${viewMode === '3d' ? 'active' : ''}`}
+                onClick={() => setViewMode('3d')}
+              >
+                3D Model
+              </button>
             </div>
           )}
         </div>
 
         {/* Product Details */}
         <div className="product-details">
-          <h1>{product.Title}</h1>
-          
-          <div className="product-meta">
+          <div className="product-header">
             <div className="brand-category">
-              <span>Brand: {product.Brand}</span>
-              <span>Category: {product.Category}</span>
+              <span className="brand">{product.Brand}</span>
+              <span className="category">{product.Category}</span>
             </div>
-            
-            <div className="product-rating">
+            <h1 className="product-title">{product.Title}</h1>
+            <div className="rating-container">
               <div className="stars">
                 {[...Array(5)].map((_, i) => (
                   <FiStar key={i} className={i < (product.Rating || 0) ? 'filled' : ''} />
                 ))}
               </div>
-              <span>({product.ReviewCount || 0} reviews)</span>
+              <span className="review-count">({product.ReviewCount || 0} reviews)</span>
             </div>
           </div>
 
-          <div className="product-price">
+          <div className="price-section">
+            <div className="current-price">PKR {product.Price.toLocaleString()}</div>
             {product.discount > 0 && (
-              <div className="price-original">
+                <>
+                  <div className="original-price">
                 <span>PKR {(product.Price + (product.Price * (product.discount / 100))).toLocaleString()}</span>
-                <span className="discount-badge">{product.discount}% OFF</span>
+              
               </div>
+                  <span className="discount-percent">Save {product.discount}%</span>
+                </>
+            
+              
             )}
-            <div className="price-current">PKR {product.Price.toLocaleString()}</div>
-          </div>
-
-          <div className="product-description">
-            <h3>Description</h3>
-            <p>{product.Description || "No description available for this product."}</p>
-          </div>
-
-          <div className="product-specs">
-            <h3>Specifications</h3>
-            <ul>
-              {product.Specifications && Object.entries(product.Specifications).map(([key, value]) => (
-                <li key={key}>
-                  <strong>{key}:</strong> {value}
-                </li>
-              ))}
-            </ul>
           </div>
 
           <div className="product-actions">
@@ -376,56 +455,256 @@ function ProductPage() {
                 onClick={() => setQuantity(prev => Math.max(1, prev - 1))}
                 disabled={quantity <= 1}
               >
-                -
+                −
               </button>
               <span>{quantity}</span>
               <button onClick={() => setQuantity(prev => prev + 1)}>+</button>
             </div>
 
-            <div className="action-buttons">
-              <button className="add-to-cart" onClick={addToCart}>
-                <FiShoppingCart /> Add to Cart
-              </button>
-              <button className="wishlist" onClick={addToWishlist}>
-                <FiHeart /> Wishlist
-              </button>
-              <button className="share">
-                <FiShare2 /> Share
-              </button>
+            <button className="add-to-cart" onClick={addToCart}>
+              <FiShoppingCart /> Add to Cart
+            </button>
+           
+          </div>
+
+          <div className="delivery-info">
+            <div className="info-item">
+              <span className="info-label">Availability:</span>
+              <span className={`stock-status ${product.Stock > 0 ? 'in-stock' : 'out-of-stock'}`}>
+                {product.Stock > 0 ? 'In Stock' : 'Out of Stock'}
+              </span>
+            </div>
+            <div className="info-item">
+              <span className="info-label">SKU:</span>
+              <span className="sku">{product.SKU || 'N/A'}</span>
             </div>
           </div>
 
-          <div className="product-tags">
-            <span>SKU: {product.SKU || 'N/A'}</span>
-            <span>Availability: {product.Stock > 0 ? 'In Stock' : 'Out of Stock'}</span>
-          </div>
+          <button className="share-btn">
+            <FiShare2 /> Share this product
+          </button>
         </div>
       </div>
 
-      {/* Product Tabs */}
-      <div className="product-tabs">
-        <div className="tab-header">
-          <button className="active">Description</button>
-          <button>Specifications</button>
-          <button>Reviews ({product.ReviewCount || 0})</button>
-          <button>Shipping & Returns</button>
+      {/* Product Info Tabs */}
+      <div className="product-info-tabs">
+        <div className="tab-buttons">
+          <button
+            className={`tab-btn ${activeTab === 'description' ? 'active' : ''}`}
+            onClick={() => setActiveTab('description')}
+          >
+            Description
+          </button>
+        
+          <button
+            className={`tab-btn ${activeTab === 'reviews' ? 'active' : ''}`}
+            onClick={() => setActiveTab('reviews')}
+          >
+            Reviews ({product.ReviewCount || 0})
+          </button>
         </div>
+
         <div className="tab-content">
-          <div className="tab-pane active">
-            <h3>Detailed Description</h3>
-            <p>{product.DetailedDescription || product.Description || "No detailed description available."}</p>
+          {activeTab === 'description' && (
+            <div className="description-content">
+              <h3>Product Details</h3>
+              <p>{product.Description || "No description available."}</p>
+              {product.DetailedDescription && (
+                <>
+                  <h3>Detailed Information</h3>
+                  <p>{product.DetailedDescription}</p>
+                </>
+              )}
+            </div>
+          )}
+
+          {activeTab === 'specs' && (
+            <div className="specs-content">
+              <h3>Technical Specifications</h3>
+              <ul className="specs-list">
+                {product.Specifications && Object.entries(product.Specifications).map(([key, value]) => (
+                  <li key={key}>
+                    <span className="spec-name">{key}:</span>
+                    <span className="spec-value">{value}</span>
+                  </li>
+                ))}
+              </ul>
+            </div>
+          )}
+
+      {activeTab === 'reviews' && (
+  <div className="reviews-content">
+    {product.ReviewCount > 0 ? (
+      <div className="reviews-list">
+        {/* Existing reviews */}
+        {product.reviews?.map((review, index) => (
+          <div key={index} className="review-card">
+            <div className="review-header">
+              <div className="review-author">{review.userName}</div>
+              <div className="review-rating">
+                {[...Array(5)].map((_, i) => (
+                  <FiStar key={i} className={i < review.rating ? 'filled' : ''} />
+                ))}
+              </div>
+              <div className="review-date">
+                {new Date(review.date).toLocaleDateString()}
+              </div>
+            </div>
+            <div className="review-text">{review.comment}</div>
           </div>
+        ))}
+      </div>
+    ) : (
+      <p className="no-reviews">No reviews yet. Be the first to review this product!</p>
+    )}
+
+    {/* Review Form */}
+    <div className="review-form-container">
+      <h3>Write a Review</h3>
+      <form onSubmit={handleReviewSubmit} className="review-form">
+        <div className="form-group">
+          <label htmlFor="rating">Rating</label>
+          <div className="star-rating">
+            {[1, 2, 3, 4, 5].map((star) => (
+              <React.Fragment key={star}>
+                <input
+                  type="radio"
+                  id={`star-${star}`}
+                  name="rating"
+                  value={star}
+                  checked={reviewData.rating === star}
+                  onChange={() => setReviewData({...reviewData, rating: star})}
+                  required
+                />
+                <label htmlFor={`star-${star}`}>
+                  <FiStar className={star <= reviewData.rating ? 'filled' : ''} />
+                </label>
+              </React.Fragment>
+            ))}
+          </div>
+        </div>
+
+        <div className="form-group">
+          <label htmlFor="name">Your Name</label>
+          <input
+            type="text"
+            id="name"
+            name="name"
+            value={reviewData.name}
+            onChange={(e) => setReviewData({...reviewData, name: e.target.value})}
+            required
+          />
+        </div>
+
+        <div className="form-group">
+          <label htmlFor="email">Email Address</label>
+          <input
+            type="email"
+            id="email"
+            name="email"
+            value={reviewData.email}
+            onChange={(e) => setReviewData({...reviewData, email: e.target.value})}
+            required
+          />
+        </div>
+
+        <div className="form-group">
+          <label htmlFor="comment">Your Review</label>
+          <textarea
+            id="comment"
+            name="comment"
+            rows="5"
+            value={reviewData.comment}
+            onChange={(e) => setReviewData({...reviewData, comment: e.target.value})}
+            required
+          ></textarea>
+        </div>
+
+        <button type="submit" className="submit-review-btn" disabled={isSubmitting}>
+          {isSubmitting ? 'Submitting...' : 'Submit Review'}
+        </button>
+      </form>
+    </div>
+  </div>
+)}
         </div>
       </div>
 
       {/* Related Products */}
-      <div className="related-products">
-        <h2>You May Also Like</h2>
-        <div className="related-products-grid">
-          {/* You would fetch and display related products here */}
-          <p>Related products would be displayed here</p>
+    <section className="related-products">
+  <h2 className="section-title">You May Also Like</h2>
+  <div className="related-products-grid">
+    {products
+      .filter(p =>
+        p._id !== product._id &&             // Exclude current product
+        p.Brand !== product.Brand &&         // Different brand
+        (p.Rating || 0) >= 4                 // High rating
+      )
+      .slice(0, 4) // Show top 4
+      .map((relatedProduct) => (
+        <div className="product-card" key={relatedProduct._id}>
+          <div className="card-badge-container">
+            {relatedProduct.discount > 0 && (
+              <div className="discount-badge">-{relatedProduct.discount}%</div>
+            )}
+            <div className="category-badge">{relatedProduct.Category}</div>
+          </div>
+
+          <div className="product-image-wrapper">
+            <img
+              src={relatedProduct.ImageURL?.[0] || "https://via.placeholder.com/300x300?text=No+Image"}
+              alt={relatedProduct.Title}
+              className="product-image"
+              onError={(e) => {
+                e.target.src = "https://via.placeholder.com/300x300?text=No+Image";
+              }}
+            />
+          </div>
+
+          <div className="product-details">
+            <h3 className="product-title">{relatedProduct.Title}</h3>
+            <div className="price-container">
+              <span className="current-price">
+                PKR {relatedProduct.Price.toLocaleString()}
+              </span>
+              {relatedProduct.discount > 0 && (
+                <span className="original-price">
+                  PKR {(
+                    relatedProduct.Price +
+                    (relatedProduct.Price * relatedProduct.discount) / 100
+                  ).toFixed(0).toLocaleString()}
+                </span>
+              )}
+            </div>
+
+            <div className="rating-container">
+              <div className="star-rating">
+                {[...Array(5)].map((_, i) => (
+                  <svg
+                    key={i}
+                    viewBox="0 0 24 24"
+                    width="14"
+                    height="14"
+                    fill={i < Math.floor(relatedProduct.Rating || 0) ? "#FFD700" : "#DDDDDD"}
+                  >
+                    <path d="M12,17.27L18.18,21L16.54,13.97L22,9.24L14.81,8.62L12,2L9.19,8.62L2,9.24L7.45,13.97L5.82,21L12,17.27Z" />
+                  </svg>
+                ))}
+              </div>
+              <span className="review-count">({relatedProduct.Rating || 0})</span>
+            </div>
+
+            <div className="action-buttons">
+              <button className="nav0cta1" onClick={() => navigate(`/product/${relatedProduct._id}`)}>
+                View Product
+              </button>
+            </div>
+          </div>
         </div>
-      </div>
+      ))}
+  </div>
+</section>
+
     </div>
   );
 }
