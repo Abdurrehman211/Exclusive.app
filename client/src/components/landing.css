@@ -284,7 +284,7 @@ background-color: #ff4d4d;
   z-index: 2;
 }
 
-.discount-badge {
+#Sales .discount-badge {
   background: #ff4757;
   color: white;
   padding: 4px 10px;
@@ -1445,4 +1445,50 @@ width: 40%;
   .headline-part3 {
     font-size: 1.5rem;
   }
+}
+#Offer-time{
+  padding: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: url('./images/latest_model_v2.jpg');
+      background-attachment: fixed;
+    background-position:top center;
+    background-repeat: no-repeat;
+    background-size: contain;
+    background-color: #000000;
+  height: 100vh;
+      font-family: "Montserrat", sans-serif;
+
+}
+#Offer-time .offer{
+  color: #ffffff;
+  text-align: center;
+}
+#Offer-time .offer h1{
+  font-size: 60px;
+  font-weight: 600;
+  text-transform: uppercase;
+  line-height: 4rem;
+  letter-spacing: 3px;
+}
+.offer p{
+  font-size: 30px;
+   
+}
+.offer p span{
+  font-style: italic;
+}
+.offer button{
+  padding: 15px 30px;
+  color: white;
+  background-color: #da4445;
+  border-radius: 20px;
+  border: none;
+  transition: all 0.3s ease-in-out;
+}
+.offer button:hover{
+  background-color: #171717;
+  transform: translateY(-10px);
+  transition: all 0.3s ease-in-out;
 }

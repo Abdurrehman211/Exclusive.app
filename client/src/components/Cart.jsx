@@ -120,6 +120,10 @@ setCartCounter(updatedItems.length);
   }, []);
 
   const addToCart = async () => {
+    if(!token){
+      toast.error('login before adding to cart');
+      return;
+    }
     try {
       const response = await axios.post("https://exclusive-app-z5t7.onrender.com/get-cart-item", {
         userId,

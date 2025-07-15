@@ -6,6 +6,7 @@ import * as THREE from 'three';
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls';
 import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader';
 import './productmodel.css';
+import { toast } from "react-toastify";
 
 function ProductPage() {
   const [product, setProduct] = useState(null);
@@ -205,6 +206,10 @@ const handleShare = () => {
   };
 
   const addToCart = async () => {
+    if(!token){
+      toast.info(`You have to login before adding to the Cart `);
+      return;
+    }
     try {
       const response = await axios.post(
         "https://exclusive-app-z5t7.onrender.com/add-to-cart",
@@ -216,13 +221,13 @@ const handleShare = () => {
         }
       );
       if (response.data.success) {
-        alert("Product added to cart successfully!");
+        toast.success("Product added to cart successfully!");
       } else {
-        alert("Failed to add product to cart.");
+        toast.error("Failed to add product to cart.");
       }
     } catch (error) {
       console.error("Error adding product to cart", error);
-      alert("An error occurred while adding the product to cart.");
+      toast.error("An error occurred while adding the product to cart.");
     }
   };
 const handleReviewSubmit = async (e) => {

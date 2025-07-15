@@ -452,7 +452,7 @@
 
 .quick-view {
   position: absolute;
-  bottom: -40px;
+  bottom: -34px;
   left: 0;
   width: 100%;
   background: rgba(255, 255, 255, 0.95);
@@ -462,7 +462,7 @@
   border: none;
   cursor: pointer;
   transition: var(--transition);
-  z-index: 2;
+ 
 }
 
 .product-card:hover .quick-view {

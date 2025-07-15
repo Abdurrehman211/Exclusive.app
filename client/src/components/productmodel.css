@@ -91,7 +91,7 @@
   object-fit: contain;
 }
 
-.discount-badge {
+.product-page .discount-badge {
   position: absolute;
   top: 20px;
   right: 20px;
@@ -311,7 +311,8 @@
   flex-wrap: wrap;
 }
 
-.quantity-selector {
+
+.product-page .quantity-selector {
   display: flex;
   align-items: center;
   border: 1px solid var(--border-color);
@@ -634,7 +635,7 @@
   z-index: 2;
 }
 
-.related-products .discount-badge {
+.product-page .related-products .discount-badge {
   background: #ff4757;
   color: white;
   padding: 4px 10px;
@@ -678,7 +679,7 @@
   transform: scale(1.05);
 }
 
-.quick-view-button {
+.related-products .quick-view-button {
   position: absolute;
   bottom: -40px;
   left: 50%;
@@ -762,7 +763,7 @@
   font-size: 12px;
   color: #666;
 }
-.products-container {
+.related-products .products-container {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
   gap: 25px;
