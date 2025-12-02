@@ -65,7 +65,7 @@ const [flashTimeLeft, setFlashTimeLeft] = useState({});
     getAllProducts();
   }, []);
 useEffect(() => {
-  const targetDate = new Date("2025-07-19T00:00:00Z");
+  const targetDate = new Date("2025-09-28T00:00:00Z");
   const updateCountdown = () => {
     const now = new Date();
     const distance = targetDate - now;
@@ -121,7 +121,7 @@ useEffect(() => {
 
   const getAllProducts = async () => {
     try {
-      const response = await axios.post("https://exclusive-app-z5t7.onrender.com/get-product");
+      const response = await axios.post("http://localhost:3001/get-product");
       if (response.data.success) {
         const products = response.data.products || [];
         setProducts(products);

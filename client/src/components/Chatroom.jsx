@@ -2,58 +2,67 @@ import React, { useEffect, useState, useRef } from "react";
 import { io } from "socket.io-client";
 import { useNavigate } from "react-router-dom";
 import "./AdminChat.css";
-
-const auth = sessionStorage.getItem("Auth-Token");
-const socket = io("https://exclusive-app-z5t7.onrender.com", {
-  transports: ["websocket", "polling"],
-  auth: { token: auth },
-  reconnectionAttempts: 5,
-  reconnectionDelay: 1000
-});
+import { useSocket } from "./context/Socketcontext";
 
 const ChatRoom = ({ user }) => {
   const [message, setMessage] = useState("");
   const [chat, setChat] = useState([]);
   const chatEndRef = useRef(null);
 const [firstMessageSent, setFirstMessageSent] = useState(false);
+const socket = useSocket();
 
 const navigate = useNavigate();
   // Debug connection status
-  useEffect(() => {
-    console.log("Socket connection status:", socket.connected);
-    
-    socket.on("connect", () => {
-      console.log("Connected to server with ID:", socket.id);
-    });
+ useEffect(() => {
+  if (!socket) return;
 
-    socket.on("disconnect", () => {
-      console.log("Disconnected from server");
-    });
-  }, []);
+console.log("Socket connection status:", socket?.connected);
+
+  const onConnect = () => console.log("Connected to server with ID:", socket.id);
+  const onDisconnect = () => console.log("Disconnected from server");
+
+  socket.on("connect", onConnect);
+  socket.on("disconnect", onDisconnect);
+
+  return () => {
+    socket.off("connect", onConnect);
+    socket.off("disconnect", onDisconnect);
+  };
+}, [socket]);
 
   // Message handling
   useEffect(() => {
-    const handleIncomingMessage = (data) => {
-      console.log("Received message data:", data);
-      setChat(prev => {
-        const exists = prev.some(msg => 
-          msg._id === data._id || (msg.tempId && msg.tempId === data.tempId)
-        );
-        return exists ? prev : [...prev, data];
-      });
-    };
+  if (!socket) return;
 
-    // Listen to BOTH event names for compatibility
-    socket.on("new_message", handleIncomingMessage);
-    socket.on("receive_message", handleIncomingMessage);
-    socket.on("message_sent", handleIncomingMessage);
+  const handleIncomingMessage = (data) => {
+    setChat(prev => {
+      const exists = prev.some(msg => 
+        (msg._id?.toString() === data._id?.toString()) || 
+        (msg.tempId && msg.tempId === data.tempId)
+      );
+      if (exists) return prev;
 
-    return () => {
-      socket.off("new_message", handleIncomingMessage);
-      socket.off("receive_message", handleIncomingMessage);
-      socket.off("message_sent", handleIncomingMessage);
-    };
-  }, [user.id]);
+      return [
+        ...prev,
+        {
+          ...data,
+          isOptimistic: false,
+          timestamp: new Date(data.timestamp)
+        }
+      ];
+    });
+  };
+
+  socket.on("new_message", handleIncomingMessage);
+  socket.on("receive_message", handleIncomingMessage);
+  socket.on("message_sent", handleIncomingMessage);
+
+  return () => {
+    socket.off("new_message", handleIncomingMessage);
+    socket.off("receive_message", handleIncomingMessage);
+    socket.off("message_sent", handleIncomingMessage);
+  };
+}, [socket, user]);
 
   const sendMessage = () => {
       if (!firstMessageSent) setFirstMessageSent(true);
@@ -84,6 +93,7 @@ const navigate = useNavigate();
 
   // Error handling
   useEffect(() => {
+    if (!socket) return;
     const errorHandler = (error) => {
       console.error("Socket error:", error);
       // Display to user if needed
@@ -120,7 +130,7 @@ const navigate = useNavigate();
       </h4>
 
       <div className="connection-status badge bg-light text-dark">
-        {socket.connected ? "🟢 Connected" : "🔴 Disconnected"}
+        {socket?.connected ? "🟢 Connected" : "🔴 Disconnected"}
       </div>
     </div>
 
@@ -166,9 +176,9 @@ const navigate = useNavigate();
       <button
         className="send-button btn btn-success"
         onClick={sendMessage}
-        disabled={!socket.connected || !message.trim()}
+        disabled={!socket?.connected || !message.trim()}
       >
-        {socket.connected ? "📨 Send" : "⏳ Connecting..."}
+        {socket?.connected ? "📨 Send" : "⏳ Connecting..."}
       </button>
     </div>
   </div>

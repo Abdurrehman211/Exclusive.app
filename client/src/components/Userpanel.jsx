@@ -8,13 +8,40 @@ import { toast } from "react-toastify";
 import { googleLogout } from '@react-oauth/google';
 import profile from './images/Profile.png';
 import AddressCard from "./AddressCard";
+import { useNotifications } from "./context/NotificationContext";
+import { useSocket } from "./context/Socketcontext";
+import io from "socket.io-client";
 function Userpanel() {
+   const { addNotification } = useNotifications();
+   const socket = useSocket();
 const navigate = useNavigate();
 const [user, setUser] = useState({
   email: "",
   name: "",
 });
 const [userAddress, setUserAddress] = useState(null);
+
+useEffect(() => {
+    if (!socket) return;
+
+    socket.on("new_message", (data) => {
+      if (data.sender !== user.id) {
+        addNotification({
+          id: `chat-${data._id}`,
+          title: "New Chat Message",
+          message: data.message,
+          onClick: () => navigate("/chat-room"),
+          isChatNotification: true,
+        });
+        console.log("New chat message notification added:", data);
+      }
+    });
+
+    return () => {
+      socket.off("new_message");
+    };
+  }, [socket, user.id, addNotification, navigate]);
+
 
 
 useEffect(() => {

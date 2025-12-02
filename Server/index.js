@@ -506,46 +506,97 @@ const user = jwt.verify(token, JWT_Secret);
 
 const userId = {};
 
+io.use((socket, next) => {
+  const token = socket.handshake.auth.token;
+  if (!token) {
+    return next(new Error("No Authentication"));
+  }
+  try {
+    const user = jwt.verify(token, JWT_Secret);
+    socket.user = user;
+    next();
+  } catch (error) {
+    next(new Error("Authentication error"));
+  }
+});
 io.on("connection", (socket) => {
   const user_id = socket.user.id;
   userId[user_id] = socket.id;
-  
+
   console.log(`${user_id} connected on socket ${socket.id}`);
 
-  socket.on('send_message', async ({ receiver_id, message, tempId }) => {
-  try {
-    const sender_id = socket.user.id;
-    const savedMessage = await Message.create({
-      sender: sender_id,
-      receiver: receiver_id,
-      message,
-    });
+  /**
+   * 📩 SEND MESSAGE
+   */
+  socket.on("send_message", async ({ receiver_id, message, tempId }) => {
+    try {
+      const sender_id = socket.user.id;
+      const savedMessage = await Message.create({
+        sender: sender_id,
+        receiver: receiver_id,
+        message,
+        status: "sent", // initial status
+      });
 
-    const clientMessage = {
-      ...savedMessage.toObject(), // Convert mongoose doc to plain object
-      tempId // Include the temporary ID
-    };
-    console.log(clientMessage);
-    // Confirm to sender
-    socket.emit("message_sent", clientMessage);
-      
-      // Emit to receiver if online
+      const clientMessage = {
+        ...savedMessage.toObject(),
+        tempId, // match with frontend optimistic update
+      };
+
+      // ✅ Confirm to sender
+      socket.emit("message_sent", clientMessage);
+
+      // ✅ Deliver to receiver if online
       const receiverSocketID = userId[receiver_id];
-      console.log(`Receiver Socket ID: ${receiverSocketID}`);
-      
-    if (receiverSocketID) {
-      io.to(receiverSocketID).emit("new_message", clientMessage);
+      if (receiverSocketID) {
+        io.to(receiverSocketID).emit("new_message", clientMessage);
+
+        // tell sender it's delivered
+        socket.emit("message_delivered", { _id: savedMessage._id });
+      }
+    } catch (error) {
+      console.error("Message send error:", error);
+      socket.emit("message_error", { error: "Failed to send message" });
+      socket.emit("remove_optimistic", { tempId });
     }
-    
-  } catch (error) {
-    console.error("Message send error:", error);
-    socket.emit("message_error", { error: "Failed to send message" });
-    
-    // Optionally: Remove optimistic update on error
-    socket.emit("remove_optimistic", { tempId });
-  }
   });
 
+  /**
+   * 👀 MESSAGE READ
+   */
+  socket.on("mark_read", async ({ messageId }) => {
+    try {
+      const msg = await Message.findByIdAndUpdate(
+        messageId,
+        { status: "read" },
+        { new: true }
+      );
+
+      if (!msg) return;
+
+      // notify sender their message was read
+      const senderSocketID = userId[msg.sender];
+      if (senderSocketID) {
+        io.to(senderSocketID).emit("message_read", { _id: msg._id });
+      }
+    } catch (err) {
+      console.error("Error marking as read:", err);
+    }
+  });
+
+  /**
+   * ✍️ TYPING INDICATOR
+   */
+  socket.on("typing", (receiverId) => {
+    const receiverSocketID = userId[receiverId];
+    if (receiverSocketID) {
+      io.to(receiverSocketID).emit("typing", user_id);
+    }
+  });
+
+  /**
+   * 🔌 DISCONNECT
+   */
   socket.on("disconnect", () => {
     delete userId[user_id];
     console.log(`${user_id} disconnected`);
@@ -568,7 +619,7 @@ app.get("/chat/messages/:userId", async (req, res) => {
   res.json(messages);
 });
 
-// Safe PAy integration !!!
+
 
 
 //safepay initailization
@@ -595,18 +646,18 @@ app.post('/gateway/payment', async (req, res) => {
       intent: "CYBERSOURCE",
       mode: "payment",
       currency: "PKR",
-      customer: {  // Add customer details
-    email: address.email,  // Required field
+      customer: {  
+    email: address.email,  
     first_name: address.name,
   },
   metadata: {
     order_id: Order_id,
-    source: "your-website"  // Additional identifying info
+    source: "your-website"
   }
     });
 
 
-console.log("Full Payment Session Response:", payment.data);  // Debug output
+console.log("Full Payment Session Response:", payment.data);
 
 const token = payment?.data?.tracker?.token;
 if (!token) {
@@ -666,7 +717,7 @@ const baseParams = {
      res.json({
       success: true,
       checkout_url: checkoutUrl.toString(),
-      debug: {  // Remove in production
+      debug: {  
         tracker: payment.data.tracker,
         capabilities: payment.data.capabilities
       }
@@ -791,8 +842,6 @@ app.post('/gateway/GooglePay' , async (req , res)=>{
         country: address.country
       });
 
-      // store the Mongo document reference in order if needed (optional)
-      // or continue embedding the raw address (depends on your schema)
       finalAddress = {
         name: savedAddress.name,
         addressLine: savedAddress.addressLine,
@@ -1028,7 +1077,7 @@ app.post('/get-cart-item',async (req, res) => {
   try {
     const cart = await Cart.findOne({ userId: userId })
     if (!cart) {
-      return res.status(404).json({ success: false, message: "Cart not found" });
+      return res.status(200).json({ success: true, message: "No item in the Cart" });
     }
     res.status(200).json({ success: true, items: cart });
   } catch (error) {

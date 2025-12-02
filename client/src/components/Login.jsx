@@ -85,7 +85,7 @@ const HandleGoogleLogin = async (credentialResponse) => {
 const FetchuserDetail =async () => {
 try {
     const token = sessionStorage.getItem("Auth-Token");
-    const response = await axios.get('https://exclusive-app-z5t7.onrender.com/getuser',{
+    const response = await axios.get('http://localhost:3001/getuser',{
         headers: {
             'Authorization': `Bearer ${token}`
         }

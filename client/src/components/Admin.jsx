@@ -20,11 +20,54 @@ import { FiEdit, FiTrash } from "react-icons/fi";
 import { toast } from "react-toastify";
 import { googleLogout } from "@react-oauth/google";
 import axios from "axios";
+import { useNotifications } from "./context/NotificationContext";
+import io from "socket.io-client";
 const Admin = () => {
+   const { addNotification } = useNotifications();
   const navigate = useNavigate();
   const [adminDetails, setAdminDetails] = useState(null);
   const [accessDenied, setAccessDenied] = useState(false);
   const [checked, setChecked] = useState(false);
+     const [users, setUsers] = useState([]);
+
+  const [socket, setSocket] = useState(null);
+
+  useEffect(() => {
+    const token = sessionStorage.getItem("Auth-Token");
+    if (!token) return;
+
+    const newSocket = io("http://localhost:3001", {
+      auth: { token },
+    });
+
+    setSocket(newSocket);
+
+    newSocket.on("connect", () => {
+      console.log("Admin connected with socket ID:", newSocket.id);
+    });
+
+    const adminId = sessionStorage.getItem("adminId");
+    newSocket.on("new_message", (data) => {
+      console.log("New message received:", data);
+
+      // only notify if the message is for this admin
+      if (data.receiver === adminId) {
+        addNotification({
+          id: `chat-${data.sender}-${Date.now()}`,
+          title: "New Chat Message",
+          message:"New message received from user",
+          onClick: () => navigate(`/admin/chat?select=${data.sender}`),
+          isChatNotification: true,
+        });
+      }
+    });
+
+    // cleanup
+    return () => {
+      newSocket.disconnect();
+    };
+  }, [addNotification, navigate]);
+
 
   const fetchAdminDetails = async () => {
     try {
@@ -132,6 +175,7 @@ const AdminPage = ({ adminDetails }) => {
   const HandleRouting = () => {
     navigate("/AdminPanel/AddProduct");
   };
+ 
   return (
     <div className="admin-container">
       {/* Sidebar */}

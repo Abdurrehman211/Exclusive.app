@@ -42,7 +42,7 @@ const [isSubmitting, setIsSubmitting] = useState(false);
     const fetchProduct = async () => {
         console.log(id)
       try {
-        const response = await axios.post(`https://exclusive-app-z5t7.onrender.com/get-product-by-id`,{
+        const response = await axios.post(`http://localhost:3001/get-product-by-id`,{
             productId: id
         },{});
         if (response.data.success) {
@@ -206,14 +206,16 @@ const handleShare = () => {
   };
 
   const addToCart = async () => {
+
     if(!token){
       toast.info(`You have to login before adding to the Cart `);
       return;
     }
+    setIsSubmitting(true);
     try {
       const response = await axios.post(
-        "https://exclusive-app-z5t7.onrender.com/add-to-cart",
-        { userId, id, quantity },
+        "http://localhost:3001/add-to-cart",
+        { userId,productId: id, quantity },
         {
           headers: {
             Authorization: `Bearer ${token}`
@@ -222,12 +224,16 @@ const handleShare = () => {
       );
       if (response.data.success) {
         toast.success("Product added to cart successfully!");
+        setIsSubmitting(false);
+
       } else {
         toast.error("Failed to add product to cart.");
+        setIsSubmitting(false);
       }
     } catch (error) {
       console.error("Error adding product to cart", error);
       toast.error("An error occurred while adding the product to cart.");
+      setIsSubmitting(false);
     }
   };
 const handleReviewSubmit = async (e) => {
@@ -236,7 +242,7 @@ const handleReviewSubmit = async (e) => {
 
   try {
     const response = await axios.post(
-      `https://exclusive-app-z5t7.onrender.com/add-review/${id}`,
+      `http://localhost:3001/add-review/${id}`,
       {
         ...reviewData,
         userId: userId // If you want to associate with logged in user
@@ -250,7 +256,7 @@ const handleReviewSubmit = async (e) => {
 
     if (response.data.success) {
       // Refresh product data to show new review
-      const updatedProduct = await axios.get(`https://exclusive-app-z5t7.onrender.com/get-product/${id}`);
+      const updatedProduct = await axios.get(`http://localhost:3001/get-product/${id}`);
       setProduct(updatedProduct.data.product);
       
       // Reset form
@@ -272,7 +278,7 @@ const handleReviewSubmit = async (e) => {
 };
    const getAllProducts = async () => {
       try {
-        const response = await axios.post("https://exclusive-app-z5t7.onrender.com/get-product");
+        const response = await axios.post("http://localhost:3001/get-product");
         if (response.data.success) {
           const products = response.data.products || [];
           setProducts(products);
@@ -295,7 +301,7 @@ const handleReviewSubmit = async (e) => {
   const addToWishlist = async () => {
     try {
       const response = await axios.post(
-        "https://exclusive-app-z5t7.onrender.com/add-to-wishlist",
+        "http://localhost:3001/add-to-wishlist",
         { userId, id },
         {
           headers: {
@@ -467,7 +473,7 @@ const handleReviewSubmit = async (e) => {
             </div>
 
             <button className="add-to-cart" onClick={addToCart}>
-              <FiShoppingCart /> Add to Cart
+              <FiShoppingCart /> {isSubmitting ? "Adding" : "Add to Cart"}
             </button>
            
           </div>

@@ -1,5 +1,4 @@
-import React, { createContext, useState, useContext, useEffect } from "react";
-import { toast } from "react-toastify";
+import React, { createContext, useState, useContext } from "react";
 
 const NotificationContext = createContext();
 
@@ -8,12 +7,6 @@ export const NotificationProvider = ({ children }) => {
 
   const addNotification = (notification) => {
     setNotifications((prev) => [...prev, notification]);
-
-    // Show toast immediately
-    toast.info(notification.message, {
-      position: "top-right",
-      autoClose: 3000,
-    });
   };
 
   const removeNotification = (id) => {

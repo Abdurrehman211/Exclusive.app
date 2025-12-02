@@ -220,9 +220,7 @@ function Account() {
            
 
         </div> */}
-      <footer>
-        <Footer />
-      </footer>
+ 
     </>
   );
 }

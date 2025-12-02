@@ -69,7 +69,7 @@ function Cart() {
   const handleDelete = async (id) => {
   try {
     const response = await axios.post(
-      "https://exclusive-app-z5t7.onrender.com/delete-item-from-cart",
+      "http://localhost:3001/delete-item-from-cart",
       {
         userId,
         productId: id, // This must be the actual productId, NOT the cart item _id
@@ -125,10 +125,13 @@ setCartCounter(updatedItems.length);
       return;
     }
     try {
-      const response = await axios.post("https://exclusive-app-z5t7.onrender.com/get-cart-item", {
+      const response = await axios.post("http://localhost:3001/get-cart-item", {
         userId,
       });
-
+      if(response.data.success == true && response.data.message === 'No item in the Cart'){
+        toast.info("Nothing in the Cart");
+        return
+      }
 
        if (!response.data.success || !response.data.items?.items) {
       toast.error("Failed to fetch cart items");
@@ -143,7 +146,7 @@ setCartCounter(updatedItems.length);
         cartItems.items.map(async (item) => {
           try {
             const res = await axios.post(
-              "https://exclusive-app-z5t7.onrender.com/get-product-by-id",
+              "http://localhost:3001/get-product-by-id",
               {
                 productId: item.productId,
               }
@@ -199,7 +202,7 @@ setCartCounter(updatedItems.length);
             </tr>
           </thead>
           <tbody>
-            {cartItems.map((item) => (
+            { cartItems.length > 0 ? (cartItems.map((item) => (
               <tr key={item.id}>
                 <td className="product-cell">
                   <img src={item.image} alt={item.name} />
@@ -226,7 +229,15 @@ setCartCounter(updatedItems.length);
       
                 </td>
               </tr>
-            ))}
+            ))) : (
+              <>
+                <tr>
+                  <td colSpan="5" className="text-center">
+                    Your cart is empty.
+                  </td>
+                </tr>
+              </>
+            )}
           </tbody>
         </table>
           </div>
